@@ -1,0 +1,59 @@
+.custom-footer {
+  background-color: #f3f0e6; /* أوف وايت */
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+ 
+.footer-logo {
+  background-color:  #722f37; /* Burgundy */
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 600;
+  width: 100px;
+  height: 100px;
+  border-radius: 0; /* مربع */
+}
+
+.footer-title {
+  font-weight: bold;
+  color: #822433; /* Burgundy */
+  font-size: 1.1rem;
+}
+
+.footer-link {
+  color: #000;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.footer-link:hover {
+  color: #822433;
+}
+
+.footer-text {
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.footer-icon {
+  font-size: 1.3rem;
+  color: #000;
+  transition: 0.3s;
+}
+
+.footer-icon:hover {
+  color: #822433;
+}
+
+.custom-footer .border,
+.custom-footer .border-end {
+  border: solid 1px #fff !important;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .custom-footer .border-end {
+    border-right: none !important;
+    border-bottom: 1px solid #ddd;
+  }
+}

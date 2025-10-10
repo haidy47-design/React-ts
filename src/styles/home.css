@@ -1,0 +1,372 @@
+/* =========================================================
+   🌹 Elegant Rose & Maroon Theme for Home Page
+   ========================================================= */
+
+/* ===========================
+   🎨 Root Variables
+   =========================== */
+   /* :root {
+    --rose-primary: #a52834;
+    --rose-secondary: #f8eaea;
+    --rose-light: #f4efe8;
+  
+    --maroon-primary: #6a1b1b;
+    --maroon-secondary: #8b3a3a;
+    --maroon-light: #dddddd;
+  
+    --rose-gradient: linear-gradient(135deg, #a52834 0%, #6a1b1b 100%);
+    --maroon-gradient: linear-gradient(135deg, #6a1b1b 0%, #8b3a3a 100%);
+    --rose-maroon-gradient: linear-gradient(135deg, #a52834 0%, #6a1b1b 100%);
+  } */
+  
+
+  :root {
+    --rose-primary: #722f37;;
+    --rose-secondary: #f8eaea;
+    --rose-light: #f4efe8;
+  
+    --maroon-primary:#4a1f24;
+    --maroon-secondary: #8b3a3a;
+    --maroon-light: #dddddd;
+  
+    --rose-gradient: linear-gradient(135deg, #722f37 0%, #4a1f24 100%);
+    --maroon-gradient: linear-gradient(135deg, #4a1f24 0%,#722f37 100%);
+    --rose-maroon-gradient: linear-gradient(135deg, #722f37 0%,#4a1f24 100%);
+  }
+  /* =========================================================
+     🪞 Section Titles
+     ========================================================= */
+     .section-title {
+      font-weight: 700;
+      font-size: 1.75rem;
+      color: var(--rose-primary);
+      position: relative;
+      display: inline-block; /* علشان ياخد عرضه فقط */
+      margin: 0 auto 1rem;
+      padding-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+      text-transform: capitalize;
+      text-align: center;
+    }
+    /* Ensure section title is perfectly centered horizontally */
+section.container .section-title {
+  display: inline-block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Fix Bootstrap spacing behavior */
+section.container.text-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+    
+    /* الخط اللي تحت العنوان */
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: var(--rose-maroon-gradient);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+    
+    .section-title:hover::after {
+      width: 80px;
+    }
+    
+    /* علشان inline-block يتوسّط فعلاً */
+    section.container {
+      text-align: center;
+    }
+    
+  /* Title Animation */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  } */
+  
+  /* =========================================================
+     🛍 Category Slider
+     ========================================================= */
+
+  
+  .category-card {
+    transition: all 0.3s ease;
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .category-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.category-card:hover .category-img {
+  transform: scale(1.1);
+}
+.category-card:hover .overlay {
+  opacity: 1;
+}
+
+  
+  .category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+  }
+  
+  .category-card .card-img-top-container {
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+  }
+  
+  .category-card .card-body {
+    padding: 1rem;
+    background: var(--rose-light);
+    border-top: 3px solid var(--rose-primary);
+  }
+  
+  .category-card .card-title {
+    font-weight: 600;
+    color: var(--maroon-primary);
+    font-size: 1.1rem;
+  }
+  
+  /* =========================================================
+     🧭 Swiper Navigation & Pagination
+     ========================================================= */
+
+     .swiper {
+  min-height: 250px;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    color: var(--rose-primary) !important;
+    fill: var(--rose-primary) !important;
+    background-color: var(--rose-light) !important;
+    border-radius: 50%;
+    width: 40px !important;
+    height: 40px !important;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    color: var(--rose-primary) !important;
+    font-size: 18px !important;
+    font-weight: bold;
+  }
+  
+  .swiper-button-prev:hover,
+  .swiper-button-next:hover {
+    background: var(--rose-maroon-gradient) !important;
+    color: #fff !important;
+    transform: scale(1.1);
+  }
+  
+  .swiper-button-prev:hover::after,
+  .swiper-button-next:hover::after {
+    color: #fff !important;
+  }
+  
+  /* Pagination Dots */
+  .swiper-pagination-bullet {
+    background: var(--rose-primary) !important;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+  }
+  
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+  }
+  
+  /* Slide Transition */
+  .swiper-slide {
+    transition: transform 0.4s ease-in-out;
+  }
+  
+  /* =========================================================
+     🧺 Product Card
+     ========================================================= */
+  .product-card {
+    transition: all 0.3s ease;
+    border: none !important;
+    box-shadow: none !important;
+    /* border-radius: 12px; */
+    overflow: hidden;
+    background-color: var(--rose-light);
+    text-align: start !important;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+  }
+  
+  .product-card .card-body {
+    /* padding: 1.25rem; */
+    background: linear-gradient(135deg, #ffffff 0%, var(--rose-light) 100%);
+    /* border-top: 2px solid var(--rose-secondary); */
+  }
+  
+  .product-card .card-title {
+    font-weight: 600;
+    color: #212529;
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+  
+  /* Price Badge */
+  .badge.bg-success {
+    background: linear-gradient(135deg, #a52834 0%, #6a1b1b 100%) !important;
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(233, 30, 98, 0.363);
+  }
+  
+  /* Discount Badge */
+  .badge.bg-danger {
+    background:linear-gradient(135deg, #a52834 0%, #6a1b1b 100%) !important;
+    font-weight: 600;
+    padding: 0.4rem 0.6rem;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(131, 2, 2, 0.432);
+    font-size: 0.8rem;
+    animation: pulse 2s infinite;
+  }
+
+  .bg-cat{
+    background-color: var(--maroon-primary) !important;
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(233, 30, 98, 0.363);
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  /* =========================================================
+     🎀 Buttons
+     ========================================================= */
+  .btn-primary {
+    background: var(--rose-gradient);
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background: var(--maroon-gradient);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
+  }
+  
+  .btn-outline-primary {
+    border: 2px solid var(--rose-primary);
+    color: var(--rose-primary);
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-outline-primary:hover {
+    background: var(--rose-primary);
+    color: #fff;
+    border-color: var(--rose-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(233, 30, 99, 0.3);
+  }
+  
+  /* =========================================================
+     📱 Responsive Adjustments
+     ========================================================= */
+  @media (max-width: 768px) {
+    .category-card .card-body,
+    .product-card .card-body {
+      padding: 1rem;
+    }
+  
+    .category-card .card-title,
+    .product-card .card-title {
+      font-size: 1rem;
+    }
+  
+    .btn-primary,
+    .btn-outline-primary {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    section.container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  
+    .category-card,
+    .product-card {
+      margin-bottom: 1rem;
+    }
+  }
+  
+  /* =========================================================
+     ✨ Miscellaneous
+     ========================================================= */
+  .alert {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  * {
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--rose-maroon-gradient);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    filter: brightness(1.1);
+  }
+  
