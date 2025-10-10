@@ -1,0 +1,102 @@
+/* ------------------------------------------------ */
+/* 🌍 GLOBAL BASE STYLES                            */
+/* ------------------------------------------------ */
+body {
+  background-color: #f4efe8;
+}
+
+.navbar {
+  backdrop-filter: saturate(120%) blur(2px);
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.card-img-top {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+/* ------------------------------------------------ */
+/* 🎨 BUTTON STYLES                                 */
+/* ------------------------------------------------ */
+.btn-primary {
+  background-color: #7b1e33;
+  border-color: #7b1e33;
+}
+
+.btn-primary:hover {
+  background-color: #6b182b;
+  border-color: #6b182b;
+}
+
+/* ------------------------------------------------ */
+/* 🖼️ CAROUSEL CAPTION                              */
+/* ------------------------------------------------ */
+.carousel-caption {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* ------------------------------------------------ */
+/* ❤️ CUSTOM UTILITY COLORS                         */
+/* ------------------------------------------------ */
+.bg-maroon {
+  background-color:  #722f37 !important;
+  color: #fff !important;
+}
+
+.text-maroon {
+  color: #6a1b1b !important;
+}
+
+.btn-outline-maroon {
+  color: #6a1b1b !important;
+  border-color: #6a1b1b !important;
+}
+
+.btn-outline-maroon:hover {
+  background-color: #6a1b1b !important;
+  color: #fff !important;
+}
+
+/* ------------------------------------------------ */
+/* ✂️ TEXT CLAMP UTILITIES                           */
+/* ------------------------------------------------ */
+
+/* stylelint-disable property-no-vendor-prefix */
+
+/* One-line clamp */
+.text-clamp-1 {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Two-line clamp */
+.text-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* Three-line clamp */
+.text-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* stylelint-enable property-no-vendor-prefix */
+
+/* ------------------------------------------------ */
+/* 📱 RESPONSIVE (Bootstrap handles most cases)     */
+/* ------------------------------------------------ */
+@media (max-width: 992px) {
+  .navbar-nav {
+    text-align: center;
+    gap: 0.6rem;
+  }
+}

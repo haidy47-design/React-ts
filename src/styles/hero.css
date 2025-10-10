@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@400;600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@400;500&display=swap');
+
+
+/* === Universal Hero Section Styles (shared) === */
+.hero-section {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Parallax effect */
+  overflow: hidden;
+  transition: background-position 0.3s ease-out;
+  color: #fff;
+  position: relative;
+}
+.hero-section .hero-heading {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+}
+
+.hero-section .hero-paragraph {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+
+/* === Overlay for contrast === */
+.hero-section {
+  min-height: 100vh; /* full viewport */
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-overlay {
+  background: rgba(0, 0, 0, 0.45); /* dark overlay */
+  z-index: 1;
+}
+
+.carousel-item img,
+.container[position-relative] {
+  will-change: transform; 
+  transition: transform 0.1s linear;
+}
+
+.hero-heading {
+  font-family: "Playfair Display", serif;
+}
+
+.subheading-font,
+.hero-paragraph {
+  font-family: "Montserrat", sans-serif;
+}
+
+.hero-paragraph {
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.fade-up {
+  animation: fadeInUp 1.5s ease-out both;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

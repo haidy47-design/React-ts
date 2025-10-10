@@ -1,0 +1,69 @@
+.insta-section {
+  background-color: #f9f7f3;
+}
+
+.text-maroon {
+  color: #722f37;
+  font-family: "Georgia", serif;
+}
+
+.btn-follow {
+  background-color: transparent;
+  border: 1px solid #722f37;
+  color: #722f37;
+  padding: 8px 30px;
+  border-radius: 3px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.btn-follow:hover {
+  background-color: #722f37;
+  color: #fff;
+}
+
+.insta-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.insta-img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(114, 47, 55, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  color: #fff;
+  transition: opacity 0.4s ease;
+}
+
+.insta-wrapper:hover .overlay {
+  opacity: 1;
+}
+
+.insta-wrapper:hover .insta-img {
+  transform: scale(1.05);
+}
+
+.slick-slide {
+  padding: 0 10px;
+}
+
+@media (max-width: 767px) {
+  .insta-img {
+    height: 200px;
+  }
+}

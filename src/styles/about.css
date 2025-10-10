@@ -1,0 +1,25 @@
+.about-section {
+  background-color: #fdfdfd;
+}
+
+.about-title {
+  color: #722f37;
+  font-weight: 600;
+  font-family: "Georgia", serif;
+}
+
+.btn-outline-custom {
+  border: 1px solid #722f37;
+  color: #722f37;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-custom:hover {
+  background-color: #722f37;
+  color: #fff;
+}
+
+img {
+  object-fit: cover;
+}

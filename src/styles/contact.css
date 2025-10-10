@@ -1,0 +1,40 @@
+.contact-section {
+  background-color: #fdfdfd;
+}
+
+.contact-title {
+  color: #722f37;
+  font-weight: 600;
+  font-family: "Georgia", serif;
+}
+
+.btn-outline-custom {
+  border: 1px solid #722f37;
+  background-color: #722f37;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-custom:hover {
+  background-color: transparent;
+  color: #722f37;
+}
+
+.form-control {
+  background-color: transparent;
+  box-shadow: none !important;
+}
+
+.form-control:focus {
+  border-color: #722f37;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #aaa;
+  font-size: 0.95rem;
+}
+
+img {
+  object-fit: cover;
+}
