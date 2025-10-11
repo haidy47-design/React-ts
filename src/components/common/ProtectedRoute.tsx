@@ -2,13 +2,21 @@ import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAppSelector } from "../../features/hooks";
 
-// Guards private routes; redirects to /login if not authenticated
 export default function ProtectedRoute(): React.ReactElement {
   const location = useLocation();
-  const isAuthenticated = useAppSelector((s) => Boolean(s.auth.token));
+
+  
+  const user = useAppSelector((s) => s.auth);
+  const storedUser = localStorage.getItem("user");
+
+  const isAuthenticated = Boolean(user && Object.keys(user).length > 0 || storedUser);
+
   if (!isAuthenticated) {
+ 
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
+
+ 
   return <Outlet />;
 }
 

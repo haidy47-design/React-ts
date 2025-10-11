@@ -1,42 +1,90 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Spinner from "../../components/common/Spinner";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+import toast, { Toaster } from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../../styles/auth.css";
 
-const schema = z.object({ email: z.string().email() });
-type FormValues = z.infer<typeof schema>;
+const schema = z.object({
+  email: z.string().email("Invalid email address"),
+});
 
-export default function ForgotPasswordPage(): React.ReactElement {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>({ resolver: zodResolver(schema) });
-  const onSubmit = async () => {
-    await new Promise((r) => setTimeout(r, 700));
-    alert("Reset link sent (mocked)");
-  };
+type ForgotForm = z.infer<typeof schema>;
+
+export default function ForgotPassword() {
+  const navigate = useNavigate();
+  const [serverError, setServerError] = useState<string>("");
+  const form = useForm<ForgotForm>({
+    resolver: zodResolver(schema),
+    defaultValues: { email: "" },
+  });
+
+  const { register, handleSubmit, formState } = form;
+
+  const handleForgot = async (values: ForgotForm) => {
+  try {
+    const { data } = await axios.get("https://68e83849f2707e6128ca32fb.mockapi.io/users");
+    const user = data.find((u: any) => u.email.toLowerCase() === values.email.toLowerCase());
+
+    if (user) {
+      toast.success("📩 Email found! Redirecting...");
+      setTimeout(() => navigate(`/reset-password?email=${values.email}`), 1500);
+    } else {
+      toast.error("❌ Email not found. Please check again.");
+    }
+  } catch (error) {
+    toast.error("⚠️ Something went wrong. Try again later.");
+    console.error(error);
+  }
+};
+
+
   return (
-    <div className="container py-4">
-      <HelmetWrapper title="Forgot Password" />
-      <div className="row justify-content-center">
-        <div className="col-12 col-md-8 col-lg-5">
-          <div className="card shadow-sm border-0">
-            <div className="card-body p-4">
-              <h4 className="mb-3 text-center">Forgot Password</h4>
-              {isSubmitting && <Spinner />}
-              <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input className={`form-control ${errors.email ? "is-invalid" : ""}`} {...register("email")} />
-                  {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
-                </div>
-                <button className="btn btn-primary w-100" disabled={isSubmitting}>Send Reset Link</button>
-              </form>
-            </div>
-          </div>
+    <>
+      <Helmet>
+        <title>Forgot Password</title>
+      </Helmet>
+      <Toaster position="top-center" />
+
+      <div className="auth-container">
+        <div className="auth-overlay" />
+        <div className="auth-card">
+          <h2 className="auth-title">Forgot Password</h2>
+          <p className="auth-subtitle">Enter your email to reset your password</p>
+
+          <form onSubmit={handleSubmit(handleForgot)}>
+            <label className="auth-label">Email</label>
+            <input
+              type="email"
+              className="auth-input"
+              placeholder="Enter your email"
+              {...register("email")}
+            />
+
+           
+            {formState.errors.email && (
+              <div className="error-message">{formState.errors.email.message}</div>
+            )}
+
+            
+            {serverError && <div className="error-message">{serverError}</div>}
+
+            <button className="auth-btn" type="submit">
+              Send Reset Link
+            </button>
+          </form>
+
+          <p className="mt-3">
+            Back to{" "}
+            <span className="auth-link" onClick={() => navigate("/login")}>
+              Login
+            </span>
+          </p>
         </div>
       </div>
-    </div>
+    </>
   );
 }
-
-
