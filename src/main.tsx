@@ -12,6 +12,8 @@ import AppRoutes from "./routes/AppRoutes";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Toaster } from "react-hot-toast";
 
 
 const container = document.getElementById("root")!;
@@ -32,6 +34,23 @@ root.render(
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <AppRoutes />
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                duration: 2500,
+                style: {
+                  background: "#333",
+                  color: "#fff",
+                  borderRadius: "10px",
+                },
+                success: {
+                  style: { background: "#722F37" },
+                },
+                error: {
+                  style: { background: "#722F37" },
+                },
+              }}
+            />
           </BrowserRouter>
         </QueryClientProvider>
       </Provider>

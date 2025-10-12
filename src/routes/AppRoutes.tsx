@@ -15,6 +15,8 @@ import ForgotPasswordPage from "../features/auth/ForgotPasswordPage";
 import ProfilePage from "../features/auth/ProfilePage";
 import About from "../features/home/About";
 import Contact from "../features/home/Contact";
+import OrderDetails from "../features/order/OrderDetails";
+import ResetPassword from "../features/auth/ResetPassword";
 
 export default function AppRoutes(): React.ReactElement {
   return (
@@ -31,12 +33,14 @@ export default function AppRoutes(): React.ReactElement {
         <Route element={<ProtectedRoute />}>
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/:id" element={<OrderDetails />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
 
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPassword  />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
