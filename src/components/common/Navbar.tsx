@@ -1,13 +1,13 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../features/hooks";
-import { logout } from "../../features/auth/authSlice";
+import { logoutUser } from "../../features/auth/authSlice";
 import "../../styles/navbar.css";
 
 
 export default function Navbar(): React.ReactElement {
   const dispatch = useAppDispatch();
-  const { token, user } = useAppSelector((s) => s.auth);
+  const  user  = useAppSelector((s) => s.auth);
   const cartCount = useAppSelector((s) => s.cart.items.length);
 
   return (
@@ -77,7 +77,7 @@ export default function Navbar(): React.ReactElement {
             <ul className="navbar-nav ms-lg-auto align-items-lg-center">
               {/* User Section */}
               <li className="nav-item dropdown">
-                {token ? (
+                {user ? (
                   <>
                     <a
                       href="#!"
@@ -106,7 +106,7 @@ export default function Navbar(): React.ReactElement {
                       <li>
                         <button
                           className="dropdown-item text-danger"
-                          onClick={() => dispatch(logout())}
+                          onClick={() => dispatch(logoutUser())}
                         >
                           Logout
                         </button>

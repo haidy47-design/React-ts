@@ -1,58 +1,139 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Spinner from "../../components/common/Spinner";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
+import "../../styles/auth.css";
 
-const schema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  password: z.string().min(6),
-});
-type FormValues = z.infer<typeof schema>;
+const schema = z
+  .object({
+    name: z.string().min(3, "Name must be at least 3 characters"),
+    age: z.number().min(1, "Age is required"),
+    email: z.string().email("Invalid email"),
+    password: z
+      .string()
+      .regex(/^[A-Z][a-z0-9]{3,8}$/, "Must start with uppercase and 4–9 chars"),
+    "re-password": z.string(),
+  })
+  .refine((data) => data.password === data["re-password"], {
+    message: "Passwords must match",
+    path: ["re-password"],
+  });
 
-export default function SignupPage(): React.ReactElement {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>({ resolver: zodResolver(schema) });
+type RegisterForm = z.infer<typeof schema>;
 
-  const onSubmit = async () => {
-    await new Promise((r) => setTimeout(r, 800));
-    alert("Account created locally. Use Login to authenticate.");
+export default function Register() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const form = useForm<RegisterForm>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: "",
+      age: 0,
+      email: "",
+      password: "",
+      "re-password": "",
+    },
+  });
+
+  const { register, handleSubmit, formState } = form;
+
+  const handleRegister = async (values: RegisterForm) => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      await axios.post("https://68e83849f2707e6128ca32fb.mockapi.io/users", values);
+      toast.success("✅ Account created!");
+      setTimeout(() => navigate("/login"), 1500);
+    } catch {
+      toast.error("❌ Failed to register. Try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="container py-4">
-      <HelmetWrapper title="Sign Up" />
-      <div className="row justify-content-center">
-        <div className="col-12 col-md-8 col-lg-5">
-          <div className="card shadow-sm border-0">
-            <div className="card-body p-4">
-              <h4 className="mb-3 text-center">Create account</h4>
-              {isSubmitting && <Spinner />}
-              <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                <div className="mb-3">
-                  <label className="form-label">Name</label>
-                  <input className={`form-control ${errors.name ? "is-invalid" : ""}`} {...register("name")} />
-                  {errors.name && <div className="invalid-feedback">{errors.name.message}</div>}
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input type="email" className={`form-control ${errors.email ? "is-invalid" : ""}`} {...register("email")} />
-                  {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Password</label>
-                  <input type="password" className={`form-control ${errors.password ? "is-invalid" : ""}`} {...register("password")} />
-                  {errors.password && <div className="invalid-feedback">{errors.password.message}</div>}
-                </div>
-                <button className="btn btn-primary w-100" disabled={isSubmitting} type="submit">Create</button>
-              </form>
-            </div>
-          </div>
+    <>
+      <Helmet>
+        <title>Register</title>
+      </Helmet>
+      <Toaster position="top-center" />
+
+      <div className="auth-container">
+        <div className="auth-overlay" />
+        <div className="auth-card">
+          <h2 className="auth-title">Create Account</h2>
+          <p className="auth-subtitle">Join us and start managing your tasks</p>
+
+          <form onSubmit={handleSubmit(handleRegister)}>
+            <label className="auth-label">Full Name</label>
+            <input className="auth-input" placeholder="Your name" {...register("name")} />
+            {formState.errors.name && (
+              <div className="error-message">{formState.errors.name.message}</div>
+            )}
+
+            <label className="auth-label">Email</label>
+            <input
+              type="email"
+              className="auth-input"
+              placeholder="Your email"
+              {...register("email")}
+            />
+            {formState.errors.email && (
+              <div className="error-message">{formState.errors.email.message}</div>
+            )}
+
+            <label className="auth-label">Password</label>
+            <input
+              type="password"
+              className="auth-input"
+              placeholder="Password"
+              {...register("password")}
+            />
+            {formState.errors.password && (
+              <div className="error-message">{formState.errors.password.message}</div>
+            )}
+
+            <label className="auth-label">Re-enter Password</label>
+            <input
+              type="password"
+              className="auth-input"
+              placeholder="Re-enter password"
+              {...register("re-password")}
+            />
+            {formState.errors["re-password"] && (
+              <div className="error-message">{formState.errors["re-password"].message}</div>
+            )}
+
+            <label className="auth-label">Age</label>
+            <input
+              type="number"
+              className="auth-input"
+              placeholder="Your age"
+              {...register("age", { valueAsNumber: true })}
+            />
+            {formState.errors.age && (
+              <div className="error-message">{formState.errors.age.message}</div>
+            )}
+
+            <button className="auth-btn" disabled={loading}>
+              {loading ? "Creating..." : "Register"}
+            </button>
+          </form>
+
+          <p className="mt-3">
+            Already have an account?{" "}
+            <span className="auth-link" onClick={() => navigate("/login")}>
+              Login
+            </span>
+          </p>
         </div>
       </div>
-    </div>
+    </>
   );
 }
-
-

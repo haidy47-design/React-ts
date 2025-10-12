@@ -1,76 +1,120 @@
-import React from "react";
+import React, { useState } from "react";
+import axios, { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import { useAppDispatch } from "../hooks";
-import { setCredentials } from "./authSlice";
-import Spinner from "../../components/common/Spinner";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+import { z } from "zod";
+import toast, { Toaster } from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
+import "../../styles/auth.css";
+import { FaSignInAlt } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { setUser } from "../auth/authSlice";
 
 const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
+  email: z.string().email("Invalid email"),
+  password: z
+    .string()
+    .regex(/^[A-Z][a-z0-9]{3,8}$/, "Must start with uppercase and 4–9 chars"),
 });
-type FormValues = z.infer<typeof schema>;
 
-export default function LoginPage(): React.ReactElement {
-  const dispatch = useAppDispatch();
+type LoginForm = z.infer<typeof schema>;
+
+export default function Login() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({ resolver: zodResolver(schema) });
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
-  const mutation = useMutation({
-    mutationFn: async (values: FormValues) => {
-      const res = await axios.post("https://notes-mrp9.onrender.com/signin", values);
-      return res.data as { token: string };
-    },
-    onSuccess: (data) => {
-      dispatch(setCredentials({ token: data.token }));
-      const to = (location.state as any)?.from?.pathname ?? "/";
-      navigate(to, { replace: true });
-    },
+  const form = useForm<LoginForm>({
+    resolver: zodResolver(schema),
+    defaultValues: { email: "", password: "" },
   });
+  const { register, handleSubmit, formState } = form;
 
-  const onSubmit = (values: FormValues) => mutation.mutate(values);
+  const handleLogin = async (values: LoginForm) => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      const { data } = await axios.get("https://68e83849f2707e6128ca32fb.mockapi.io/users");
+
+      const user = data.find(
+        (u: any) =>
+          u.email.toLowerCase() === values.email.toLowerCase() &&
+          u.password === values.password
+      );
+
+      if (user) {
+        dispatch(setUser(user)); 
+        toast.success("✅ Logged in successfully!");
+        setTimeout(() => navigate("/home"), 1200);
+      } else {
+        toast.error("❌ Invalid email or password!");
+      }
+    } catch (err) {
+      const e = err as AxiosError;
+      console.error(e);
+      toast.error("⚠️ Something went wrong, please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="container py-4">
-      <HelmetWrapper title="Login" />
-      <div className="row justify-content-center">
-        <div className="col-12 col-md-8 col-lg-5">
-          <div className="card shadow-sm border-0">
-            <div className="card-body p-4">
-              <h4 className="mb-3 text-center">Welcome back</h4>
-              {mutation.isPending && <Spinner />}
-              <form onSubmit={handleSubmit(onSubmit)} className="needs-validation" noValidate>
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input type="email" className={`form-control ${errors.email ? "is-invalid" : ""}`} {...register("email")} />
-                  {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Password</label>
-                  <input type="password" className={`form-control ${errors.password ? "is-invalid" : ""}`} {...register("password")} />
-                  {errors.password && <div className="invalid-feedback">{errors.password.message}</div>}
-                </div>
-                {mutation.isError && (
-                  <div className="alert alert-danger">Login failed. Please check your credentials.</div>
-                )}
-                <button className="btn btn-primary w-100" disabled={mutation.isPending} type="submit">Login</button>
-              </form>
-              <div className="d-flex justify-content-between mt-3 small">
-                <Link to="/forgot-password">Forgot password?</Link>
-                <Link to="/signup">Create account</Link>
-              </div>
-            </div>
-          </div>
+    <>
+      <Helmet>
+        <title>Login</title>
+      </Helmet>
+      <Toaster position="top-center" />
+
+      <div className="auth-container">
+        <div className="auth-overlay" />
+        <div className="auth-card">
+          <h2 className="auth-title">
+            <FaSignInAlt /> Welcome Back
+          </h2>
+          <p className="auth-subtitle">Please enter your details to sign in</p>
+
+          <form onSubmit={handleSubmit(handleLogin)}>
+            <label className="auth-label">Email</label>
+            <input
+              type="email"
+              className="auth-input"
+              placeholder="Enter your email"
+              {...register("email")}
+            />
+            {formState.errors.email && (
+              <div className="error-message">{formState.errors.email.message}</div>
+            )}
+
+            <label className="auth-label mt-3">Password</label>
+            <input
+              type="password"
+              className="auth-input"
+              placeholder="Enter your password"
+              {...register("password")}
+            />
+            {formState.errors.password && (
+              <div className="error-message">{formState.errors.password.message}</div>
+            )}
+
+            <button className="auth-btn" disabled={loading}>
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
+          </form>
+
+          <p className="mt-3">
+            Don’t have an account?{" "}
+            <span className="auth-link" onClick={() => navigate("/signup")}>
+              Register
+            </span>
+          </p>
+
+          <p className="auth-link mt-2" onClick={() => navigate("/forgot-password")}>
+            Forgot password?
+          </p>
         </div>
       </div>
-    </div>
+    </>
   );
 }
-
-
