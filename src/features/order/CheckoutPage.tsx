@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { placeOrder } from "./orderSlice";
 import { clearCart, fetchCartItems } from "../product/cartSlice";
@@ -8,7 +8,8 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query"; // ✅ استيراد useQueryClient
+import { useQueryClient } from "@tanstack/react-query";
+import Spinner from "../../components/common/Spinner"; // ✅ تأكد أن المسار صح
 
 // ✅ تحديث الـ schema لقبول رقم مصري فقط
 const schema = z.object({
@@ -27,19 +28,26 @@ export default function CheckoutPage(): React.ReactElement {
   const items = useAppSelector((s) => s.cart.items);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const queryClient = useQueryClient(); 
+  const queryClient = useQueryClient();
+
+  const [loading, setLoading] = useState(true); // ✅ Spinner state
 
   const total = useMemo(
-    () => items.reduce((sum, i) => sum + i.price * i.quantity, 0),
+    () => items.reduce((sum, i) => sum + i.discount * i.quantity, 0),
     [items]
   );
 
-
-   useEffect(() => {
-    dispatch(fetchCartItems());
+  // ✅ تحميل العناصر مع Spinner
+  useEffect(() => {
+    const loadCart = async () => {
+      try {
+        await dispatch(fetchCartItems());
+      } finally {
+        setLoading(false); // ✅ إيقاف اللودينج بعد التحميل
+      }
+    };
+    loadCart();
   }, [dispatch]);
-
-
 
   const form = useForm<CheckoutFormData>({
     defaultValues: {
@@ -60,13 +68,8 @@ export default function CheckoutPage(): React.ReactElement {
       return;
     }
 
-
     const storedUser = localStorage.getItem("user");
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
-
-
-   
-
 
     if (!currentUser) {
       toast.error("Please login first");
@@ -82,7 +85,7 @@ export default function CheckoutPage(): React.ReactElement {
         id: i.id,
         title: i.title,
         quantity: i.quantity,
-        price: i.price,
+        discount: i.discount,
         image: i.image,
         category: i.category,
       })),
@@ -97,9 +100,7 @@ export default function CheckoutPage(): React.ReactElement {
         orderData
       );
 
-
-queryClient.invalidateQueries({ queryKey: ["orders"] });
-
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
 
       dispatch(placeOrder({ items, total }));
       dispatch(clearCart());
@@ -141,13 +142,22 @@ queryClient.invalidateQueries({ queryKey: ["orders"] });
     }
   };
 
+  // ✅ عرض الـ Spinner لو لسه بيحمل
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
+        <Spinner />
+      </div>
+    );
+  }
+
   return (
     <div className="container py-3 py-md-4 py-lg-4" style={{ minHeight: "100vh" }}>
       <Toaster position="top-center" reverseOrder={false} />
 
-      <h3 className="col-12 mb-4 pb-3 border-bottom border-secondary border-opacity-50">
+      <h2 className="col-12 mb-4 pb-3 border-bottom border-secondary border-opacity-50">
         Checkout
-      </h3>
+      </h2>
 
       <div className="row ms-lg-5 justify-content-center justify-content-md-between">
         {/* 🧾 Order Summary */}
@@ -178,7 +188,7 @@ queryClient.invalidateQueries({ queryKey: ["orders"] });
                     <div className="text-muted small">Qty: {item.quantity}</div>
                   </div>
                 </div>
-                <div>${(item.price * item.quantity).toFixed(2)}</div>
+                <div>${(item.discount * item.quantity).toFixed(2)}</div>
               </div>
             ))}
 
@@ -190,9 +200,9 @@ queryClient.invalidateQueries({ queryKey: ["orders"] });
               <span>Shipping</span>
               <span>Free</span>
             </div>
-            <div className="border-top border-secondary border-opacity-50 mt-2 py-2 d-flex justify-content-between fw-semibold border-bottom">
+            <div className="fs-5 border-top border-secondary border-opacity-50 mt-3 py-2 d-flex justify-content-between border-bottom">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span className="fw-semibold">${total.toFixed(2)}</span>
             </div>
           </div>
         )}

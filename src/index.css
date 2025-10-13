@@ -28,6 +28,8 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  font-family: "Avenir LT Pro 35 Light";
+  background-color: #f4efe8;
 }
 
 h1 {
@@ -66,3 +68,18 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+
+
+
+@font-face {
+    font-family: "Avenir LT Pro 35 Light";
+    src: url("https://db.onlinewebfonts.com/t/e5f78b4fb90a80a32be156470cbfead1.eot");
+    src: url("https://db.onlinewebfonts.com/t/e5f78b4fb90a80a32be156470cbfead1.eot?#iefix")format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/e5f78b4fb90a80a32be156470cbfead1.woff2")format("woff2"),
+    url("https://db.onlinewebfonts.com/t/e5f78b4fb90a80a32be156470cbfead1.woff")format("woff"),
+    url("https://db.onlinewebfonts.com/t/e5f78b4fb90a80a32be156470cbfead1.ttf")format("truetype"),
+    url("https://db.onlinewebfonts.com/t/e5f78b4fb90a80a32be156470cbfead1.svg#Avenir LT Pro 35 Light")format("svg");
+}
+

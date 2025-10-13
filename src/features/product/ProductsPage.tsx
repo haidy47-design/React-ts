@@ -90,7 +90,7 @@ export default function ProductsPage(): React.ReactElement {
                 id="searchInput"
                 type="text"
                 placeholder="Search flowers..."
-                className="form-control custom-input"
+                className="form-control rounded-0 border-top-0 border-start-0 border-end-0 border-2"
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>

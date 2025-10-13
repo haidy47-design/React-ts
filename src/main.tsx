@@ -14,6 +14,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Toaster } from "react-hot-toast";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 
 const container = document.getElementById("root")!;

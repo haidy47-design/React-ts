@@ -8,6 +8,7 @@ import {
 } from "./cartSlice";
 import { useNavigate } from "react-router";
 import "./CartPage.css"; 
+import Spinner from "../../components/common/Spinner";
 
 export default function CartPage(): React.ReactElement {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function CartPage(): React.ReactElement {
     dispatch(fetchCartItems());
   }, [dispatch]);
 
-  const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const total = items.reduce((sum, i) => sum + i.discount * i.quantity, 0);
 
   const handleQuantityChange = (id: string, quantity: number) => {
     if (quantity < 1) return;
@@ -35,12 +36,12 @@ export default function CartPage(): React.ReactElement {
 
   if (loading)
     return (
-      <div className="cart-loading">Loading your cart...</div>
+      <Spinner/>
     );
 
   if (items.length === 0)
     return (
-      <div className="cart-empty">🛒 Your cart is empty.</div>
+      <div className="cart-empty"><span className="display-1">🛒</span> Your cart is empty.</div>
     );
 
   return (
@@ -49,11 +50,11 @@ export default function CartPage(): React.ReactElement {
         <div className="cart-grid">
           {/* 🛍 My Cart Section */}
           <div className="cart-section">
-            <h1 className="cart-title">My Cart</h1>
+            <h2 className="">My Cart</h2>
             <div className="cart-divider"></div>
 
             {items.map((item) => (
-              <div key={item.id} className="cart-item">
+              <div key={item.id} className="cart-item d-flex align-items-center">
                 <img
                   src={item.image}
                   alt={item.title}
@@ -62,7 +63,7 @@ export default function CartPage(): React.ReactElement {
 
                 <div className="cart-item-details">
                   <h3 className="cart-item-title">{item.title}</h3>
-                  <span className="cart-item-price">
+                  <span className=" text-decoration-line-through">
                     ${item.price.toFixed(2)}
                   </span>
                 </div>
@@ -86,27 +87,28 @@ export default function CartPage(): React.ReactElement {
                     </button>
                   </div>
 
-                  <button
-                    onClick={() => handleRemove(item.id!)}
-                    className="cart-remove-btn"
-                  >
-                    Remove
-                  </button>
+                  
                 </div>
 
-                <div className="cart-item-total">
-                  ${(item.price * item.quantity).toFixed(2)}
+                <div className="cart-item-total fw-semibold">
+                  ${(item.discount * item.quantity).toFixed(2)}
                 </div>
+                <button
+                    onClick={() => handleRemove(item.id!)}
+                    className="main-color bg-transparent border-0"
+                  >
+                      <i className="fa-solid fa-trash m-1" />
+                  </button>
               </div>
             ))}
           </div>
 
           {/* 🧾 Order Summary */}
-          <div className="order-summary">
-            <h3 className="order-title">Order Summary</h3>
+          <div className="order-summary mt-3">
+            <h5 className="">Order Summary</h5>
             <div className="cart-divider"></div>
 
-            <div className="order-subtotal">
+            <div className="order-subtotal mt-5">
               <span>Subtotal</span>
               <span>${total.toFixed(2)}</span>
             </div>
@@ -116,14 +118,11 @@ export default function CartPage(): React.ReactElement {
               <span>${total.toFixed(2)}</span>
             </div>
 
-            <button onClick={handleCheckout} className="checkout-btn">
+            <button onClick={handleCheckout} className="btn btn-success col-12 rounded-0 py-3">
               Checkout
             </button>
 
-            <div className="secure-checkout">
-              <i className="bi bi-lock-fill"></i>
-              <span>Secure Checkout</span>
-            </div>
+          
           </div>
         </div>
       </div>

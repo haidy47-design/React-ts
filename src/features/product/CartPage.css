@@ -174,8 +174,8 @@
     text-align: center;
   }
   .cart-item-img {
-    width: 150px;
-    height: 180px;
+    width: 250px;
+    height: 300px;
   }
   .cart-item-total {
     text-align: center;
@@ -196,22 +196,13 @@
   }
 }
 
-.product-details-page {
-  font-family: "Poppins", sans-serif;
-}
 
 .product-image {
   max-height: 600px;
   width: 100%;
   object-fit: contain;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.product-title {
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
 
 .product-sku {
   color: #777;
@@ -219,12 +210,7 @@
   margin-bottom: 1rem;
 }
 
-.product-price {
-  font-size: 1.8rem;
-  color: #9b0a0a;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-}
+
 
 .quantity-section {
   display: flex;
@@ -240,13 +226,11 @@
 .quantity-control {
   display: flex;
   align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  overflow: hidden;
+  
 }
 
 .quantity-control button {
-  border: none;
+  border: 1px solid gray;
   background: #f8f9fa;
   padding: 0.5rem 1rem;
   font-weight: bold;
@@ -295,20 +279,10 @@
   padding-top: 1rem;
 }
 
-.product-description h5 {
-  font-weight: 600;
-  color: #9b0a0a;
-}
 
-.product-description p {
-  color: #444;
-  line-height: 1.6;
-  margin-top: 0.5rem;
-}
 
-.products-page {
-  font-family: "Poppins", sans-serif;
-}
+
+
 
 /* ===== Filters ===== */
 .filters-bar {
@@ -369,4 +343,12 @@
   .custom-select {
     width: 100%;
   }
+}
+
+
+
+.related-slider .slick-prev:before,
+.related-slider .slick-next:before {
+  color: #79253D; /* لون السهم */
+  font-size: 25px;
 }

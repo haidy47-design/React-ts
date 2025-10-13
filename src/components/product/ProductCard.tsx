@@ -8,7 +8,7 @@ export type Product = {
   price: number;
   image: string;
   category: string;
-  discount?:number;
+  discount:number;
   quantity?:number
 };
 
@@ -24,7 +24,7 @@ function ProductCardComponent({ product }: Props): React.ReactElement {
 
   return (
     
-    <div className=" border-0  position-relative overflow-hidden product-card mb-3"
+    <div className=" border-0 pb-3  position-relative overflow-hidden product-card mb-3"
     style={{ 
         backgroundColor: 'transparent',
         borderRadius: '0px',
@@ -52,14 +52,14 @@ function ProductCardComponent({ product }: Props): React.ReactElement {
           </div>
       )}
 
-      {/* صورة المنتج */}
+    
       <Link to={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <div >
         <img
           src={product.image}
           alt={product.title}
-          style={{height:"500px"}}
-          className="card-img-top object-fit-cover"
+          style={{height:"500px",objectFit:"contain"}}
+          className="card-img-top rounded-0 object-fit-cover"
           loading="lazy"
         />
       </div>
