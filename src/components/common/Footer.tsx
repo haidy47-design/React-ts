@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="custom-footer py-5 mt-5">
+    <footer className="custom-footer py-5 mt-5" style={{backgroundColor:"#E7E2D2"}}>
       <div className="container">
         <div className="row text-center  border"> 
 
