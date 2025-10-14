@@ -44,14 +44,11 @@ export const fetchCartItems = createAsyncThunk<CartItem[], void, { rejectValue: 
 );
 
 // 🟡 Add or update cart item
-export const addToCart = createAsyncThunk<
-  CartItem,
-  Product & { quantity: number },
-  { rejectValue: string }
->("cart/addToCart", async (product, { rejectWithValue }) => {
+export const addToCart = createAsyncThunk<CartItem,Product & { quantity: number },{ rejectValue: string }>
+("cart/addToCart", async (product, { rejectWithValue }) => {
   const storedUser = localStorage.getItem("user");
   if (!storedUser) {
-    toast.error("Please login first");
+  
     return rejectWithValue("Please login first");
   }
 
@@ -67,7 +64,6 @@ export const addToCart = createAsyncThunk<
       ...existing,
       quantity: existing.quantity + product.quantity,
     });
-    toast.success("Quantity updated in cart");
     return updated.data;
   } else {
     const newItem: CartItem = {
@@ -76,10 +72,10 @@ export const addToCart = createAsyncThunk<
       userID,
     };
     const addRes = await axios.post(API_URL, newItem);
-    toast.success("Added to cart");
     return addRes.data;
   }
 });
+
 
 // 🔵 Update quantity manually
 export const updateCartQuantity = createAsyncThunk<CartItem, { id: string; quantity: number }>(

@@ -42,7 +42,30 @@ export default function ProductDetailsPage(): React.ReactElement {
   const handleAddToCart = async () => {
     const userID = localStorage.getItem("user");
     if (!userID) {
-      toast.error("⚠️ Please login first!");
+      toast.custom((t) => (
+          <div
+            className={`${
+              t.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            } transition-all duration-300 bg-white shadow-lg rounded-4 border py-3 px-5 text-center`}
+            style={{
+              minWidth: "200px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <div
+              className="rounded-circle bg-warning d-flex align-items-center justify-content-center"
+              style={{ width: "50px", height: "50px" }}
+            >
+              <span style={{ fontSize: "24px", color: "white" }}>!</span>
+            </div>
+            <h5 className="fw-semibold mt-2 mb-1 text-dark">Please Login First</h5>
+          </div>
+        ),
+        { duration: 1500, position: "top-right" }
+      );
       return;
     }
 
@@ -52,9 +75,55 @@ export default function ProductDetailsPage(): React.ReactElement {
     try {
       await dispatch(addToCart({ ...product!, quantity })).unwrap();
       queryClient.invalidateQueries({ queryKey: ["orders"] });
-      toast.success("✅ Added to cart!");
+    toast.custom(
+        (t) => (
+          <div
+            className={`${
+              t.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            } transition-all duration-300 bg-white shadow-lg rounded-4 border py-2 px-5 text-center`}
+            style={{
+              minWidth: "200px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <div
+              className="rounded-circle bg-success d-flex align-items-center justify-content-center"
+              style={{ width: "50px", height: "50px" }}
+            >
+              <span style={{ fontSize: "24px", color: "white" }}>✔</span>
+            </div>
+            <h6 className="fw-semibold mt-2 mb-1 text-dark">Added To Cart Successful</h6>
+          </div>
+        ),
+        { duration: 2000, position: "top-right" }
+      );
     } catch (error) {
-      toast.error(typeof error === "string" ? error : "❌ Failed to add to cart!");
+      toast.custom((t) => (
+          <div
+            className={`${
+              t.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            } transition-all duration-300 bg-white shadow-lg rounded-4 border py-3 px-5 text-center`}
+            style={{
+              minWidth: "200px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <div
+              className="rounded-circle bg-danger d-flex align-items-center justify-content-center"
+              style={{ width: "50px", height: "50px" }}
+            >
+              <span style={{ fontSize: "24px", color: "white" }}>X</span>
+            </div>
+            <h5 className="fw-semibold mt-2 mb-1 text-dark">Failed to add to cart!</h5>
+          </div>
+        ),
+        { duration: 1500, position: "top-right" });
     } finally {
       setIsAdding(false);
     }
@@ -66,9 +135,9 @@ export default function ProductDetailsPage(): React.ReactElement {
   const settings = {
     dots: false,
     infinite: true,
-    speed: 500,
+    speed: 700,
     slidesToShow: 3,
-    slidesToScroll: 3,
+    slidesToScroll: 1,
     arrows: true,
     autoplay: true,
     autoplaySpeed: 3000,
@@ -136,7 +205,7 @@ export default function ProductDetailsPage(): React.ReactElement {
           <h4 className="text-center mb-4 main-color">Related Products</h4>
           <Slider {...settings} className="text-center related-slider" >
             {related
-              .filter(prod => prod.id !== product.id)
+              .filter(prod => prod.id !== product.id &&prod.category == product.category)
               .map(prod => (
                 <div key={prod.id} className="p-2">
                   <ProductCard product={prod} />

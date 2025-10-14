@@ -1,14 +1,36 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../features/hooks";
 import { logoutUser } from "../../features/auth/authSlice";
 import "../../styles/navbar.css";
+import { GiShoppingCart } from 'react-icons/gi';
+import Badge from '@mui/material/Badge';
+import { styled } from '@mui/material/styles';
+import { fetchCartItems } from "../../features/product/cartSlice";
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    right: -1,
+    top: 2,
+    border: `2px solid ${(theme.vars ?? theme).palette.background.paper}`,
+    padding: '0 4px',
+    backgroundColor: '#79253D',
+    color: 'white', 
+  },
+}));
 
 
 export default function Navbar(): React.ReactElement {
   const dispatch = useAppDispatch();
   const  user  = useAppSelector((s) => s.auth);
-  const cartCount = useAppSelector((s) => s.cart.items.length);
+  const cartItems = useAppSelector((s) => s.cart.items);
+  const cartCount = useMemo(() => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  }, [cartItems]);
+
+  useEffect(() => {
+      dispatch(fetchCartItems());
+    }, [dispatch]);
+  
 
   return (
     <>
@@ -16,12 +38,12 @@ export default function Navbar(): React.ReactElement {
         
       </div>
       {/* 🔹 Top Promo Bar */}
-      <div className="container bg-maroon text-white text-center fs-6 py-3 small fw-semibold  mx-auto ">
-        Valentine’s Day Promotions <a href="#"className= "text-decoration-underline text-white">Shop Now</a> <span className="ms-1">♡</span>
+      <div className="container bg-success text-white text-center fs-6 py-3 small fw-semibold ">
+        Valentine’s Day Promotions <Link to="/products"className= "text-decoration-underline text-white">Shop Now</Link> <span className="ms-1">♡</span>
       </div>
 
       {/* 🔹 Main Navbar */}
-      <nav className="container navbar navbar-expand-lg navbar-light  sticky-top shadow-sm   mx-auto border border-danger-subtle border-bottom-0">
+      <nav className="container navbar navbar-expand-lg sticky-top shadow-sm mx-auto " style={{backgroundColor:"#F4EFE8"}}>
         <div className="container ">
           {/* Brand */}
           <Link to="/" className="navbar-brand">
@@ -121,13 +143,16 @@ export default function Navbar(): React.ReactElement {
               </li>
 
               {/* Cart Button */}
-              <li className="nav-item ms-lg-3">
+              <li className="nav-item ms-lg-3 mx-3">
                 <NavLink
                   to="/cart"
-                  className="btn-outline-maroon position-relative text-decoration-none px-2 py-1 rounded"
+                  className=" "
                 >
-                  Cart ({cartCount})
-                  {/* <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    <StyledBadge badgeContent={cartItems.length>=1?cartCount:"0"} >
+                         <GiShoppingCart style={{height:"30px",width:"30px" ,color:"#79253D"}} />
+                    </StyledBadge>
+                  
+                  {/* <span className="position-absolute top-0 start-100 translate-middle rounded-circle py-1 px-2  bg-success">
                     {cartCount}
                   </span> */}
                 </NavLink>

@@ -9,11 +9,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import Spinner from "../../components/common/Spinner"; // ✅ تأكد أن المسار صح
+import Spinner from "../../components/common/Spinner"; 
 
-// ✅ تحديث الـ schema لقبول رقم مصري فقط
+//
 const schema = z.object({
-  name: z.string().min(1, "Name is required").max(30, "Max 30 chars"),
+  name: z.string().min(3, "Name is required").max(30, "Max 30 chars"),
   email: z.string().email("Invalid email"),
   address: z.string().min(1, "Address is required"),
   phone: z
@@ -30,14 +30,14 @@ export default function CheckoutPage(): React.ReactElement {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [loading, setLoading] = useState(true); // ✅ Spinner state
+  const [loading, setLoading] = useState(true);
 
   const total = useMemo(
     () => items.reduce((sum, i) => sum + i.discount * i.quantity, 0),
     [items]
   );
 
-  // ✅ تحميل العناصر مع Spinner
+
   useEffect(() => {
     const loadCart = async () => {
       try {
@@ -113,7 +113,7 @@ export default function CheckoutPage(): React.ReactElement {
               t.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
             } transition-all duration-300 bg-white shadow-lg rounded-4 border py-4 px-5 text-center`}
             style={{
-              minWidth: "300px",
+              minWidth: "200px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -142,7 +142,7 @@ export default function CheckoutPage(): React.ReactElement {
     }
   };
 
-  // ✅ عرض الـ Spinner لو لسه بيحمل
+  
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
@@ -153,20 +153,63 @@ export default function CheckoutPage(): React.ReactElement {
 
   return (
     <div className="container py-3 py-md-4 py-lg-4" style={{ minHeight: "100vh" }}>
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster containerStyle={{marginTop:"50%",marginLeft:"50%"}} reverseOrder={false} />
 
       <h2 className="col-12 mb-4 pb-3 border-bottom border-secondary border-opacity-50">
         Checkout
       </h2>
 
       <div className="row ms-lg-5 justify-content-center justify-content-md-between">
-        {/* 🧾 Order Summary */}
+      
+        {/* 👤 Checkout Form */}
+        <div className="py-lg-4 mb-lg-4 ms-lg-0 mt-3 mt-md-2 col-11 col-md-6 col-lg-6 col-xl-6 ">
+          <h5 className="mb-3 text-secondary">User Details</h5>
+
+          <form id="checkoutForm" onSubmit={handleSubmit(onSubmit)} className="mt-4">
+            <div className="form-floating mb-3">
+              <input type="text" className="form-control rounded-0" {...register("name")} id="name" placeholder="Name" />
+              <label htmlFor="name">Name</label>
+              {formState.errors.name && <p className="alert alert-danger p-1 mt-1 text-center">{formState.errors.name.message}</p>}
+            </div>
+
+            <div className="form-floating mb-3">
+              <input type="email" className="form-control rounded-0" {...register("email")} id="email" placeholder="Email" />
+              <label htmlFor="email">Email</label>
+              {formState.errors.email && <p className="alert alert-danger p-1 mt-1 text-center">{formState.errors.email.message}</p>}
+            </div>
+
+            <div className="form-floating mb-3">
+              <input type="text" className="form-control rounded-0" {...register("address")} id="address" placeholder="Address" />
+              <label htmlFor="address">Address</label>
+              {formState.errors.address && <p className="alert alert-danger p-1 mt-1 text-center">{formState.errors.address.message}</p>}
+            </div>
+
+    
+            <div className="form-floating mb-3">
+              <input
+                type="text"
+                className="form-control rounded-0"
+                {...register("phone")}
+                id="phone"
+                placeholder="Phone"
+              />
+              <label htmlFor="phone">Phone</label>
+              {formState.errors.phone && (
+                <p className="alert alert-danger p-1 mt-1 text-center">
+                  {formState.errors.phone.message}
+                </p>
+              )}
+            </div>
+          </form>
+        </div>
+        
+          {/* 🧾 Order Summary */}
         {items.length === 0 ? (
           <div className="text-center py-5 text-secondary p-lg-4 mb-lg-4 ms-lg-4 col-11 col-md-7 col-lg-6 col-xl-6 mt-3 mt-md-0">
             <p>Your cart is empty.</p>
           </div>
         ) : (
-          <div className="p-lg-4 mb-lg-4 ms-lg-4 col-11 col-md-7 col-lg-6 col-xl-6 mt-3 mt-md-0">
+          <div className="p-lg-4 mb-lg-4 ms-lg-4 col-11 col-md-5 col-lg-5 col-xl-5 mt-5 mt-md-3">
             <h5 className="mb-3 text-secondary">Order Summary</h5>
 
             {items.map((item) => (
@@ -204,59 +247,18 @@ export default function CheckoutPage(): React.ReactElement {
               <span>Total</span>
               <span className="fw-semibold">${total.toFixed(2)}</span>
             </div>
+            <div className="mt-4">
+             <button
+               form="checkoutForm"
+               type="submit"
+               disabled={!items.length}
+               className="btn col-12 px-4 py-2 rounded-0 btn-success"
+             >
+               Place Order
+             </button>
+           </div>
           </div>
         )}
-
-        {/* 👤 Checkout Form */}
-        <div className="p-lg-4 mb-lg-4 ms-lg-5 mt-5 mt-md-2 col-11 col-md-4 col-lg-5 col-xl-5">
-          <h5 className="mb-3 text-secondary">User Details</h5>
-
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-            <div className="form-floating mb-3">
-              <input type="text" className="form-control rounded-0" {...register("name")} id="name" placeholder="Name" />
-              <label htmlFor="name">Name</label>
-              {formState.errors.name && <p className="alert alert-danger p-1 mt-1 text-center">{formState.errors.name.message}</p>}
-            </div>
-
-            <div className="form-floating mb-3">
-              <input type="email" className="form-control rounded-0" {...register("email")} id="email" placeholder="Email" />
-              <label htmlFor="email">Email</label>
-              {formState.errors.email && <p className="alert alert-danger p-1 mt-1 text-center">{formState.errors.email.message}</p>}
-            </div>
-
-            <div className="form-floating mb-3">
-              <input type="text" className="form-control rounded-0" {...register("address")} id="address" placeholder="Address" />
-              <label htmlFor="address">Address</label>
-              {formState.errors.address && <p className="alert alert-danger p-1 mt-1 text-center">{formState.errors.address.message}</p>}
-            </div>
-
-            {/* ✅ حقل الموبايل المصري */}
-            <div className="form-floating mb-3">
-              <input
-                type="text"
-                className="form-control rounded-0"
-                {...register("phone")}
-                id="phone"
-                placeholder="Phone"
-              />
-              <label htmlFor="phone">Phone</label>
-              {formState.errors.phone && (
-                <p className="alert alert-danger p-1 mt-1 text-center">
-                  {formState.errors.phone.message}
-                </p>
-              )}
-            </div>
-
-            <div className="text-end">
-              <button
-                disabled={!items.length}
-                className="btn px-4 py-2 rounded-0 btn-success"
-              >
-                Place Order
-              </button>
-            </div>
-          </form>
-        </div>
       </div>
     </div>
   );
