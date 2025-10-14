@@ -39,17 +39,17 @@ root.render(
             <Toaster
               position="top-right"
               toastOptions={{
-                duration: 2500,
+                duration: 1500,
                 style: {
                   background: "#333",
-                  color: "#fff",
+                  color: "black",
                   borderRadius: "10px",
                 },
                 success: {
-                  style: { background: "#722F37" },
+                  style: { background: "#f4dbb2ff" },
                 },
                 error: {
-                  style: { background: "#722F37" },
+                  style: { background: "#de4a5bff" },
                 },
               }}
             />

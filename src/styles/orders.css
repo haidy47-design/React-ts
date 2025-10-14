@@ -155,6 +155,10 @@ select:-webkit-autofill {
 .main-color{
  color: #79253D;
 }
+
+.main-color:hover{
+ color: black;
+}
 .bg-main-color{
   background-color: #79253D;
 }

@@ -6,9 +6,10 @@ import {
   removeFromCart,
   clearCart,
 } from "./cartSlice";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import "./CartPage.css"; 
 import Spinner from "../../components/common/Spinner";
+import { FaLongArrowAltRight } from 'react-icons/fa';
 
 export default function CartPage(): React.ReactElement {
   const navigate = useNavigate();
@@ -30,6 +31,10 @@ export default function CartPage(): React.ReactElement {
     dispatch(removeFromCart(id));
   };
 
+  const handleClear = () => {
+    dispatch(clearCart());
+  };
+
   const handleCheckout = () => {
     navigate("/checkout");
   };
@@ -46,7 +51,7 @@ export default function CartPage(): React.ReactElement {
 
   return (
     <div className="cart-page">
-      <div className="container cart-container">
+      <div className="container ">
         <div className="cart-grid">
           {/* 🛍 My Cart Section */}
           <div className="cart-section">
@@ -64,12 +69,12 @@ export default function CartPage(): React.ReactElement {
                 <div className="cart-item-details">
                   <h3 className="cart-item-title">{item.title}</h3>
                   <span className=" text-decoration-line-through">
-                    ${item.price.toFixed(2)}
+                    ${((item.price * item.quantity)).toFixed(2)}
                   </span>
                 </div>
 
                 <div className="cart-quantity-group">
-                  <div className="cart-quantity-controls">
+                  <div className="cart-quantity-controls align-items-center">
                     <button
                       onClick={() =>
                         handleQuantityChange(item.id!, item.quantity - 1)
@@ -101,6 +106,10 @@ export default function CartPage(): React.ReactElement {
                   </button>
               </div>
             ))}
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-center ">
+             <button onClick={handleClear} className="btn btn-outline-success rounded-0 col-12 col-md-12 col-lg-2 mt-4">Clear Cart</button>
+             <Link to="/products" className="btn btn-link mt-4 fs-5 main-color text-decoration-none">Continue Shopping<FaLongArrowAltRight/></Link>
+          </div>
           </div>
 
           {/* 🧾 Order Summary */}
@@ -114,11 +123,11 @@ export default function CartPage(): React.ReactElement {
             </div>
 
             <div className="order-total">
-              <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <strong>Total</strong>
+              <strong>${total.toFixed(2)}</strong>
             </div>
-
-            <button onClick={handleCheckout} className="btn btn-success col-12 rounded-0 py-3">
+             <div className="cart-divider"></div>
+            <button onClick={handleCheckout} className="btn btn-success col-12 rounded-0 py-3 mt-3">
               Checkout
             </button>
 
