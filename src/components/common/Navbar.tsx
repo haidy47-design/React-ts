@@ -136,7 +136,7 @@ export default function Navbar(): React.ReactElement {
                     </ul>
                   </>
                 ) : (
-                  <NavLink to="/login" className="nav-link text-dark">
+                  <NavLink to="/login" className="btn col-12 px-4 py-2 rounded-0 btn-success">
                     Login
                   </NavLink>
                 )}
