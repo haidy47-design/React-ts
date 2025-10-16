@@ -99,7 +99,7 @@ export default function Navbar(): React.ReactElement {
             <ul className="navbar-nav ms-lg-auto align-items-lg-center">
               {/* User Section */}
               <li className="nav-item dropdown">
-                {user ? (
+                {user && user.name ? (
                   <>
                     <a
                       href="#!"
