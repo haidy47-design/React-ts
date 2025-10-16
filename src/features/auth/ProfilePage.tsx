@@ -45,6 +45,14 @@ export default function ProfilePage(): React.ReactElement {
 
     const { name, oldPassword, password, "re-password": rePassword } = formData;
 
+     if (name) {
+    const nameRegex = /^[A-Za-z\s]{3,30}$/;
+    if (!nameRegex.test(name.trim())) {
+      toast.error("⚠️ Name must be at least 3 letters and contain only alphabets.");
+      return;
+    }
+  }
+
     
     if (!name && !password && !rePassword) {
       toast.error("⚠️ Please update at least one field.");
@@ -67,6 +75,11 @@ export default function ProfilePage(): React.ReactElement {
         toast.error("❌ Passwords do not match.");
         return;
       }
+       const passwordRegex = /^[A-Z][a-z0-9]{3,8}$/;
+    if (!passwordRegex.test(password)) {
+      toast.error("⚠️ Password must start with a capital letter and be 4–9 characters (letters/numbers only).");
+      return;
+    }
     }
 
     try {
@@ -127,7 +140,7 @@ export default function ProfilePage(): React.ReactElement {
               : "—"}
           </p>
 
-          <button className="btn btn-danger w-100 mt-4" onClick={handleLogout}>
+          <button className="btn btn-danger  mt-4" onClick={handleLogout}>
             Logout
           </button>
         </div>
@@ -142,7 +155,7 @@ export default function ProfilePage(): React.ReactElement {
           <input
             type="text"
             name="name"
-            className="auth-inputt"
+            className="form-control rounded-0"
             placeholder="Enter new name"
             onChange={handleChange}
           />
@@ -152,7 +165,7 @@ export default function ProfilePage(): React.ReactElement {
           <input
             type="password"
             name="oldPassword"
-            className="auth-inputt"
+            className="form-control rounded-0"
             placeholder="Enter old password"
             value={formData.oldPassword}
             onChange={handleChange}
@@ -163,7 +176,7 @@ export default function ProfilePage(): React.ReactElement {
           <input
             type="password"
             name="password"
-            className="auth-inputt"
+            className="form-control rounded-0"
             placeholder="Enter new password"
             value={formData.password}
             onChange={handleChange}
@@ -174,13 +187,13 @@ export default function ProfilePage(): React.ReactElement {
           <input
             type="password"
             name="re-password"
-            className="auth-inputt"
+            className="form-control rounded-0"
             placeholder="Confirm new password"
             value={formData["re-password"]}
             onChange={handleChange}
           />
 
-          <button type="submit" className="btn btn-primary w-100 mt-3">
+          <button type="submit" className="btn col-12 px-4 py-2 rounded-0 btn-success mt-3">
             Save Changes
           </button>
         </form>
