@@ -1,11 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import ProductsPage from "../product/ProductsPage";
 import HelmetWrapper from "../../components/common/HelmetWrapper";
 import Welcome from "./Welcome";
 import CategorySlider from "./CategorySlider";
 import ListOfLowestProduct from "./ListOfLowestProduct";
-import "../../styles/home.css";
 import About from "./About";
 import Contact from "./Contact";
 import SpecialOffer from "./SpecialOffer";

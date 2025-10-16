@@ -1,0 +1,49 @@
+.product-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card:hover img {
+  filter: brightness(0.8) blur(1px);
+  transition: filter 0.4s ease;
+}
+
+
+.product-card .hover-overlay {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translate(-50%, 30px);
+  display: flex;
+  gap: 12px;
+  opacity: 0;
+  transition: all 0.4s ease;
+  z-index: 2;
+}
+
+.product-card:hover .hover-overlay {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.hover-overlay button,
+.hover-overlay a {
+  width: 54px;
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.2));
+  color: #333;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.hover-overlay button:hover,
+.hover-overlay a:hover {
+  background: radial-gradient(circle at 30% 30%, var(--main-color, #f4efe8), #f8eaeada);
+  color: #fff;
+  transform: translateY(-4px) scale(1.06);
+}

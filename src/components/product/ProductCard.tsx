@@ -1,5 +1,11 @@
+
 import React, { memo } from "react";
 import { Link } from "react-router-dom";
+import { useAppDispatch } from "../../features/hooks";
+import { addToCart } from "../../features/product/cartSlice";
+import { toast } from "react-hot-toast";
+import "../../styles/card.css";
+import { FaShoppingCart, FaEye } from "react-icons/fa";
 
 export type Product = {
   id: string;
@@ -8,8 +14,8 @@ export type Product = {
   price: number;
   image: string;
   category: string;
-  discount:number;
-  quantity?:number
+  discount: number;
+  quantity?: number;
 };
 
 type Props = {
@@ -17,61 +23,99 @@ type Props = {
 };
 
 function ProductCardComponent({ product }: Props): React.ReactElement {
-
   const hasDiscount = true;
   const discountedPrice = (product.price * 0.9).toFixed(2);
   const originalPrice = product.price.toFixed(2);
 
+  const dispatch = useAppDispatch();
+
+const handleAddToCart = () => {
+  dispatch(addToCart({ ...product, quantity: 1 }))
+    .unwrap()
+    .then(() => {
+      toast.success("Added to cart!");
+    })
+    .catch((err) => {
+      toast.error(err || "Failed to add to cart");
+    });
+};
+
+
   return (
-    
-    <div className=" border-0 pb-3  position-relative overflow-hidden product-card mb-3"
-    style={{ 
-        backgroundColor: 'transparent',
-        borderRadius: '0px',
-        overflow: 'hidden',
-        transition: 'all 0.3s ease',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column'
+    <div
+      className="border-0 pb-3 position-relative overflow-hidden product-card mb-3"
+      style={{
+        backgroundColor: "transparent",
+        borderRadius: "0px",
+        overflow: "hidden",
+        transition: "all 0.3s ease",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
       }}
       onMouseOver={(e) => {
-        e.currentTarget.style.transform = 'translateY(-20px)';
+        e.currentTarget.style.transform = "translateY(-20px)";
       }}
       onMouseOut={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.transform = "translateY(0)";
       }}
     >
-  
+      {/* badge */}
       {hasDiscount && (
-          <div className="bg-main-color px-2 text-white" style={{
-            position: 'absolute',
-            top: '0px',
-            left: '0px',
-          }}>
-            VDAY 10% Off
-          </div>
+        <div
+          className="bg-main-color px-2 text-white"
+          style={{
+            position: "absolute",
+            top: "0px",
+            left: "0px",
+            zIndex: 2, 
+          }}
+        >
+          VDAY 10% Off
+        </div>
       )}
 
-    
-      <Link to={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-      <div >
-        <img
-          src={product.image}
-          alt={product.title}
-          style={{height:"500px",objectFit:"contain"}}
-          className="card-img-top rounded-0 object-fit-cover"
-          loading="lazy"
-        />
+      {/* image */}
+      <div className="position-relative">
+        <Link
+          to={`/products/${product.id}`}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <img
+            src={product.image}
+            alt={product.title}
+            style={{ height: "500px", objectFit: "contain" }}
+            className="card-img-top rounded-0 object-fit-cover"
+            loading="lazy"
+          />
+        </Link>
+
+        {/* hover overlay */}
+        <div className="hover-overlay d-flex justify-content-center align-items-center gap-3">
+          {/* Cart icon */}
+          <button
+            className="btn btn-light rounded-circle p-3 shadow-sm"
+            style={{ transition: "all 0.3s ease" }}
+            onClick={handleAddToCart}
+          >
+            <FaShoppingCart size={26} className="fs-5 text-dark" />
+          </button>
+
+          {/* Details icon */}
+          <Link
+            to={`/products/${product.id}`}
+            className="btn btn-light rounded-circle p-3 shadow-sm"
+            style={{ transition: "all 0.3s ease" }}
+          >
+            <FaEye size={26} className="fs-5 text-dark" />
+          </Link>
+        </div>
       </div>
-      </Link>
 
-      {/* تفاصيل المنتج */}
-      <div className=" text-center">
-        <h5 className=" mt-3 mb-2 ">
-          {product.title}
-        </h5>
+      {/* info */}
+      <div className="text-center">
+        <h5 className="mt-3 mb-2">{product.title}</h5>
 
-        {/* السعر */}
         <div>
           {hasDiscount ? (
             <>
@@ -86,8 +130,6 @@ function ProductCardComponent({ product }: Props): React.ReactElement {
             <span className="fw-bold">${originalPrice}</span>
           )}
         </div>
-
-      
       </div>
     </div>
   );
