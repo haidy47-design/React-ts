@@ -7,6 +7,7 @@ export type CartItem = Product & {
   quantity: number;
   userID: string;
   id?: string;
+  productId?: string;
   createdAt?: string;
 };
 
@@ -68,6 +69,7 @@ export const addToCart = createAsyncThunk<CartItem,Product & { quantity: number 
   } else {
     const newItem: CartItem = {
       ...product,
+      productId: product.id,
       createdAt: new Date().toISOString(),
       userID,
     };
