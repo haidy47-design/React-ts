@@ -43,22 +43,59 @@ export default function OrdersPage(): React.ReactElement {
   // ✅ فلترة الطلبات حسب userID
   const userOrders = allOrders?.filter((o) => o.userID === currentUserID) || [];
 
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await axios.delete(`https://68e43ee28e116898997b5bf8.mockapi.io/orders/${id}`);
-    },
-    onSuccess: (_, id) => {
-      queryClient.setQueryData<IOrder[]>(["orders"], (old) =>
-        old?.filter((o) => o.id !== id)
-      );
-      toast.success("Order deleted successfully!");
-    },
-    onError: () => {
-      toast.error("Failed to delete order");
-    },
-  });
+const deleteMutation = useMutation({
+  mutationFn: async (order: IOrder) => {
+    // 1️⃣ امسح الـ order
+    await axios.delete(`https://68e43ee28e116898997b5bf8.mockapi.io/orders/${order.id}`);
+    
+    // 2️⃣ ارجع الـ stock للمنتجات
+  const restoreStockPromises = order.items.map(async (item) => {
+  try {
+    
+    const { data: products } = await axios.get(
+      "https://68e43ee28e116898997b5bf8.mockapi.io/product"
+    );
 
-  const handleDelete = (id: string) => {
+    const matchedProduct = products.find(
+      (p: any) => p.title.trim().toLowerCase() === item.title.trim().toLowerCase()
+    );
+
+    if (!matchedProduct) {
+      console.warn(`⚠️ No matching product found for: ${item.title}`);
+      return null;
+    }
+
+    const currentStock = Number(matchedProduct.stock) || 0;
+    const returnedQty = Number(item.quantity) || 0;
+    const newStock = currentStock + returnedQty;
+
+    await axios.put(
+      `https://68e43ee28e116898997b5bf8.mockapi.io/product/${matchedProduct.id}`,
+      { ...matchedProduct, stock: newStock }
+    );
+
+    console.log(`✅ Returned ${returnedQty} to ${item.title}`);
+  } catch (error) {
+    console.error(`Error restoring stock for ${item.title}`, error);
+  }
+});
+
+    
+    await Promise.all(restoreStockPromises);
+  },
+  onSuccess: (_, order) => {
+    queryClient.setQueryData<IOrder[]>(["orders"], (old) =>
+      old?.filter((o) => o.id !== order.id)
+    );
+    queryClient.invalidateQueries({ queryKey: ["products"] }); 
+    toast.success("Order deleted");
+  },
+  onError: () => {
+    toast.error("Failed to delete order");
+  },
+});
+
+  const handleDelete = (order: IOrder) => {
     toast((t) => (
       <div>
         <p className="mb-2">Are you sure you want to delete this order?</p>
@@ -68,7 +105,7 @@ export default function OrdersPage(): React.ReactElement {
             style={{ backgroundColor: "#79253D" }}
             onClick={() => {
               toast.dismiss(t.id);
-              deleteMutation.mutate(id);
+              deleteMutation.mutate(order);
             }}
           >
             Yes
@@ -185,7 +222,7 @@ export default function OrdersPage(): React.ReactElement {
                     <button className="btn btn-emojiShow btn-sm" onClick={() => navigate(`/orders/${o.id}`)}>
                       <i className="fa-solid fa-eye m-1" />
                     </button>
-                    <button className="btn btn-emojiDelete btn-sm" onClick={() => handleDelete(o.id)}>
+                    <button className="btn btn-emojiDelete btn-sm" onClick={() => handleDelete(o)}>
                       <i className="fa-solid fa-trash m-1" />
                     </button>
                   </div>

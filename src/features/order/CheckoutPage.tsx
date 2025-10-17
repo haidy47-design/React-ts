@@ -98,9 +98,39 @@ export default function CheckoutPage(): React.ReactElement {
       await axios.post(
         "https://68e43ee28e116898997b5bf8.mockapi.io/orders",
         orderData
-      );
+      );  
+
+    const updateStockPromises = items.map(async (item) => {
+  try {
+    // ✅ استخدم productId لو موجود، لو لأ استخدم id
+    const productId = item.productId || item.id;
+    console.log(`🔄 Updating stock for product ${productId}`);
+    
+    const response = await axios.get(
+      `https://68e43ee28e116898997b5bf8.mockapi.io/product/${productId}`
+    );
+
+    const product = response.data;
+    const currentStock = Number(product.stock) || 0;
+    const orderQty = Number(item.quantity) || 0;
+    const newStock = Math.max(0, currentStock - orderQty);
+
+    console.log(`📊 ${product.title}: Stock ${currentStock} -> ${newStock}`);
+
+    return axios.put(
+      `https://68e43ee28e116898997b5bf8.mockapi.io/product/${productId}`,
+      { ...product, stock: newStock }
+    );
+  } catch (error) {
+    console.error(`❌ Error:`, error);
+    return null;
+  }
+});
+
+await Promise.all(updateStockPromises);
 
       queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["product"] });
 
       dispatch(placeOrder({ items, total }));
       dispatch(clearCart());

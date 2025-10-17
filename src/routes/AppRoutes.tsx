@@ -17,8 +17,17 @@ import About from "../features/home/About";
 import Contact from "../features/home/Contact";
 import OrderDetails from "../features/order/OrderDetails";
 import ResetPassword from "../features/auth/ResetPassword";
+<<<<<<< HEAD
 import ProfileLayout from "../features/auth/ProfileLayout";
 
+=======
+import ProtectedAdmin from "../features/admin/ProtectedAdmin";
+import AdminLayout from "../features/admin/AdminLayout";
+import Dashboard from "../features/admin/Dashboard";
+import Products from "../features/admin/Products";
+import AdminOrders from "../features/admin/Orders";
+import Users from "../features/admin/Users";
+>>>>>>> 95828ce5d363d59c0a2b7285f48d1818d5a51f1b
 
 export default function AppRoutes(): React.ReactElement {
 const location = useLocation();
@@ -63,6 +72,20 @@ const location = useLocation();
         <Route path="/reset-password" element={<ResetPassword  />} />
    
         
+
+        <Route
+          path="/admin"
+          element={
+            <ProtectedAdmin>
+              <AdminLayout />
+            </ProtectedAdmin>
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="products" element={<Products />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="users" element={<Users />} />
+        </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
