@@ -99,7 +99,7 @@ export default function Navbar(): React.ReactElement {
             <ul className="navbar-nav ms-lg-auto align-items-lg-center">
               {/* User Section */}
               <li className="nav-item dropdown">
-                {user ? (
+                {user && user.name ? (
                   <>
                     <a
                       href="#!"
@@ -136,7 +136,7 @@ export default function Navbar(): React.ReactElement {
                     </ul>
                   </>
                 ) : (
-                  <NavLink to="/login" className="nav-link text-dark">
+                  <NavLink to="/login" className="btn col-12 px-4 py-2 rounded-0 btn-success">
                     Login
                   </NavLink>
                 )}

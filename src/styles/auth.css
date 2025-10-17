@@ -133,7 +133,7 @@ input:-webkit-autofill:active {
   font-family: 20px;
 }
 .profile-card {
-  background: #cfc19d6c;
+  background-color: #FAF7F2 !important;
   border-radius: 20px;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -182,13 +182,11 @@ input:-webkit-autofill:active {
 }
 
 .auth-inputt {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid rgba(121, 37, 61, 0.85);
-  outline: none;
-  margin-bottom: 15px;
-  transition: all 0.2s;
- color: rgba(121, 37, 61, 0.85);
+  background-color: #FAF7F2 !important; 
+  border: 1px solid rgba(121, 37, 61, 1);
+  color: #1a1a1a;
+  transition: all 0.25s ease-in-out;
+  border-radius: 6px;
 }
 
 
@@ -216,5 +214,19 @@ input:-webkit-autofill:active {
 
 
 
+@media (max-width: 768px) {
+  .profile-card {
+    flex-direction: column;
+    padding: 1.5rem;
+  }
 
+  .main {
+    text-align: center;
+  }
+
+  .password-info {
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+}
 

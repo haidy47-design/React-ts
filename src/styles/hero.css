@@ -36,7 +36,7 @@
 }
 
 .hero-overlay {
-  background: rgba(0, 0, 0, 0.45); /* dark overlay */
+  background-color: rgba(0, 0, 0, 0.45); /* dark overlay */
   z-index: 1;
 }
 
@@ -50,6 +50,7 @@
   object-position: center;
   will-change: transform; 
   transition: transform 0.1s linear;
+  filter: brightness(60%);
 }
 
 .hero-heading {
@@ -82,4 +83,7 @@
 
 
 
-
+.carousel-control-prev,
+.carousel-control-next {
+  z-index: 3 !important; /* خليها فوق كل الطبقات */
+}
