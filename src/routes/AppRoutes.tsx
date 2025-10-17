@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
 import ProtectedRoute from "../components/common/ProtectedRoute";
@@ -17,11 +17,25 @@ import About from "../features/home/About";
 import Contact from "../features/home/Contact";
 import OrderDetails from "../features/order/OrderDetails";
 import ResetPassword from "../features/auth/ResetPassword";
+import ProfileLayout from "../features/auth/ProfileLayout";
+
 
 export default function AppRoutes(): React.ReactElement {
+const location = useLocation();
+  const hideLayoutRoutes = [
+    "/login",
+    "/signup",
+    "/forgot-password",
+    "/reset-password",
+  ];
+
+  const isAuthOrProfileRoute =
+    hideLayoutRoutes.includes(location.pathname) ||
+    location.pathname.startsWith("/profile");
+
   return (
     <>
-      <Navbar />
+      {!isAuthOrProfileRoute && <Navbar />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<About />} />
@@ -34,17 +48,26 @@ export default function AppRoutes(): React.ReactElement {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetails />} />
-          <Route path="/profile" element={<ProfilePage />} />
+         
+        </Route>
+
+        <Route path="/profile" element={<ProfileLayout />}>
+          <Route index element={<Navigate to="info" replace />} />
+          <Route path="info" element={<ProfilePage />} />
+         <Route path="orders" element={<OrdersPage />} /> 
         </Route>
 
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPassword  />} />
+   
+        
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <Footer />
+     {!isAuthOrProfileRoute && <Footer />}
+      
     </>
   );
 }

@@ -47,7 +47,8 @@ export default function Register() {
     setLoading(true);
 
     try {
-      await axios.post("https://68e83849f2707e6128ca32fb.mockapi.io/users", values);
+       const userData = { ...values, role: "user" };
+      await axios.post("https://68e83849f2707e6128ca32fb.mockapi.io/users", userData);
       toast.success("✅ Account created!");
       setTimeout(() => navigate("/login"), 1500);
     } catch {
