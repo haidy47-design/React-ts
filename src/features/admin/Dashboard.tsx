@@ -1,6 +1,6 @@
 const Dashboard = () => {
   return (
-    <div >شسبتلاشبلا</div>
+    <div ></div>
   );
 }   
 

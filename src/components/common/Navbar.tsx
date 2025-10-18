@@ -121,9 +121,22 @@ export default function Navbar(): React.ReactElement {
                         </NavLink>
                       </li>
                       <li>
+                        <NavLink to="/orders" className="dropdown-item">
+                          Orders History
+                        </NavLink>
+                      </li>
+                      <li>
+                      <NavLink to="/wishlist" className="dropdown-item">
+                        Wishlist
+                      </NavLink>
+                    </li>
+                      <li>
                         <NavLink to="/reset-password" className="dropdown-item">
                           Reset Password
                         </NavLink>
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
                       </li>
                       <li>
                         <button
@@ -146,17 +159,20 @@ export default function Navbar(): React.ReactElement {
               <li className="nav-item ms-lg-3 mx-3">
                 <NavLink
                   to="/cart"
-                  className=" "
+                  className="text-decoration-none  d-flex align-items-center"
+                  style={{
+                    color: "#79253D",
+                    fontSize: "18px",
+                    transition: "color 0.3s ease",
+                  }}
                 >
-                    <StyledBadge badgeContent={cartItems.length>=1?cartCount:"0"} >
-                         <GiShoppingCart style={{height:"30px",width:"30px" ,color:"#79253D"}} />
-                    </StyledBadge>
-                  
-                  {/* <span className="position-absolute top-0 start-100 translate-middle rounded-circle py-1 px-2  bg-success">
-                    {cartCount}
-                  </span> */}
+                  Cart ({cartCount})
                 </NavLink>
               </li>
+
+              
+
+
             </ul>
           </div>
         </div>

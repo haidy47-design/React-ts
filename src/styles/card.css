@@ -1,49 +1,133 @@
+.badge-offer {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+  transform-origin: top left;
+  transition: all 0.3s ease;
+}
+
+.product-card:hover .badge-offer {
+  transform: scale(1) !important;
+}
+
+
 .product-card {
   position: relative;
   overflow: hidden;
+  transition: transform 0.4s cubic-bezier(.25,.8,.25,1);
+  transform-origin: center;
+}
+
+.product-card:hover {
+  transform: translateY(-14px) scale(1.02);
 }
 
 .product-card:hover img {
   filter: brightness(0.8) blur(1px);
-  transition: filter 0.4s ease;
+  transform: scale(1.07);
+  transition: transform 0.6s cubic-bezier(.19,1,.22,1), filter 0.4s ease;
 }
 
-
-.product-card .hover-overlay {
+.hover-overlay {
   position: absolute;
-  bottom: 18px;
+  bottom: 25px;
   left: 50%;
-  transform: translate(-50%, 30px);
+  transform: translate(-50%, 40px);
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
   opacity: 0;
-  transition: all 0.4s ease;
-  z-index: 2;
+  transition: all 0.6s cubic-bezier(.23,1,.32,1);
+  z-index: 3;
+  pointer-events: none;
 }
 
 .product-card:hover .hover-overlay {
   opacity: 1;
   transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+.bottom-icons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
 }
 
 .hover-overlay button,
 .hover-overlay a {
-  width: 54px;
-  height: 54px;
+  width: 56px;
+  height: 56px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.2));
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(255,255,255,0.1));
   color: #333;
   border: none;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-  transition: all 0.3s ease;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.4s ease;
+  opacity: 0;
+  transform: translateY(25px) scale(0.85);
 }
 
 .hover-overlay button:hover,
 .hover-overlay a:hover {
   background: radial-gradient(circle at 30% 30%, var(--main-color, #f4efe8), #f8eaeada);
   color: #fff;
+  transform: translateY(-6px) scale(1.12);
+  box-shadow: 0 0 20px rgba(244, 239, 232, 0.8);
+}
+
+
+
+
+@keyframes fadePop {
+  0% { opacity: 0; transform: translateY(25px) scale(0.7); filter: blur(3px); }
+  60% { opacity: 1; transform: translateY(-4px) scale(1.05); filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(255,255,255,0); }
+  50% { box-shadow: 0 0 16px rgba(255,255,255,0.5); }
+}
+
+.product-card:hover .wishlist-btn {
+  animation: fadePop 0.55s cubic-bezier(.17,.89,.33,1.15) forwards 0.05s,
+             pulseGlow 1s ease-in-out 0.6s 1;
+}
+
+.product-card:hover .bottom-icons button:nth-child(1) {
+  animation: fadePop 0.55s cubic-bezier(.17,.89,.33,1.15) forwards 0.15s,
+             pulseGlow 1s ease-in-out 0.7s 1;
+}
+
+.product-card:hover .bottom-icons a {
+  animation: fadePop 0.55s cubic-bezier(.17,.89,.33,1.15) forwards 0.25s,
+             pulseGlow 1s ease-in-out 0.8s 1;
+}
+.wishlist-btn {
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.2));
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.wishlist-btn:hover {
+ background: radial-gradient(circle at 30% 30%, var(--main-color, #f4efe8), #f8eaeada);
+  color: #333 !important;
   transform: translateY(-4px) scale(1.06);
+}
+
+.wishlist-btn.active {
+  background: radial-gradient(circle at 30% 30%, var(--main-color, #f4efe8), #f8eaeada);
+  color:  #333 !important;
+  transform: scale(1.1);
+}
+
+.wishlist-btn.active:hover {
+  background: radial-gradient(circle at 30% 30%,#f4efe8e1,   #b9a067);
+  transform: translateY(-3px) scale(1.15);
 }

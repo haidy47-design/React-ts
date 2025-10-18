@@ -31,7 +31,10 @@
   background-color: #f8eaea !important;
   color: #722f37 !important;
 }
-
+.dropdown-item.active {
+  background-color: #722f37 !important;
+  color: #f8eaea  !important;
+}
 /* Mobile View Tweaks */
 @media (max-width: 992px) {
   .navbar-nav {
