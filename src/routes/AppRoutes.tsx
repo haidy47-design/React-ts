@@ -24,20 +24,41 @@ import Products from "../features/admin/Products/Products";
 import AdminOrders from "../features/admin/Orders";
 import Users from "../features/admin/Users";
 import Reports from "../features/admin/Reports";
-import Wishlist from "../features/product/Wishlist";
+import Wishlist from "../features/product/Wishlist"
 import EditProduct from "../features/admin/Products/EditProduct";
 import AddProduct from "../features/admin/Products/AddProduct";
 import AdminProductReviews from "../features/admin/Products/ProductReviews";
 
+import ProfileLayout from "../features/auth/ProfileLayout";
+
+
 export default function AppRoutes(): React.ReactElement {
 
+
+
+  
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith("/admin");
+
+  
+  const hideLayoutRoutes = [
+    "/login",
+    "/signup",
+    "/forgot-password",
+    "/reset-password",
+  ];
+
+  
+  const hideLayout =
+    location.pathname.startsWith("/admin") ||
+    hideLayoutRoutes.includes(location.pathname) ||
+    location.pathname.startsWith("/profile");
 
   return (
     <>
-       {!isAdminRoute && <Navbar />}
+      {!hideLayout && <Navbar />}
+
       <Routes>
+        
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
@@ -46,19 +67,27 @@ export default function AppRoutes(): React.ReactElement {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/wishlist" element={<Wishlist />} />
 
-
+      
         <Route element={<ProtectedRoute />}>
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetails />} />
-          <Route path="/profile" element={<ProfilePage />} />
         </Route>
 
+    
+        <Route path="/profile" element={<ProfileLayout />}>
+          <Route index element={<Navigate to="info" replace />} />
+          <Route path="info" element={<ProfilePage />} />
+          <Route path="orders" element={<OrdersPage />} />
+        </Route>
+
+      
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password" element={<ResetPassword  />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
+        
         <Route
           path="/admin"
           element={
@@ -77,9 +106,11 @@ export default function AppRoutes(): React.ReactElement {
           <Route path="reports" element={<Reports />} />
         </Route>
 
+       
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-       {!isAdminRoute && <Footer />}
+
+      {!hideLayout && <Footer />}
     </>
   );
 }
