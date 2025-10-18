@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
 import ProtectedRoute from "../components/common/ProtectedRoute";
@@ -23,11 +23,16 @@ import Dashboard from "../features/admin/Dashboard";
 import Products from "../features/admin/Products";
 import AdminOrders from "../features/admin/Orders";
 import Users from "../features/admin/Users";
+import Reports from "../features/admin/Reports";
 
 export default function AppRoutes(): React.ReactElement {
+
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
+
   return (
     <>
-      <Navbar />
+       {!isAdminRoute && <Navbar />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<About />} />
@@ -60,11 +65,12 @@ export default function AppRoutes(): React.ReactElement {
           <Route path="products" element={<Products />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route path="users" element={<Users />} />
+          <Route path="reports" element={<Reports />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <Footer />
+       {!isAdminRoute && <Footer />}
     </>
   );
 }

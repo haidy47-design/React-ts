@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import Spinner from "../../components/common/Spinner";
@@ -14,6 +14,7 @@ import "./CartPage.css";
 import { Rating } from "@mui/material";
 import PolicyAccordion from "./PolicyAccordion";
 import ReviewForm from "./ReviewForm";
+import { showErrorAlert, showLoginRequired, showSuccessAlert } from "../../components/common/CustomSwal";
 
 
 // ✅ تعريف Zod Schema
@@ -42,7 +43,7 @@ export default function ProductDetailsPage(): React.ReactElement {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [ratingValue, setRatingValue] = useState<number | null>(4);
   const queryClient = useQueryClient();
-
+const navigate = useNavigate()
   
 
   const { data: product, isLoading, isError } = useQuery({
@@ -73,22 +74,32 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
   const handleAddToCart = async () => {
     const userID = localStorage.getItem("user");
     if (!userID) {
-      toast.error("Please Login First");
+        showLoginRequired("Please login first",navigate);
       return;
     }
 
     if (isAdding) return;
     setIsAdding(true);
-
+ 
     try {
       await dispatch(addToCart({ ...product!, quantity })).unwrap();
       queryClient.invalidateQueries({ queryKey: ["orders"] });
-      toast.success("Added To Cart Successfully");
-    } catch {
-      toast.error("Failed to add to cart!");
+    showSuccessAlert("Order Added successfully");
+    } catch (err: any) {
+    
+    if (err === "Not enough stock available" || err === "Quantity exceeds stock") {
+    
+      console.warn("Stock issue handled already.");
+    } else if (err === "Please login first") {
+      showLoginRequired("Please login first", navigate);
+    } else {
+    
+      showErrorAlert("Failed to add to cart!");
+    }
     } finally {
       setIsAdding(false);
     }
+
   };
 
   // ✅ إرسال الريفيو
