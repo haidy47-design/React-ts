@@ -23,8 +23,10 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
 import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
+import CloseIcon from '@mui/icons-material/Close';
 import { showLogout } from "../../components/common/CustomSwal";
 import { useAppDispatch } from "../hooks";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const drawerWidth = 240;
 
@@ -70,17 +72,18 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
+  [theme.breakpoints.up("md")]: {
+    ...(open && {
+      marginLeft: drawerWidth,
+      width: `calc(100% - ${drawerWidth}px)`,
+      transition: theme.transitions.create(["width", "margin"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
     }),
-  }),
+  },
 }));
 
-// ✅ Drawer بلون #79253D
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
     width: drawerWidth,
@@ -110,12 +113,16 @@ export default function AdminSidebar() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const handleDrawerOpen = () => setOpen(true);
+  const handleDrawerToggle = () => setOpen(!open);
   const handleDrawerClose = () => setOpen(false);
 
   const dispatch = useAppDispatch();
-  const handleLogout = () => showLogout(navigate,dispatch);
+  const handleLogout = () => {
+    showLogout(navigate, dispatch);
+    if (isMobile) handleDrawerClose();
+  };
 
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/admin" },
@@ -125,125 +132,158 @@ export default function AdminSidebar() {
     { text: "Reports", icon: <OutlinedFlagIcon />, path: "/admin/reports" },
   ];
 
-  return (
-    <Box sx={{ display: "flex", fontFamily: "'Montserrat', sans-serif" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ marginRight: 5, ...(open && { display: "none" }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{color:"#ebe5dbff"}}>
-            Admin Panel
+  const drawerContent = (
+    <>
+      <DrawerHeader>
+        <Link
+          to="/"
+          style={{
+            flexGrow: 1,
+            textDecoration: "none",
+            color: "white",
+            fontSize: "1.1rem",
+            paddingLeft: "16px",
+            display: "flex",
+            alignItems: "center",
+          }}
+          onClick={isMobile ? handleDrawerClose : undefined}
+        >
+          <img
+            src="/Images/Rlogo.png"
+            alt="Roséa Logo"
+            height={50}
+            style={{ marginRight: "8px" }}
+            className="mx-0"
+          />
+          <Typography variant="h4" className="mt-2" sx={{ fontWeight: "bold", color: "#ebe5dbff" }}>
+            oséa
           </Typography>
-        </Toolbar>
-      </AppBar>
+        </Link>
+        <IconButton onClick={handleDrawerClose} sx={{ color: "white" }}>
+          {isMobile ? <CloseIcon /> : theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+        </IconButton>
+      </DrawerHeader>
 
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <Link
-            to="/"
-            style={{
-              flexGrow: 1,
-              textDecoration: "none",
-              color: "white",
-              fontSize: "1.1rem",
-              paddingLeft: "16px",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <img
-              src="/Images/Rlogo.png"
-              alt="Roséa Logo"
-              height={50}
-              style={{ marginRight: "8px" }}
-              className="mx-0"
-            />
-            <Typography variant="h4" className="mt-2" sx={{ fontWeight: "bold" ,color:"#ebe5dbff" }}>
-              oséa
-            </Typography>
-          </Link>
-          <IconButton onClick={handleDrawerClose} sx={{ color: "white" }}>
-            {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
+      <Divider sx={{ borderColor: "rgba(255,255,255,0.3)" }} />
 
-        <Divider sx={{ borderColor: "rgba(255,255,255,0.3)" }} />
-
-        <List>
-          {menuItems.map((item) => (
-            <ListItem key={item.text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                component={NavLink}
-                to={item.path}
-                end={item.path === "/admin"}
-                sx={{
-                  minHeight: 48,
-                  px: 2.5,
-                  color: "#ebe5dbff",
-                  "&.active": {
-                    backgroundColor: "#f0a0b7",
-                    color: "#79253D",
-                    fontWeight: "bold",
-                  },
-                  "&:hover": {
-                    backgroundColor: "#a33b52",
-                  },
-                  justifyContent: open ? "initial" : "center",
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit",
-                  }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-
-          <Divider sx={{ borderColor: "rgba(255,255,255,0.2)", my: 1 }} />
-
-          {/* ✅ Logout Button */}
-          <ListItem disablePadding sx={{ display: "block" }}>
+      <List>
+        {menuItems.map((item) => (
+          <ListItem key={item.text} disablePadding sx={{ display: "block" }}>
             <ListItemButton
-              onClick={handleLogout}
+              component={NavLink}
+              to={item.path}
+              end={item.path === "/admin"}
+              onClick={isMobile ? handleDrawerClose : undefined}
               sx={{
                 minHeight: 48,
                 px: 2.5,
-                color: "white",
+                color: "#ebe5dbff",
+                "&.active": {
+                  backgroundColor: "#f0a0b7",
+                  color: "#79253D",
+                  fontWeight: "bold",
+                },
                 "&:hover": {
                   backgroundColor: "#a33b52",
                 },
-                justifyContent: open ? "initial" : "center",
+                justifyContent: open || isMobile ? "initial" : "center",
               }}
             >
               <ListItemIcon
                 sx={{
                   minWidth: 0,
-                  mr: open ? 3 : "auto",
+                  mr: open || isMobile ? 3 : "auto",
                   justifyContent: "center",
                   color: "inherit",
                 }}
               >
-                <LogoutIcon />
+                {item.icon}
               </ListItemIcon>
-              <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText primary={item.text} sx={{ opacity: open || isMobile ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
-        </List>
-      </Drawer>
+        ))}
+
+        <Divider sx={{ borderColor: "rgba(255,255,255,0.2)", my: 1 }} />
+
+        <ListItem disablePadding sx={{ display: "block" }}>
+          <ListItemButton
+            onClick={handleLogout}
+            sx={{
+              minHeight: 48,
+              px: 2.5,
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#a33b52",
+              },
+              justifyContent: open || isMobile ? "initial" : "center",
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open || isMobile ? 3 : "auto",
+                justifyContent: "center",
+                color: "inherit",
+              }}
+            >
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" sx={{ opacity: open || isMobile ? 1 : 0 }} />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </>
+  );
+
+  return (
+    <Box sx={{ display: "flex", fontFamily: "'Montserrat', sans-serif" }}>
+      <CssBaseline />
+      <AppBar position="fixed" open={!isMobile && open}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            onClick={handleDrawerToggle}
+            edge="start"
+            sx={{ 
+              marginRight: 2,
+              ...((!isMobile && open) && { display: "none" })
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div" sx={{ color: "#ebe5dbff" }}>
+            Admin Panel
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      {/* Mobile Drawer - Temporary, slides from top */}
+      {isMobile ? (
+        <MuiDrawer
+          anchor="top"
+          open={open}
+          onClose={handleDrawerClose}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            "& .MuiDrawer-paper": {
+              backgroundColor: "#79253D",
+              color: "white",
+              width: "100%",
+              maxHeight: "80vh",
+              overflowY: "auto",
+            },
+          }}
+        >
+          {drawerContent}
+        </MuiDrawer>
+      ) : (
+        <Drawer variant="permanent" open={open}>
+          {drawerContent}
+        </Drawer>
+      )}
     </Box>
   );
 }

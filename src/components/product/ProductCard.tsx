@@ -26,8 +26,7 @@ type Props = {
 
 function ProductCardComponent({ product }: Props): React.ReactElement {
   const hasDiscount = true;
-  const discountedPrice = (product.price * 0.9).toFixed(2);
-  const originalPrice = product.price.toFixed(2);
+  
 
   const dispatch = useAppDispatch();
   
@@ -149,14 +148,14 @@ const handleAddToCart = () => {
           {hasDiscount ? (
             <>
               <span className="fw-bold main-color me-2">
-                ${discountedPrice}
+                ${product.discount}
               </span>
               <span className="text-muted text-decoration-line-through small">
-                ${originalPrice}
+                ${product.price}
               </span>
             </>
           ) : (
-            <span className="fw-bold">${originalPrice}</span>
+            <span className="fw-bold">${product.price}</span>
           )}
         </div>
       </div>

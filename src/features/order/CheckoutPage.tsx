@@ -92,6 +92,7 @@ export default function CheckoutPage(): React.ReactElement {
       address: data.address,
       userName: data.name,
       phone: data.phone,
+      email:data.email
     };
 
     try {

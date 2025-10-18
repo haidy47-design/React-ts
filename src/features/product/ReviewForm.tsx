@@ -16,7 +16,12 @@ const reviewSchema = z.object({
   productID: z.string().min(1, "Product ID required"),
 });
 
-type ReviewFormData = z.infer<typeof reviewSchema>;
+export type ReviewFormData = z.infer<typeof reviewSchema>;
+
+export interface ReviewResponse extends ReviewFormData {
+  id: string;
+  createdAt: string;
+}
 
 const ReviewForm: React.FC<{ productID: string }> = ({ productID }) => {
   const [loading, setLoading] = useState(false);

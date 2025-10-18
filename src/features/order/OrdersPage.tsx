@@ -8,6 +8,7 @@ import { showConfirmAlert, showSuccessAlert, showErrorAlert } from "../../compon
 export interface IOrder {
   id: string;
   userName: string;
+  email:string;
   address: string;
   phone: string;
   items: {
