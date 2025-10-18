@@ -1,11 +1,13 @@
 
 import React, { memo } from "react";
 import { Link } from "react-router-dom";
-import { useAppDispatch } from "../../features/hooks";
+import { useAppSelector, useAppDispatch } from "../../features/hooks";
 import { addToCart } from "../../features/product/cartSlice";
 import { toast } from "react-hot-toast";
 import "../../styles/card.css";
-import { FaShoppingCart, FaEye } from "react-icons/fa";
+import { FaShoppingCart, FaEye, FaHeart } from "react-icons/fa";
+import { addToWishlist, removeFromWishlist } from "../../features/product/wishlistSlice";
+
 
 export type Product = {
   id: string;
@@ -28,6 +30,8 @@ function ProductCardComponent({ product }: Props): React.ReactElement {
   const originalPrice = product.price.toFixed(2);
 
   const dispatch = useAppDispatch();
+  
+
 
 const handleAddToCart = () => {
   dispatch(addToCart({ ...product, quantity: 1 }))
@@ -40,6 +44,17 @@ const handleAddToCart = () => {
     });
 };
 
+  const wishlist = useAppSelector((state) => state.wishlist.items);
+  const isInWishlist = wishlist.some((item) => item.id === product.id);
+  const handleAddToWishlist = () => {
+  if (isInWishlist) {
+    dispatch(removeFromWishlist(product.id));
+    toast("Removed from wishlist 💔", { icon: "💔" });
+  } else {
+    dispatch(addToWishlist(product));
+    toast.success("Added to wishlist ❤️");
+  }
+};
 
   return (
     <div
@@ -90,27 +105,41 @@ const handleAddToCart = () => {
           />
         </Link>
 
-        {/* hover overlay */}
-        <div className="hover-overlay d-flex justify-content-center align-items-center gap-3">
-          {/* Cart icon */}
-          <button
-            className="btn btn-light rounded-circle p-3 shadow-sm"
-            style={{ transition: "all 0.3s ease" }}
-            onClick={handleAddToCart}
-          >
-            <FaShoppingCart size={26} className="fs-5 text-dark" />
-          </button>
+        
 
-          {/* Details icon */}
-          <Link
-            to={`/products/${product.id}`}
-            className="btn btn-light rounded-circle p-3 shadow-sm"
-            style={{ transition: "all 0.3s ease" }}
-          >
-            <FaEye size={26} className="fs-5 text-dark" />
-          </Link>
-        </div>
-      </div>
+        {/* hover overlay */}
+        <div className="hover-overlay">
+              {/*Wishlist*/}
+              
+              <button
+                  className={`wishlist-btn btn rounded-circle p-3 shadow-sm ${
+                    isInWishlist ? "active" : ""
+                  }`}
+                  onClick={handleAddToWishlist}
+                >
+                  <FaHeart size={26} />
+                </button>
+
+
+              <div className="bottom-icons">
+                <button
+                  className="btn btn-light rounded-circle p-3 shadow-sm"
+                  style={{ transition: "all 0.3s ease" }}
+                  onClick={handleAddToCart}
+                >
+                  <FaShoppingCart size={26} className="fs-5 text-dark" />
+                </button>
+
+                <Link
+                  to={`/products/${product.id}`}
+                  className="btn btn-light rounded-circle p-3 shadow-sm"
+                  style={{ transition: "all 0.3s ease" }}
+                >
+                  <FaEye size={26} className="fs-5 text-dark" />
+                </Link>
+              </div>
+            </div>
+          </div>
 
       {/* info */}
       <div className="text-center">

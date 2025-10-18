@@ -1,6 +1,4 @@
-/* ------------------------------------------------ */
-/* 🌍 GLOBAL BASE STYLES                            */
-/* ------------------------------------------------ */
+
 body {
   background-color: #f4efe8;
 }
@@ -18,9 +16,7 @@ body {
   border-top-right-radius: 12px;
 }
 
-/* ------------------------------------------------ */
-/* 🎨 BUTTON STYLES                                 */
-/* ------------------------------------------------ */
+
 .btn-primary {
   background-color: #7b1e33;
   border-color: #7b1e33;
@@ -31,16 +27,12 @@ body {
   border-color: #6b182b;
 }
 
-/* ------------------------------------------------ */
-/* 🖼️ CAROUSEL CAPTION                              */
-/* ------------------------------------------------ */
+
 .carousel-caption {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
-/* ------------------------------------------------ */
-/* ❤️ CUSTOM UTILITY COLORS                         */
-/* ------------------------------------------------ */
+
 .bg-maroon {
   background-color:  #722f37 !important;
   color: #fff !important;
@@ -60,11 +52,6 @@ body {
   color: #fff !important;
 }
 
-/* ------------------------------------------------ */
-/* ✂️ TEXT CLAMP UTILITIES                           */
-/* ------------------------------------------------ */
-
-/* stylelint-disable property-no-vendor-prefix */
 
 /* One-line clamp */
 .text-clamp-1 {
@@ -89,11 +76,7 @@ body {
   -webkit-line-clamp: 3;
 }
 
-/* stylelint-enable property-no-vendor-prefix */
 
-/* ------------------------------------------------ */
-/* 📱 RESPONSIVE (Bootstrap handles most cases)     */
-/* ------------------------------------------------ */
 @media (max-width: 992px) {
   .navbar-nav {
     text-align: center;

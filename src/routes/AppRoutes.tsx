@@ -24,6 +24,7 @@ import Products from "../features/admin/Products";
 import AdminOrders from "../features/admin/Orders";
 import Users from "../features/admin/Users";
 import Reports from "../features/admin/Reports";
+import Wishlist from "../features/product/Wishlist";
 
 export default function AppRoutes(): React.ReactElement {
 
@@ -40,6 +41,8 @@ export default function AppRoutes(): React.ReactElement {
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/products/:id" element={<ProductDetailsPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+
 
         <Route element={<ProtectedRoute />}>
           <Route path="/checkout" element={<CheckoutPage />} />
