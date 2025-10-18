@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import '../../styles/orders.css'
+import "../../styles/orders.css";
+import { showConfirmAlert, showSuccessAlert, showErrorAlert } from "../../components/common/CustomSwal";
 
 export interface IOrder {
   id: string;
@@ -43,82 +43,61 @@ export default function OrdersPage(): React.ReactElement {
   // ✅ فلترة الطلبات حسب userID
   const userOrders = allOrders?.filter((o) => o.userID === currentUserID) || [];
 
-const deleteMutation = useMutation({
-  mutationFn: async (order: IOrder) => {
-    // 1️⃣ امسح الـ order
-    await axios.delete(`https://68e43ee28e116898997b5bf8.mockapi.io/orders/${order.id}`);
-    
-    // 2️⃣ ارجع الـ stock للمنتجات
-  const restoreStockPromises = order.items.map(async (item) => {
-  try {
-    
-    const { data: products } = await axios.get(
-      "https://68e43ee28e116898997b5bf8.mockapi.io/product"
-    );
+  const deleteMutation = useMutation({
+    mutationFn: async (order: IOrder) => {
+      // 1️⃣ امسح الطلب
+      await axios.delete(`https://68e43ee28e116898997b5bf8.mockapi.io/orders/${order.id}`);
 
-    const matchedProduct = products.find(
-      (p: any) => p.title.trim().toLowerCase() === item.title.trim().toLowerCase()
-    );
+      // 2️⃣ ارجع الكمية للمخزون
+      const restoreStockPromises = order.items.map(async (item) => {
+        try {
+          const { data: products } = await axios.get(
+            "https://68e43ee28e116898997b5bf8.mockapi.io/product"
+          );
 
-    if (!matchedProduct) {
-      console.warn(`⚠️ No matching product found for: ${item.title}`);
-      return null;
+          const matchedProduct = products.find(
+            (p: any) => p.title.trim().toLowerCase() === item.title.trim().toLowerCase()
+          );
+
+          if (!matchedProduct) {
+            console.warn(`⚠️ No matching product found for: ${item.title}`);
+            return null;
+          }
+
+          const currentStock = Number(matchedProduct.stock) || 0;
+          const returnedQty = Number(item.quantity) || 0;
+          const newStock = currentStock + returnedQty;
+
+          await axios.put(
+            `https://68e43ee28e116898997b5bf8.mockapi.io/product/${matchedProduct.id}`,
+            { ...matchedProduct, stock: newStock }
+          );
+
+          console.log(`✅ Returned ${returnedQty} to ${item.title}`);
+        } catch (error) {
+          console.error(`Error restoring stock for ${item.title}`, error);
+        }
+      });
+
+      await Promise.all(restoreStockPromises);
+    },
+    onSuccess: (_, order) => {
+      queryClient.setQueryData<IOrder[]>(["orders"], (old) =>
+        old?.filter((o) => o.id !== order.id)
+      );
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      showSuccessAlert("Order deleted successfully!");
+    },
+    onError: () => {
+      showErrorAlert("Failed to delete order. Please try again.");
+    },
+  });
+
+  const handleDelete = async (order: IOrder) => {
+    const confirmed = await showConfirmAlert("This will delete the order and restore stock.");
+    if (confirmed) {
+      deleteMutation.mutate(order);
     }
-
-    const currentStock = Number(matchedProduct.stock) || 0;
-    const returnedQty = Number(item.quantity) || 0;
-    const newStock = currentStock + returnedQty;
-
-    await axios.put(
-      `https://68e43ee28e116898997b5bf8.mockapi.io/product/${matchedProduct.id}`,
-      { ...matchedProduct, stock: newStock }
-    );
-
-    console.log(`✅ Returned ${returnedQty} to ${item.title}`);
-  } catch (error) {
-    console.error(`Error restoring stock for ${item.title}`, error);
-  }
-});
-
-    
-    await Promise.all(restoreStockPromises);
-  },
-  onSuccess: (_, order) => {
-    queryClient.setQueryData<IOrder[]>(["orders"], (old) =>
-      old?.filter((o) => o.id !== order.id)
-    );
-    queryClient.invalidateQueries({ queryKey: ["products"] }); 
-    toast.success("Order deleted");
-  },
-  onError: () => {
-    toast.error("Failed to delete order");
-  },
-});
-
-  const handleDelete = (order: IOrder) => {
-    toast((t) => (
-      <div>
-        <p className="mb-2">Are you sure you want to delete this order?</p>
-        <div className="d-flex justify-content-between">
-          <button
-            className="btn btn-sm me-2 text-white rounded-0"
-            style={{ backgroundColor: "#79253D" }}
-            onClick={() => {
-              toast.dismiss(t.id);
-              deleteMutation.mutate(order);
-            }}
-          >
-            Yes
-          </button>
-          <button
-            className="btn btn-sm btn-secondary rounded-0"
-            onClick={() => toast.dismiss(t.id)}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    ));
   };
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -127,9 +106,7 @@ const deleteMutation = useMutation({
     (o) =>
       o.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       o.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      o.items.some((i) =>
-        i.title.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      o.items.some((i) => i.title.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -155,22 +132,23 @@ const deleteMutation = useMutation({
   }
 
   return (
-      <div className="container py-4">
-      <Toaster position="top-center" />
-      <h3 className="mb-4 text-center" style={{color:"#79253D"}}>Orders</h3>
+    <div className="container py-4">
+      <h3 className="mb-4 text-center" style={{ color: "#79253D" }}>
+        Orders
+      </h3>
 
       {/* 🔍 Search Input */}
       <div className="row justify-content-center">
         <div className="col-10 col-md-8 col-lg-6 ">
           <input
             type="text"
-            placeholder="Search by name, phone, or status..."
-            className="form-control  rounded-0 border-2"
+            placeholder="Search by name, phone, or product..."
+            className="form-control rounded-0 border-2"
             style={{ borderColor: "#79253D" }}
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
-              setCurrentPage(1); 
+              setCurrentPage(1);
             }}
           />
         </div>
@@ -197,12 +175,12 @@ const deleteMutation = useMutation({
 
             {currentOrders?.map((o, index) => (
               <tr key={o.id} style={{ borderBottom: "1px solid #79253D" }}>
-                <td className="text-center fw-semibold">{startIndex +index + 1}</td>
+                <td className="text-center fw-semibold">{startIndex + index + 1}</td>
                 <td>{o.userName}</td>
                 <td>{o.address}</td>
                 <td>{o.phone}</td>
                 <td>
-                  <ul className="list-unstyled mb-0 small" style={{ backgroundColor: "transparent" }}>
+                  <ul className="list-unstyled mb-0 small bg-transparent">
                     {o.items?.map((i) => (
                       <li key={i.id} className="d-flex align-items-center justify-content-center mb-1">
                         {i.title} × {i.quantity}
@@ -218,7 +196,7 @@ const deleteMutation = useMutation({
                   </span>
                 </td>
                 <td>
-                  <div className="d-flex justify-content-center" style={{ backgroundColor: "transparent" }}>
+                  <div className="d-flex justify-content-center bg-transparent">
                     <button className="btn btn-emojiShow btn-sm" onClick={() => navigate(`/orders/${o.id}`)}>
                       <i className="fa-solid fa-eye m-1" />
                     </button>
@@ -232,11 +210,21 @@ const deleteMutation = useMutation({
           </table>
 
           <div className="d-flex justify-content-center align-items-center mt-5">
-            <button className="btn btn-sm btn-outline-secondary me-2" disabled={currentPage === 1} onClick={goToPreviousPage}>
+            <button
+              className="btn btn-sm btn-outline-secondary me-2"
+              disabled={currentPage === 1}
+              onClick={goToPreviousPage}
+            >
               Previous
             </button>
-            <span className="fw-bold">Page {currentPage} of {totalPages}</span>
-            <button className="btn btn-sm btn-outline-success ms-2" disabled={currentPage === totalPages} onClick={goToNextPage}>
+            <span className="fw-bold">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              className="btn btn-sm btn-outline-success ms-2"
+              disabled={currentPage === totalPages}
+              onClick={goToNextPage}
+            >
               Next
             </button>
           </div>

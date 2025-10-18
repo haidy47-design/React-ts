@@ -8,7 +8,7 @@
     url("https://db.onlinewebfonts.com/t/e5f78b4fb90a80a32be156470cbfead1.svg#Avenir LT Pro 35 Light")format("svg");
 }
 
-body {
+body  {
   background-color: #f4efe8;
   font-family: "Avenir LT Pro 35 Light";
 }
@@ -167,4 +167,9 @@ select:focus {
   outline: none !important;
   box-shadow: none !important;
   border-color: #79253D !important; /* أو أي لون الحدود اللي عندك */
+}
+
+
+.admin-bg{
+  background-color: #d94c74ff;
 }
