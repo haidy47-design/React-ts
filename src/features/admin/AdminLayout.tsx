@@ -23,9 +23,7 @@ export default function AdminLayout(): React.ReactElement {
       >
         {/* عشان المحتوى ما يدخلش تحت الـ AppBar */}
         <Toolbar />
-        <Typography variant="h5" gutterBottom>
-          Admin Dashboard
-        </Typography>
+      
 
         {/* هنا بيتحمل كل صفحات الـ admin حسب الراوت */}
         <Outlet />

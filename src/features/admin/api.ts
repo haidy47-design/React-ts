@@ -1,9 +1,13 @@
+import { Product } from "src/components/product/ProductCard";
 import axiosInstance from "../../app/axiosInstance";
 import { AdminOrder, AdminProduct, AdminUser } from "./types";
+import { IOrder } from "../order/OrdersPage";
+import { ReviewFormData, ReviewResponse } from "../product/ReviewForm";
 
 const USERS_URL = "https://68e83849f2707e6128ca32fb.mockapi.io/users";
 const PRODUCTS_URL = "https://68e43ee28e116898997b5bf8.mockapi.io/product";
 const ORDERS_URL = "https://68e43ee28e116898997b5bf8.mockapi.io/orders";
+const REVIEWS_URL= "https://68f17bc0b36f9750dee96cbb.mockapi.io/reviews"
 
 // Users
 export const fetchUsers = async (): Promise<AdminUser[]> => {
@@ -21,18 +25,18 @@ export const toggleBlockUser = async (id: string, blocked: boolean): Promise<Adm
 };
 
 // Products
-export const fetchProducts = async (): Promise<AdminProduct[]> => {
-  const { data } = await axiosInstance.get<AdminProduct[]>(PRODUCTS_URL);
+export const fetchProducts = async (): Promise<Product[]> => {
+  const { data } = await axiosInstance.get<Product[]>(PRODUCTS_URL);
   return data;
 };
 
-export const createProduct = async (product: Omit<AdminProduct, "id">): Promise<AdminProduct> => {
-  const { data } = await axiosInstance.post<AdminProduct>(PRODUCTS_URL, product);
+export const createProduct = async (product: Omit<Product, "id">): Promise<Product> => {
+  const { data } = await axiosInstance.post<Product>(PRODUCTS_URL, product);
   return data;
 };
 
-export const updateProduct = async (id: string, product: Partial<AdminProduct>): Promise<AdminProduct> => {
-  const { data } = await axiosInstance.put<AdminProduct>(`${PRODUCTS_URL}/${id}`, product);
+export const updateProduct = async (id: string, product: Partial<Product>): Promise<Product> => {
+  const { data } = await axiosInstance.put<Product>(`${PRODUCTS_URL}/${id}`, product);
   return data;
 };
 
@@ -41,13 +45,19 @@ export const deleteProduct = async (id: string): Promise<void> => {
 };
 
 // Orders
-export const fetchOrders = async (): Promise<AdminOrder[]> => {
-  const { data } = await axiosInstance.get<AdminOrder[]>(ORDERS_URL);
+export const fetchOrders = async (): Promise<IOrder[]> => {
+  const { data } = await axiosInstance.get<IOrder[]>(ORDERS_URL);
   return data;
 };
 
-export const updateOrderStatus = async (id: string, status: AdminOrder["status"]): Promise<AdminOrder> => {
-  const { data } = await axiosInstance.put<AdminOrder>(`${ORDERS_URL}/${id}`, { status });
+export const updateOrderStatus = async (id: string, status: IOrder["status"]): Promise<IOrder> => {
+  const { data } = await axiosInstance.put<IOrder>(`${ORDERS_URL}/${id}`, { status });
+  return data;
+};
+
+//Reviews
+export const fetchReviews = async (): Promise<ReviewResponse[]> => {
+  const { data } = await axiosInstance.get<ReviewResponse[]>(REVIEWS_URL);
   return data;
 };
 

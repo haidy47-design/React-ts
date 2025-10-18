@@ -99,6 +99,21 @@ body  {
         }
 
 
+.btn-emojiEdit {
+            /* box-shadow: 2px 2px 2px gray; */
+            background-color: rgb(39, 38, 39);
+            color: #e65b82;
+            
+           }
+.btn-emojiEdit:hover {
+            border: none;
+            background-color: transparent;
+            color: #79253D;
+            transform: scale(1.02);
+
+        }
+
+
 
 .form-control {
   background-color: #FAF7F2 !important; /* درجة فاتحة من #F4EFE8 */

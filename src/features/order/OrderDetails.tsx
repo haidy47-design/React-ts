@@ -60,6 +60,7 @@ console.log(order?.items)
         <div className="card-body">
           <h4 className="mb-3" style={{ color: "#79253D" }}>Customer Info</h4>
           <p><strong>Name: </strong> {order.userName}</p>
+          <p><strong>Email: </strong> {order.email}</p>
           <p><strong>Address: </strong> {order.address}</p>
           <p><strong>Phone:</strong> {order.phone}</p>
           <p>
