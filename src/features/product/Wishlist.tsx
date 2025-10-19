@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../features/hooks";
-import { clearWishlist } from "./wishlistSlice";
+import {fetchWishlist, clearWishlist } from "./wishlistSlice";
 import ProductCard from "../../components/product/ProductCard";
 import "../../styles/card.css";
 import { FaHeart } from "react-icons/fa";
@@ -11,9 +11,14 @@ const Wishlist: React.FC = () => {
   const wishlist = useAppSelector((state) => state.wishlist.items);
   const dispatch = useAppDispatch();
 
-  const handleClearWishlist = () => {
-    dispatch(clearWishlist());
-  };
+   useEffect(() => {
+    dispatch(fetchWishlist());
+  }, [dispatch]); 
+
+
+ const handleClearWishlist = () => {
+  dispatch(clearWishlist());
+};
 
   return (
     <section className="container py-4">
@@ -58,3 +63,5 @@ const Wishlist: React.FC = () => {
 };
 
 export default Wishlist;
+
+

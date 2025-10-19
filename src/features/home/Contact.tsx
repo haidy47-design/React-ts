@@ -40,7 +40,9 @@ const Contact: React.FC = () => {
           Contact Us
         </motion.h2>
 
-        <div className="row shadow-sm  rounded overflow-hidden">
+
+        <div className="row rounded overflow-hidden">
+
           {/* Left Column - Form */}
           <motion.div
             className="col-12 col-md-6 p-5"
