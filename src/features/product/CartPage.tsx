@@ -50,14 +50,14 @@ export default function CartPage(): React.ReactElement {
     );
 
   return (
-    <div className="cart-page">
+    <div className="cart-page py-4">
       <div className="container ">
+          <h2 className="">My Cart</h2>
+          <div className="cart-divider mb-4"></div>
         <div className="cart-grid">
           {/* 🛍 My Cart Section */}
-          <div className="cart-section">
-            <h2 className="">My Cart</h2>
-            <div className="cart-divider"></div>
-
+          <div className="cart-section px-5">
+            
             {items.map((item) => (
               <div key={item.id} className="cart-item d-flex align-items-center">
                 <img
@@ -106,10 +106,7 @@ export default function CartPage(): React.ReactElement {
                   </button>
               </div>
             ))}
-          <div className="d-flex flex-column flex-md-row justify-content-between align-items-center ">
-             <button onClick={handleClear} className="btn btn-outline-success rounded-0 col-12 col-md-12 col-lg-2 mt-4">Clear Cart</button>
-             <Link to="/products" className="btn btn-link mt-4 fs-5 main-color text-decoration-none">Continue Shopping<FaLongArrowAltRight/></Link>
-          </div>
+        
           </div>
 
           {/* 🧾 Order Summary */}
@@ -127,10 +124,13 @@ export default function CartPage(): React.ReactElement {
               <strong>${total.toFixed(2)}</strong>
             </div>
              <div className="cart-divider"></div>
-            <button onClick={handleCheckout} className="btn btn-success col-12 rounded-0 py-3 mt-3">
-              Checkout
-            </button>
-
+              <div className="d-flex flex-column justify-content-between align-items-center ">
+                <button onClick={handleClear} className="btn btn-outline-success rounded-0 col-12  mt-4">  <i className="fa-solid fa-trash m-1" />Clear Cart</button>
+                <button onClick={handleCheckout} className="btn btn-success col-12 rounded-0 py-3 mt-3">
+                Checkout
+                </button>
+                <Link to="/products" className="btn btn-link mt-4 fs-5 main-color text-decoration-none">Continue Shopping<FaLongArrowAltRight/></Link>
+              </div>
           
           </div>
         </div>
