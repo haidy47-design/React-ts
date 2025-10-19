@@ -149,7 +149,7 @@ export default function AdminSidebar() {
           onClick={isMobile ? handleDrawerClose : undefined}
         >
           <img
-            src="/Images/Rlogo.png"
+            src="/Images/wlogo.png"
             alt="Roséa Logo"
             height={50}
             style={{ marginRight: "8px" }}
@@ -179,12 +179,12 @@ export default function AdminSidebar() {
                 px: 2.5,
                 color: "#ebe5dbff",
                 "&.active": {
-                  backgroundColor: "#f0a0b7",
-                  color: "#79253D",
+                  backgroundColor: " #f3f0e6",
+                  color: "#722f37",
                   fontWeight: "bold",
                 },
                 "&:hover": {
-                  backgroundColor: "#a33b52",
+                  backgroundColor: "#a33b528a",
                 },
                 justifyContent: open || isMobile ? "initial" : "center",
               }}
