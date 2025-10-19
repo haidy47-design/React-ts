@@ -19,7 +19,7 @@ const About: React.FC = () => {
           About Roséa
         </motion.h2>
 
-        <div className="row align-items-center justify-content-center bg-white shadow-sm rounded overflow-hidden">
+        <div className="row align-items-center justify-content-center   rounded overflow-hidden">
           {/* Left Column */}
           <motion.div
             className="col-12 col-md-6 p-5 text-center "

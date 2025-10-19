@@ -19,10 +19,10 @@ export default function HomePage(): React.ReactElement {
 
     <Welcome />
 
-    <section className="container mt-4">
+    {/* <section className="container mt-4">
 
     <About />
-    </section>
+    </section> */}
       
       {/* Category Slider Section */}
       <section className="container mt-4">
@@ -38,9 +38,9 @@ export default function HomePage(): React.ReactElement {
       <InstagramPhotos />
       </section>
       
-      <section className="container mt-4">
+      {/* <section className="container mt-4">
       <Contact />
-      </section>
+      </section> */}
 
       
     </>

@@ -6,7 +6,7 @@ import { addToCart } from "../../features/product/cartSlice";
 import { toast } from "react-hot-toast";
 import "../../styles/card.css";
 import { FaShoppingCart, FaEye, FaHeart } from "react-icons/fa";
-import { addToWishlist, removeFromWishlist } from "../../features/product/wishlistSlice";
+import { toggleWishlist } from "../../features/product/wishlistSlice";
 
 
 export type Product = {
@@ -18,6 +18,7 @@ export type Product = {
   category: string;
   discount: number;
   stock: number;
+  
 };
 
 type Props = {
@@ -44,16 +45,20 @@ const handleAddToCart = () => {
 };
 
   const wishlist = useAppSelector((state) => state.wishlist.items);
-  const isInWishlist = wishlist.some((item) => item.id === product.id);
-  const handleAddToWishlist = () => {
+const isInWishlist = wishlist.some(
+  (item) => String(item.productId) === String(product.id)
+);
+
+const handleToggleWishlist = () => {
+  dispatch(toggleWishlist(product));
+
   if (isInWishlist) {
-    dispatch(removeFromWishlist(product.id));
     toast("Removed from wishlist 💔", { icon: "💔" });
   } else {
-    dispatch(addToWishlist(product));
     toast.success("Added to wishlist ❤️");
   }
 };
+
 
   return (
     <div
@@ -114,7 +119,7 @@ const handleAddToCart = () => {
                   className={`wishlist-btn btn rounded-circle p-3 shadow-sm ${
                     isInWishlist ? "active" : ""
                   }`}
-                  onClick={handleAddToWishlist}
+                  onClick={handleToggleWishlist}
                 >
                   <FaHeart size={26} />
                 </button>
