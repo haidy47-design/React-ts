@@ -1,7 +1,7 @@
 .cart-page {
-  padding: 100px 220px;
-  min-height: 80vh;
-  background-color: #f0ebe5;
+
+  min-height: 90vh;
+  
 }
 
 .cart-container {
@@ -364,4 +364,89 @@
 .review-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Scroll only in the left (cart-section) ===== */
+.cart-grid {
+  display: flex; /* استبدل grid بـ flex */
+  gap: 60px;
+  align-items: flex-start;
+  height: calc(100vh - 200px); /* حسب ارتفاع الهيدر والفوتر عندك */
+  overflow: hidden; /* يمنع scroll للصفحة كلها */
+}
+
+/* الجزء الشمال (قائمة المنتجات) */
+.cart-section {
+  flex: 2;
+  overflow-y: auto; /* هنا ال scroll */
+  padding-right: 10px;
+  max-height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #b0b0b0 transparent;
+}
+
+.cart-section::-webkit-scrollbar {
+  width: 8px;
+}
+.cart-section::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border-radius: 10px;
+}
+
+/* الجزء اليمين (Order Summary) */
+.order-summary {
+  flex: 1;
+  position: sticky;
+
+  height: fit-content;
+  background-color: #eae6e2;
+
+  border-radius: 8px;
+  padding: 20px;
+}
+
+
+
+
+/* ===== Responsive Adjustments ===== */
+@media (max-width: 992px) {
+  .cart-grid {
+    flex-direction: column; /* يخليهم فوق بعض بدل جنب بعض */
+    height: auto; /* يلغي الارتفاع الثابت */
+    overflow: visible; /* يسمح بالتمرير العادي */
+  }
+
+  .cart-section {
+    max-height: none;
+    overflow-y: visible;
+    width: 90vw; /* مفيش scroll داخلي في الموبايل */
+  }
+
+  .order-summary {
+    position: static; /* ميبقاش ثابت */
+    width: 100%;
+    margin-top: 40px;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .cart-page {
+    padding: 40px 20px;
+  }
+
+  .cart-grid {
+    gap: 30px;
+  }
+
+  .order-summary {
+    margin-top: 20px;
+  }
+
+  .checkout-btn {
+    font-size: 14px;
+    padding: 14px;
+  }
 }
