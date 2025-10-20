@@ -1,9 +1,9 @@
-// src/features/product/wishlistSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Product } from "../../components/product/ProductCard";
 
-const API_URL = "https://68f4ce63b16eb6f4683589d0.mockapi.io/home/wishlist"; // عدّلي لو عندك URL مختلف
+
+const API_URL = "https://68f4ce63b16eb6f4683589d0.mockapi.io/home/wishlist"; 
 
 type WishlistState = {
   items: (Product & { id?: string; userId?: string; createdAt?: string })[];

@@ -50,6 +50,11 @@ const isInWishlist = wishlist.some(
 );
 
 const handleToggleWishlist = () => {
+  const storedUser = localStorage.getItem("user");
+  if (!storedUser) {
+    toast.error("Login first 💡");
+    return; 
+  }
   dispatch(toggleWishlist(product));
 
   if (isInWishlist) {
