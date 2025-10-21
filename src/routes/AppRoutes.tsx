@@ -21,7 +21,7 @@ import ProtectedAdmin from "../features/admin/ProtectedAdmin";
 import AdminLayout from "../features/admin/AdminLayout";
 import Dashboard from "../features/admin/Dashboard";
 import Products from "../features/admin/Products/Products";
-import AdminOrders from "../features/admin/Orders";
+
 import Users from "../features/admin/Users";
 import Reports from "../features/admin/Reports";
 import Wishlist from "../features/product/Wishlist"
@@ -30,6 +30,7 @@ import AddProduct from "../features/admin/Products/AddProduct";
 import AdminProductReviews from "../features/admin/Products/ProductReviews";
 
 import ProfileLayout from "../features/auth/ProfileLayout";
+import Orders from "../features/admin/orders/Orders";
 
 
 export default function AppRoutes(): React.ReactElement {
@@ -101,7 +102,7 @@ export default function AppRoutes(): React.ReactElement {
           <Route path="products/edit/:id" element={<EditProduct />} />
           <Route path="products/add" element={<AddProduct />} />
           <Route path="/admin/reviews/:productID" element={<AdminProductReviews />} />
-          <Route path="orders" element={<AdminOrders />} />
+          <Route path="orders" element={<Orders />} />
           <Route path="users" element={<Users />} />
           <Route path="reports" element={<Reports />} />
         </Route>
