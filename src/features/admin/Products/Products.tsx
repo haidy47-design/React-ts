@@ -119,20 +119,21 @@ const ProductList: React.FC = () => {
       {/* 🔹 Filters Section */}
       <div className="p-4 bg-white rounded-4 shadow-sm mb-4">
         <div className="d-md-flex justify-content-between d-flex-column ">
-          <h5 className="fw-bold mb-4" style={{ color: "#79253D" }}>
+          <h4 className="fw-bold mb-4" style={{ color: "#79253D" }}>
             Product Management
-          </h5>
+          </h4>
 
-          <button className="btn btn-success col-12 col-md-1 mb-4 mb-md-2 p-0" onClick={() => navigate("/admin/products/add")}>
+          <button className="btn btn-success col-12 col-md-2 col-lg-1 mb-4 mb-md-2 p-md-0" onClick={() => navigate("/admin/products/add")}>
             Add Product
           </button>
         </div>
 
         <div className="d-flex flex-wrap align-items-center gap-3 ">
-          <Form.Control
+          <input
             type="text"
             placeholder="Search by name or id"
-            style={{ width: "250px" }}
+            style={{ width: "250px" ,height:"2.3rem"}}
+            className="mt-3 form-control"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -154,7 +155,7 @@ const ProductList: React.FC = () => {
             ))}
           </Form.Select>
 
-                  {/* ✅ فلتر الحالة */}
+                
           <Form.Select
             style={{
               width: "200px",
@@ -171,7 +172,7 @@ const ProductList: React.FC = () => {
             <option value="Out of Stock">Out of Stock</option>
           </Form.Select>
 
-          {/* ✅ السلايدر يبدأ من أقل سعر */}
+      
           <div className="d-flex align-items-center gap-2">
             <span className="main-color">
               Max Price: ${maxPrice || maxAvailablePrice}
@@ -189,17 +190,18 @@ const ProductList: React.FC = () => {
             />
           </div>
 
-          <Button variant="outline-secondary" className="ms-auto col-12 col-md-1 px-0" onClick={handleReset}>
+          <Button variant="outline-secondary" className="ms-auto col-12 col-md-2 col-lg-1 px-0" onClick={handleReset}>
             Reset Filters
           </Button>
         </div>
       </div>
 
-      {/* 🔹 Table Section - Desktop Only (hidden on mobile) */}
+    
       <div className="table-responsive mt-4 bg-white rounded-4 shadow-sm d-none d-lg-block">
         <table className="table align-middle table-hover">
           <tr style={{ backgroundColor: "#79253D", color: "white" }}>
             <th className="p-3">Product Info</th>
+            <th className="p-3">Category</th>
             <th className="p-3">Price</th>
             <th className="p-3">Net Price</th>
             <th className="p-3">Quantity</th>
@@ -227,7 +229,7 @@ const ProductList: React.FC = () => {
                   </div>
                 </div>
               </td>
-
+              <td className="ps-4">{product.category}</td>
               <td className="ps-4">${product.price}</td>
               <td className="ps-4">${product.discount}</td>
               <td className="ps-5">{product.stock}</td>
@@ -284,7 +286,7 @@ const ProductList: React.FC = () => {
                   src={product.image} 
                   alt={product.title}
                   style={{ 
-                    height: "200px", 
+                    height: "300px", 
                     objectFit: "cover" 
                   }}
                 />
@@ -400,3 +402,10 @@ const ProductList: React.FC = () => {
 };
 
 export default ProductList;
+
+
+
+
+
+
+

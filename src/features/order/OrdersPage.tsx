@@ -15,7 +15,7 @@ export interface IOrder {
     id: string;
     title: string;
     quantity: number;
-    price: number;
+    discount: number;
     category: string;
     image: string;
   }[];
@@ -132,6 +132,26 @@ export default function OrdersPage(): React.ReactElement {
     );
   }
 
+
+  const getStatusBadgeColor = (status: string) => {
+  switch (status) {
+    case "Pending":
+      return "#FFC107"; 
+    case "Cancelled":
+      return "#DC3545"; 
+    case "Proccessing":
+      return "#0D6EFD"; 
+    case "Shipped":
+      return "#24A167"; 
+    case "Delivered":
+      return "#79253D";
+    default:
+      return "#6C757D"; 
+  }
+};
+
+
+
   return (
     <div className="container py-4">
       <h3 className="mb-4 text-center" style={{ color: "#79253D" }}>
@@ -167,7 +187,7 @@ export default function OrdersPage(): React.ReactElement {
               <th className="py-2">User Name</th>
               <th className="py-2">Address</th>
               <th className="py-2">Phone</th>
-              <th className="py-2">Items</th>
+              <th className="py-2">Items Per Order</th>
               <th className="py-2">Total</th>
               <th className="py-2">Date</th>
               <th className="py-2">Status</th>
@@ -180,19 +200,11 @@ export default function OrdersPage(): React.ReactElement {
                 <td>{o.userName}</td>
                 <td>{o.address}</td>
                 <td>{o.phone}</td>
-                <td>
-                  <ul className="list-unstyled mb-0 small bg-transparent">
-                    {o.items?.map((i) => (
-                      <li key={i.id} className="d-flex align-items-center justify-content-center mb-1">
-                        {i.title} × {i.quantity}
-                      </li>
-                    ))}
-                  </ul>
-                </td>
+                <td>{o.items.length}</td>
                 <td>${parseFloat(o.totalPrice).toFixed(2)}</td>
                 <td className="small text-muted">{new Date(o.createdAt).toLocaleString()}</td>
                 <td>
-                  <span className="badge text-white" style={{ backgroundColor: "#79253D" }}>
+                  <span className="badge text-white w-75" style={{ backgroundColor:  getStatusBadgeColor(o.status)  }}>
                     {o.status}
                   </span>
                 </td>
