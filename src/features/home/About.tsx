@@ -51,7 +51,7 @@ const About: React.FC = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="btn btn-outline-custom px-4 py-2"
+              className="btn btn-success rounded-0 px-4 py-2"
             >
               Contact Us
             </motion.button>
@@ -66,9 +66,9 @@ const About: React.FC = () => {
             viewport={{ once: true }}
           >
             <img
-              src="/Images/about.jpg"
+              src="/Images/aboutus.jpeg"
               alt="Flowers"
-              className="img-fluid w-100 h-100 object-fit-cover"
+              className="rounded-4" style={{width:"100%" , height:"600px" , filter: "brightness(0.5)"}}
             />
           </motion.div>
         </div>

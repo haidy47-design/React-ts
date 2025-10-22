@@ -270,7 +270,7 @@ input:-webkit-autofill:active {
 }
 
 .drawer {
-  width: 400px;
+  width: 350px;
   background-color: #79253D; 
   color: white;
   display: flex;

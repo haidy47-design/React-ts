@@ -73,6 +73,7 @@ export default function AppRoutes(): React.ReactElement {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetails />} />
+          <Route path="info" element={<ProfilePage />} />
         </Route>
 
     

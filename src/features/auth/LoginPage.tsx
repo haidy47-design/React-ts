@@ -10,12 +10,13 @@ import "../../styles/auth.css";
 import { FaSignInAlt } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setUser } from "../auth/authSlice";
+import { showLoginError, showLoginSuccess } from "../../components/common/CustomSwal";
 
 const schema = z.object({
   email: z.string().email("Invalid email"),
   password: z
     .string()
-    .regex(/^[A-Z][a-z0-9]{3,8}$/, "Must start with uppercase and 4–9 chars"),
+    
 });
 
 type LoginForm = z.infer<typeof schema>;
@@ -46,15 +47,15 @@ export default function Login() {
 
       if (user) {
         dispatch(setUser(user)); 
-        toast.success("✅ Logged in successfully!");
+        showLoginSuccess(" Logged in successfully" ,user.name);
         setTimeout(() => navigate("/home"), 1200);
       } else {
-        toast.error("❌ Invalid email or password!");
+        showLoginError("Invalid email or password!");
       }
     } catch (err) {
       const e = err as AxiosError;
       console.error(e);
-      toast.error("⚠️ Something went wrong, please try again.");
+      toast.error(" Something went wrong, please try again.");
     } finally {
       setLoading(false);
     }

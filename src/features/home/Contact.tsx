@@ -1,35 +1,105 @@
-import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/contact.css";
+import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
+import z from "zod";
+import { useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 
-type FormValues = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  subject: string;
-  message: string;
-};
+/**
+ * Expected localStorage shape:
+ * localStorage.setItem("user", JSON.stringify({
+ *   user: {
+ *     id: "3",
+ *     name: "Abdallah",
+ *     email: "abdodonia45@gmail.com",
+ *     ...
+ *   }
+ * }));
+ */
 
-const Contact: React.FC = () => {
+export default function Contact() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  // Read user from localStorage safely
+  let userEmail: string | null = null;
+  try {
+    const raw = localStorage.getItem("user");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // If the object is like { user: { email: "..." } }
+      if (parsed?.user?.email) userEmail = String(parsed.user.email);
+      // or if it's directly { email: "..." }
+      else if (parsed?.email) userEmail = String(parsed.email);
+    }
+  } catch (err) {
+    console.warn("Failed to parse user from localStorage", err);
+  }
+
+  // Fallback: if no user email found, you can set to null or empty string.
+  // Using null will make the refine check fail and show validation message.
+  // If you prefer to allow anonymous, change logic accordingly.
+  // Create schema factory so it can capture current userEmail
+  const createSchema = (expectedEmail: string | null) =>
+    z
+      .object({
+        firstName: z.string().min(3, "First name must be at least 3 characters"),
+        lastName: z.string().min(3, "Last name must be at least 3 characters"),
+        email: z.string().email("Invalid email"),
+        subject: z.string().regex(/^[A-Za-z\s]+$/, "Subject must contain only letters").optional(),
+        message: z.string().min(10, "Message must be at least 10 characters"),
+      })
+      .refine((data) => {
+        if (!expectedEmail) return false;
+        return data.email === expectedEmail;
+      }, {
+        message: "Email must match your logged-in account email",
+        path: ["email"],
+      });
+
+  const schema = createSchema(userEmail);
+
+  type ContactForm = z.infer<typeof schema>;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FormValues>();
+  } = useForm<ContactForm>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: userEmail ?? "",
+      subject: "",
+      message: "",
+    },
+  });
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log("Form Submitted:", data);
-    alert("✅ Thank you! Your message has been sent.");
-    reset();
+  const handleFormSubmit = async (values: ContactForm) => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      await axios.post("https://68f17bc0b36f9750dee96cbb.mockapi.io/contact", values);
+      showSuccessAlert("Thank you, your message has been sent.");
+      reset();
+    } catch (error) {
+      showErrorAlert("Failed to send. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <section className="contact-section py-5">
       <div className="container">
-        {/* Title */}
+        
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -43,7 +113,7 @@ const Contact: React.FC = () => {
 
         <div className="row rounded overflow-hidden">
 
-          {/* Left Column - Form */}
+
           <motion.div
             className="col-12 col-md-6 p-5"
             initial={{ opacity: 0, x: -50 }}
@@ -55,7 +125,7 @@ const Contact: React.FC = () => {
               We’re Here for Any Question
             </h5>
 
-            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
               <div className="row">
                 <div className="col-12 col-md-6 mb-3">
                   <input
@@ -64,16 +134,13 @@ const Contact: React.FC = () => {
                       errors.firstName ? "is-invalid" : ""
                     }`}
                     placeholder="First Name *"
-                    {...register("firstName", {
-                      required: "First name is required",
-                    })}
+                    {...register("firstName")}
                   />
                   {errors.firstName && (
-                    <div className="invalid-feedback">
-                      {errors.firstName.message}
-                    </div>
+                    <div className="invalid-feedback">{errors.firstName.message}</div>
                   )}
                 </div>
+
                 <div className="col-12 col-md-6 mb-3">
                   <input
                     type="text"
@@ -81,40 +148,37 @@ const Contact: React.FC = () => {
                       errors.lastName ? "is-invalid" : ""
                     }`}
                     placeholder="Last Name *"
-                    {...register("lastName", {
-                      required: "Last name is required",
-                    })}
+                    {...register("lastName")}
                   />
                   {errors.lastName && (
-                    <div className="invalid-feedback">
-                      {errors.lastName.message}
-                    </div>
+                    <div className="invalid-feedback">{errors.lastName.message}</div>
                   )}
                 </div>
               </div>
 
               <div className="row">
                 <div className="col-12 col-md-6 mb-3">
+                  {/* make email readOnly so user cannot change it */}
                   <input
                     type="email"
+                    readOnly
                     className={`form-control border-0 border-bottom rounded-0 ${
                       errors.email ? "is-invalid" : ""
                     }`}
                     placeholder="Email *"
-                    {...register("email", {
-                      required: "Email is required",
-                      pattern: {
-                        value: /^\S+@\S+$/i,
-                        message: "Invalid email format",
-                      },
-                    })}
+                    {...register("email")}
                   />
                   {errors.email && (
-                    <div className="invalid-feedback">
-                      {errors.email.message}
-                    </div>
+                    <div className="invalid-feedback">{errors.email.message}</div>
+                  )}
+                  {/* optional: show note if userEmail not found */}
+                  {!userEmail && (
+                    <small className="text-warning">
+                      No logged-in email found. Please log in first.
+                    </small>
                   )}
                 </div>
+
                 <div className="col-12 col-md-6 mb-3">
                   <input
                     type="text"
@@ -132,32 +196,21 @@ const Contact: React.FC = () => {
                     errors.message ? "is-invalid" : ""
                   }`}
                   placeholder="Leave us a message..."
-                  {...register("message", {
-                    required: "Message is required",
-                  })}
-                ></textarea>
+                  {...register("message")}
+                />
                 {errors.message && (
-                  <div className="invalid-feedback">
-                    {errors.message.message}
-                  </div>
+                  <div className="invalid-feedback">{errors.message.message}</div>
                 )}
               </div>
 
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="d-grid"
-              >
-                <button
-                  type="submit"
-                  className="btn btn-outline-custom py-2 rounded-0"
-                >
-                  Submit
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="d-grid">
+                <button type="submit" className="btn btn-success py-2 rounded-0" disabled={loading}>
+                  {loading ? "Sending..." : "Submit"}
                 </button>
               </motion.div>
             </form>
 
-            {/* Address & Info */}
+
             <div className="row mt-5 text-center text-md-start">
               <div className="col-12 col-md-6">
                 <h6 className="fw-semibold">Address</h6>
@@ -172,7 +225,7 @@ const Contact: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Right Column - Image */}
+
           <motion.div
             className="col-12 col-md-6 p-0"
             initial={{ opacity: 0, x: 50 }}
@@ -180,16 +233,10 @@ const Contact: React.FC = () => {
             transition={{ duration: 0.7 }}
             viewport={{ once: true }}
           >
-            <img
-              src="/Images/contact.jpg" 
-              alt="Flowers"
-              className="img-fluid w-100 h-100 object-fit-cover"
-            />
+            <img src="/Images/contactUs.jpg" alt="Contact illustration" className="rounded-4" style={{width:"100%" , height:"600px" , filter:"brightness(0.9)"}} />
           </motion.div>
         </div>
       </div>
     </section>
   );
-};
-
-export default Contact;
+}

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
 import "../../styles/auth.css";
+import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
 
 const schema = z
   .object({
@@ -49,10 +50,10 @@ export default function Register() {
     try {
        const userData = { ...values, role: "user" };
       await axios.post("https://68e83849f2707e6128ca32fb.mockapi.io/users", userData);
-      toast.success("✅ Account created!");
+      showSuccessAlert("Account created!");
       setTimeout(() => navigate("/login"), 1500);
     } catch {
-      toast.error("❌ Failed to register. Try again.");
+    showErrorAlert("Failed to register. Try again.");
     } finally {
       setLoading(false);
     }

@@ -27,7 +27,7 @@ const SpecialOffer: React.FC = () => {
 
         <Link
           to="/products" 
-          className="btn btn-outline-light px-4 py-2 fw-semibold offer-btn"
+          className="btn btn-outline-light rounded-0 px-4 py-2 fw-semibold offer-btn"
         >
           Shop Now
         </Link>

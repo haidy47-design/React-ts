@@ -283,7 +283,7 @@ const UsersManagement: React.FC = () => {
     );
 
   return (
-    <div className="container mt-5 users-container">
+    <div className="mt-5 users-container">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold" style={{color:"#79253D"}}>Users Management</h2>
         <Button

@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet-async";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import "../../styles/auth.css";
+import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
 
 const schema = z
   .object({
@@ -45,7 +46,7 @@ export default function ResetPassword() {
       );
 
       if (!user) {
-        toast.error("❌ No email found. Please request a password reset again.");
+        showErrorAlert(" No email found. Please request a password reset again.");
         return;
       }
 
@@ -64,7 +65,7 @@ export default function ResetPassword() {
       
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
-      toast.success("🔒 Password updated successfully!");
+      showSuccessAlert("🔒 Password updated successfully!");
       setTimeout(() => navigate("/login"), 1500);
     } catch (error) {
       toast.error("⚠️ Something went wrong. Try again later.");
