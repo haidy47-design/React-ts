@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../styles/auth.css";
+import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -30,10 +31,10 @@ export default function ForgotPassword() {
     const user = data.find((u: any) => u.email.toLowerCase() === values.email.toLowerCase());
 
     if (user) {
-      toast.success("📩 Email found! Redirecting...");
+      showSuccessAlert(" Email found! Redirecting...");
       setTimeout(() => navigate(`/reset-password?email=${values.email}`), 1500);
     } else {
-      toast.error("❌ Email not found. Please check again.");
+      showErrorAlert("Email not found. Please check again.");
     }
   } catch (error) {
     toast.error("⚠️ Something went wrong. Try again later.");

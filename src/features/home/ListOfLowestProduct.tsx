@@ -264,18 +264,10 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../app/axiosInstance";
 import Spinner from "../../components/common/Spinner";
-import ProductCard from "../../components/product/ProductCard";
+import ProductCard, { Product } from "../../components/product/ProductCard";
 import "../../styles/price.css";
 
-interface Product {
-  id: string;
-  title: string;
-  price: number;
-  image: string;
-  description: string;
-  category: string;
-  stock: number;
-}
+
 
 export default function ListOfLowestProduct(): React.ReactElement {
   const navigate = useNavigate();
@@ -358,7 +350,7 @@ export default function ListOfLowestProduct(): React.ReactElement {
       {/* View all products button */}
       <div className="text-center mt-4">
         <button
-          className="btn btn-outline-primary btn-lg"
+          className="btn btn-outline-success rounded-0 btn-lg"
           onClick={() => navigate("/products")}
         >
           View All Products

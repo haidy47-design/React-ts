@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import "../../styles/auth.css";
+import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
 
 export default function ProfilePage(): React.ReactElement {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function ProfilePage(): React.ReactElement {
     "re-password": "",
   });
 
-  // 📌 Load user
+  
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -36,7 +37,7 @@ export default function ProfilePage(): React.ReactElement {
     e.preventDefault();
 
     if (!user?.id) {
-      toast.error("⚠️ User not found!");
+      showErrorAlert("⚠️ User not found!");
       return;
     }
 
@@ -45,38 +46,38 @@ export default function ProfilePage(): React.ReactElement {
     if (name) {
       const nameRegex = /^[A-Za-z\s]{3,30}$/;
       if (!nameRegex.test(name.trim())) {
-        toast.error(
-          "⚠️ Name must be at least 3 letters and contain only alphabets."
+        showErrorAlert(
+          "Name must be at least 3 letters and contain only alphabets."
         );
         return;
       }
     }
 
     if (!name && !password && !rePassword) {
-      toast.error("⚠️ Please update at least one field.");
+      showErrorAlert("Please update at least one field.");
       return;
     }
 
     if (password || rePassword) {
       if (!oldPassword) {
-        toast.error("❌ Enter your old password to change it.");
+      showErrorAlert(" Enter your old password to change it.");
         return;
       }
 
       if (oldPassword !== user.password) {
-        toast.error("❌ Old password is incorrect.");
+        showErrorAlert(" Old password is incorrect.");
         return;
       }
 
       if (password !== rePassword) {
-        toast.error("❌ Passwords do not match.");
+        showErrorAlert(" Passwords do not match.");
         return;
       }
 
       const passwordRegex = /^[A-Z][a-z0-9]{3,8}$/;
       if (!passwordRegex.test(password)) {
-        toast.error(
-          "⚠️ Password must start with a capital letter and be 4–9 characters (letters/numbers only)."
+        showErrorAlert(
+          " Password must start with a capital letter and be 4–9 characters (letters/numbers only)."
         );
         return;
       }
@@ -93,7 +94,7 @@ export default function ProfilePage(): React.ReactElement {
       }
 
       if (Object.keys(updatedFields).length === 0) {
-        toast("⚠️ Nothing to update.");
+        ("Nothing to update.");
         return;
       }
 
@@ -106,7 +107,7 @@ export default function ProfilePage(): React.ReactElement {
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
 
-      toast.success("✅ Information updated successfully!");
+      showSuccessAlert(" Information updated successfully!");
       setFormData({
         ...formData,
         oldPassword: "",
@@ -115,7 +116,7 @@ export default function ProfilePage(): React.ReactElement {
       });
     } catch (error) {
       console.error(error);
-      toast.error("⚠️ Something went wrong while updating.");
+      toast.error(" Something went wrong while updating.");
     }
   };
 

@@ -73,7 +73,7 @@ const InstagramPhotos: React.FC = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="btn-follow"
+            className="btn-success btn rounded-0 px-4 py-2 "
           >
             Follow Us
           </motion.button>

@@ -96,7 +96,7 @@ export default function Welcome(): React.ReactElement {
           <p className="hero-paragraph lead mx-auto w-75 mb-4 paragraph-font text-shadow">
             Fresh blooms, delivered with love. Celebrate life's special moments with Roséa's stunning arrangements.
           </p>
-          <Link to="/products" className="btn btn-primary px-4 py-2 mt-2">
+          <Link to="/products" className="btn btn-success rounded-0 px-4 py-2 mt-2">
             Shop Now
           </Link>
         </div>

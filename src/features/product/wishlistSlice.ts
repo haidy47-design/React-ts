@@ -6,7 +6,7 @@ import { Product } from "../../components/product/ProductCard";
 const API_URL = "https://68f4ce63b16eb6f4683589d0.mockapi.io/home/wishlist"; 
 
 type WishlistState = {
-  items: (Product & { id?: string; userId?: string; createdAt?: string })[];
+  items: (Product & { productId?: string; userId?: string; createdAt?: string })[];
   loading: boolean;
   error: string | null;
 };

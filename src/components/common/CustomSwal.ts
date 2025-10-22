@@ -39,12 +39,12 @@ export const showConfirmAlert = async (message: string) => {
 };
 
 /* 🟢 Login Success */
-export const showLoginSuccess = (message = "You have successfully logged in!") => {
+export const showLoginSuccess = (message = "You have successfully logged in!",name:string) => {
   Swal.fire({
-    title: "Welcome Back! 👋",
+    title: `Welcome Back ${name}`,
     text: message,
     icon: "success",
-    iconColor: "#4BB543",
+    iconColor: "#79253D",
     background: "#fff",
     color: "#333",
     showConfirmButton: false,
@@ -56,7 +56,7 @@ export const showLoginSuccess = (message = "You have successfully logged in!") =
 /* 🔴 Login Error */
 export const showLoginError = (message = "Invalid email or password.") => {
   Swal.fire({
-    title: "Login Failed ❌",
+    title: "Login Failed",
     text: message,
     icon: "error",
     iconColor: "#d33",

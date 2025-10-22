@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import "../../styles/card.css";
 import { FaShoppingCart, FaEye, FaHeart } from "react-icons/fa";
 import { toggleWishlist } from "../../features/product/wishlistSlice";
+import { showErrorAlert, showLoginRequired, showSuccessAlert } from "../common/CustomSwal";
 
 
 export type Product = {
@@ -37,10 +38,10 @@ const handleAddToCart = () => {
   dispatch(addToCart({ ...product, quantity: 1 }))
     .unwrap()
     .then(() => {
-      toast.success("Added to cart!");
+      showSuccessAlert("Added to cart!");
     })
     .catch((err) => {
-      toast.error(err || "Failed to add to cart");
+      showErrorAlert(err || "Failed to add to cart");
     });
 };
 
@@ -52,15 +53,15 @@ const isInWishlist = wishlist.some(
 const handleToggleWishlist = () => {
   const storedUser = localStorage.getItem("user");
   if (!storedUser) {
-    toast.error("Login first 💡");
+    showLoginRequired("Login first");
     return; 
   }
   dispatch(toggleWishlist(product));
 
   if (isInWishlist) {
-    toast("Removed from wishlist 💔", { icon: "💔" });
+    showSuccessAlert("Removed from wishlist 💔");
   } else {
-    toast.success("Added to wishlist ❤️");
+    showSuccessAlert("Added to wishlist ❤️");
   }
 };
 
