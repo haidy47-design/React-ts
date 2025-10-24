@@ -32,6 +32,7 @@ import AdminProductReviews from "../features/admin/Products/ProductReviews";
 import ProfileLayout from "../features/auth/ProfileLayout";
 import Orders from "../features/admin/orders/Orders";
 import AdminContacts from "../features/admin/Contact/ContactUs";
+import ChatWidget from "../components/common/ChatWidget";
 
 
 export default function AppRoutes(): React.ReactElement {
@@ -115,8 +116,13 @@ export default function AppRoutes(): React.ReactElement {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
-      {!hideLayout && <Footer />}
-    </>
+     {!hideLayout && (
+        <>
+          <Footer />
+          <ChatWidget />
+        </>
+         )}
+    </>  
   );
 }
 
