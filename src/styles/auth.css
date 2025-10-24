@@ -270,7 +270,7 @@ input:-webkit-autofill:active {
 }
 
 .drawer {
-  width: 350px;
+  width: 300px;
   background-color: #79253D; 
   color: white;
   display: flex;
@@ -355,5 +355,50 @@ input:-webkit-autofill:active {
   .profile-content {
     margin-left: 0;
     margin-top: 10px;
+  }
+}
+
+
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 999;
+  color: #131212;
+  cursor: pointer;
+}
+
+/* Default drawer */
+.drawer {
+  width: 250px;
+  background: #79253D;
+  color: #fff;
+  padding: 20px;
+  transition: transform 0.3s ease;
+}
+
+/* Hide drawer on small screens */
+@media (max-width: 768px) {
+  .drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transform: translateY(-100%);
+    z-index: 998;
+  }
+
+  .drawer.open {
+    transform: translateX(0);
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .profile-content {
+    margin-left: 0;
+    padding-top: 60px;
   }
 }
