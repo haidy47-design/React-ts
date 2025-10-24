@@ -1,0 +1,168 @@
+:root {
+  --rose-primary: #722f37;
+  --rose-secondary: #f8eaea;
+  --rose-light: #f4efe8;
+
+  --maroon-primary:#4a1f24;
+  --maroon-secondary: #8b3a3a;
+  --maroon-light: #dddddd;
+
+  --rose-gradient: linear-gradient(135deg, #722f37 0%, #4a1f24 100%);
+  --maroon-gradient: linear-gradient(135deg, #4a1f24 0%,#722f37 100%);
+  --rose-maroon-gradient: linear-gradient(135deg, #722f37 0%,#4a1f24 100%);
+}
+
+/* Page container */
+.dashboard-container {
+  background: linear-gradient(180deg, var(--rose-secondary), #fff);
+  min-height: 100%;
+  padding-bottom: 3rem;
+}
+
+/* Summary Cards */
+.dashboard-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,234,234,0.98));
+  border-radius: 12px;
+  padding: 0.8rem;
+  border-left: 4px solid rgba(114,47,55,0.08);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+.dashboard-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 28px rgba(74,31,36,0.08);
+}
+.dashboard-card .small { color: #6c757d; }
+.count-up { color: var(--maroon-primary); }
+
+/* Filters card */
+.filter-card {
+  border-radius: 10px;
+  background: rgba(255,255,255,0.98);
+  border: 1px solid rgba(114,47,55,0.04);
+}
+
+/* Chart cards */
+.chart-card {
+  padding: 1rem;
+  border-radius: 12px;
+  background: #fff;
+  border: none;
+}
+.chart-title {
+  font-weight: 600;
+  color: var( --rose-primary);
+  margin-bottom: 0.5rem;
+}
+
+/* Top products */
+.top-products li { border-bottom: 1px dashed #f1f1f1; }
+.top-products li:last-child { border-bottom: none; }
+
+/* Recharts tooltip */
+.recharts-tooltip-wrapper { z-index: 50; }
+.custom-tooltip {
+  background: #fff;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .chart-card { padding: .65rem; }
+  .dashboard-card { padding: .6rem; }
+  .chart-title { font-size: 0.95rem; }
+}
+
+.filter-card .form-control:focus, .filter-card .form-select:focus {
+  outline: 3px solid rgba(114,47,55,0.08);
+  box-shadow: none;
+}
+
+
+.card .card-body { padding: 0.9rem; }
+
+/* Enhanced filter styles */
+.filter-card .form-control:focus, .filter-card .form-select:focus {
+  outline: 3px solid rgba(114,47,55,0.08);
+  box-shadow: 0 0 0 0.2rem rgba(114,47,55,0.15);
+  border-color: var(--rose-primary);
+}
+
+.filter-card .border-primary {
+  border-color: var(--rose-primary) !important;
+}
+
+/* Chart loading states */
+.chart-card .spinner-border {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Enhanced empty states */
+.chart-card .fa-3x {
+  color: var(--rose-light);
+}
+
+.chart-card .fa-2x {
+  color: var(--rose-light);
+}
+
+/* Top products enhancements */
+.top-products li:last-child {
+  border-bottom: none !important;
+}
+
+.top-products .badge {
+  font-weight: 600;
+}
+
+/* Smooth transitions for charts */
+.recharts-wrapper {
+  transition: opacity 0.3s ease;
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 576px) {
+  .filter-card .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+  
+  .filter-card .d-flex.gap-2 .form-control {
+    width: 100%;
+  }
+  
+  .chart-title {
+    font-size: 0.9rem;
+  }
+  
+  .top-products .fw-semibold {
+    font-size: 0.85rem;
+  }
+  
+  .btn-group .btn {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Animation for count-up */
+.count-up {
+  transition: all 0.3s ease;
+}
+
+/* Enhanced tooltip styles */
+.recharts-tooltip-wrapper {
+  z-index: 1000;
+}
+
+/* Chart card hover effects */
+.chart-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chart-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+}
