@@ -224,7 +224,7 @@ const updateMutation = useMutation({
             type="text"
             placeholder="Search by user, phone or item..."
             style={{ width: "250px", height: "2.3rem" }}
-            className="mt-3 form-control"
+            className="form-control"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

@@ -184,8 +184,8 @@ input:-webkit-autofill:active {
   color: #1a1a1a;
   transition: all 0.25s ease-in-out;
   border-radius: 6px;
-  height: 50px;
-  margin-bottom: 20px;
+  /* height: 50px;
+  margin-bottom: 20px; */
 }
 .form-control::placeholder {
   color: rgba(121, 37, 61, 1)

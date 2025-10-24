@@ -158,7 +158,7 @@ export default function ProfilePage(): React.ReactElement {
           <input
             type="text"
             name="name"
-            className="form-control rounded-0"
+            className="form-control rounded-0 mb-3"
             placeholder="Enter new name"
             onChange={handleChange}
           />
@@ -167,7 +167,7 @@ export default function ProfilePage(): React.ReactElement {
           <input
             type="password"
             name="oldPassword"
-            className="form-control rounded-0"
+            className="form-control rounded-0 mb-3"
             placeholder="Enter old password"
             value={formData.oldPassword}
             onChange={handleChange}
@@ -177,7 +177,7 @@ export default function ProfilePage(): React.ReactElement {
           <input
             type="password"
             name="password"
-            className="form-control rounded-0"
+            className="form-control rounded-0 mb-3"
             placeholder="Enter new password"
             value={formData.password}
             onChange={handleChange}
@@ -187,7 +187,7 @@ export default function ProfilePage(): React.ReactElement {
           <input
             type="password"
             name="re-password"
-            className="form-control rounded-0"
+            className="form-control rounded-0 mb-3"
             placeholder="Confirm new password"
             value={formData["re-password"]}
             onChange={handleChange}
@@ -195,7 +195,7 @@ export default function ProfilePage(): React.ReactElement {
 
           <button
             type="submit"
-            className="btn col-12 px-4 py-2 rounded-0 btn-success mt-3"
+            className="btn col-12 px-4 py-2 rounded-0 btn-success my-3"
           >
             Save Changes
           </button>

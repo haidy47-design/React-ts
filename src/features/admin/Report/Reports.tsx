@@ -148,9 +148,9 @@ const averageOrderValue = useMemo(() => {
     jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
   };
 
-  import("html2pdf.js").then((html2pdf) =>
-    html2pdf.default().from(element).set(opt).save()
-  );
+  // import("html2pdf.js").then((html2pdf) =>
+  //   html2pdf.default().from(element).set(opt).save()
+  // );
 };
 
 
