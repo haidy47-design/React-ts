@@ -139,18 +139,38 @@ const averageOrderValue = useMemo(() => {
 
   const handlePrint = () => window.print();
  const handleDownload = () => {
-  const element = document.body; 
-  const opt:{} = {
+  const element = document.body;
+  const opt: any = {
     margin: 0.5,
     filename: "report.pdf",
-    image: { type: "jpeg" as const, quality: 0.98 },
+    image: { type: "jpeg", quality: 0.98 },
     html2canvas: { scale: 2 },
     jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
   };
 
+
   // import("html2pdf.js").then((html2pdf) =>
   //   html2pdf.default().from(element).set(opt).save()
   // );
+
+  // If html2pdf is already loaded on window, use it; otherwise inject CDN script and call after load.
+  if ((window as any).html2pdf) {
+    (window as any).html2pdf().from(element).set(opt).save();
+    return;
+  }
+
+  const script = document.createElement("script");
+  script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js";
+  script.async = true;
+  script.onload = () => {
+    (window as any).html2pdf().from(element).set(opt).save();
+  };
+  script.onerror = () => {
+    // Fallback: open print dialog if library fails to load
+    window.print();
+  };
+  document.body.appendChild(script);
+
 };
 
 
