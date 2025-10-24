@@ -23,6 +23,8 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
 import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
+import ContactMailIcon from '@mui/icons-material/ContactMail';
+
 import CloseIcon from '@mui/icons-material/Close';
 import { showLogout } from "../../components/common/CustomSwal";
 import { useAppDispatch } from "../hooks";
@@ -130,6 +132,7 @@ export default function AdminSidebar() {
     { text: "Orders", icon: <ShoppingCartIcon />, path: "/admin/orders" },
     { text: "Users", icon: <PeopleIcon />, path: "/admin/users" },
     { text: "Reports", icon: <OutlinedFlagIcon />, path: "/admin/reports" },
+    { text: "Contact-us", icon: <ContactMailIcon />, path: "/admin/Contact" },
   ];
 
   const drawerContent = (
