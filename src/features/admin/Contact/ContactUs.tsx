@@ -1,6 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { FaReply } from "react-icons/fa";
+import { Button, Form } from "react-bootstrap";
+import "../../../styles/auth.css";
+import {
+  showErrorAlert,
+  showSuccessAlert,
+} from "../../../components/common/CustomSwal";
+import { fetchContacts, sendReply } from "../api";
 
-interface Contact {
+export interface Contact {
   id: string;
   firstName: string;
   lastName: string;
@@ -8,155 +17,257 @@ interface Contact {
   subject: string;
   message: string;
   createdAt: string;
+  replay: string;
 }
 
 const AdminContacts: React.FC = () => {
-  const [contacts, setContacts] = useState<Contact[]>([]);
-  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [replyText, setReplyText] = useState("");
   const itemsPerPage = 5;
 
-  useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        const res = await fetch("https://68f17bc0b36f9750dee96cbb.mockapi.io/contact");
-        const data = await res.json();
-        setContacts(data);
-        setFilteredContacts(data);
-      } catch (error) {
-        console.error("Error fetching contacts:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchContacts();
-  }, []);
+  // 🟢 استخدام React Query
+  const {
+    data: contacts = [],
+    isLoading,
+    isError,
+  } = useQuery<Contact[]>({
+    queryKey: ["contacts"],
+    queryFn: fetchContacts,
+  });
 
-  // Filter by ID or Name
-  useEffect(() => {
+  // 🟣 Mutation باستخدام sendReply
+  const replyMutation = useMutation({
+    mutationFn: async ({ id, reply }: { id: string; reply: string }) => {
+      await sendReply(id, reply);
+    },
+    onSuccess: () => {
+      showSuccessAlert("Reply sent successfully!");
+      queryClient.invalidateQueries({ queryKey: ["contacts"] }); // يحدث الجدول تلقائيًا
+      setSelectedContact(null);
+      setReplyText("");
+    },
+    onError: () => {
+      showErrorAlert("Failed to send reply");
+    },
+  });
+
+  if (isLoading) return <div className="loading">Loading...</div>;
+  if (isError) return <div className="loading">Failed to load contacts.</div>;
+
+  // 🧮 فلترة و بحث
+  const filteredContacts = contacts.filter((c) => {
     const term = searchTerm.toLowerCase();
-    const filtered = contacts.filter(
-      (c) =>
-        c.id.toLowerCase().includes(term) ||
-        c.firstName.toLowerCase().includes(term) ||
-        c.lastName.toLowerCase().includes(term)
-    );
-    setFilteredContacts(filtered);
-    setCurrentPage(1);
-  }, [searchTerm, contacts]);
+    const matchesSearch =
+      c.id.toLowerCase().includes(term) ||
+      c.firstName.toLowerCase().includes(term) ||
+      c.lastName.toLowerCase().includes(term);
+    const matchesStatus =
+      statusFilter === "All"
+        ? true
+        : statusFilter === "Unread"
+        ? c.replay === "unRead"
+        : c.replay !== "unRead";
+    return matchesSearch && matchesStatus;
+  });
 
-  // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentContacts = filteredContacts.slice(indexOfFirstItem, indexOfLastItem);
+  const currentContacts = filteredContacts.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
   const totalPages = Math.ceil(filteredContacts.length / itemsPerPage);
 
-  if (loading) return <div style={{ textAlign: "center", marginTop: "50px" }}>Loading...</div>;
+  const handleReset = () => {
+    setSearchTerm("");
+    setStatusFilter("All");
+    setCurrentPage(1);
+  };
+
+  const handleSendReply = () => {
+    if (!selectedContact) return;
+    if (!replyText.trim()) {
+      showErrorAlert("Please write your reply first!");
+      return;
+    }
+    replyMutation.mutate({ id: selectedContact.id, reply: replyText.trim() });
+  };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Poppins, sans-serif", backgroundColor: "#f4f6f8", minHeight: "100vh" }}>
-      <h1 style={{ textAlign: "center", color: "#333" }}>📬 Contact Messages</h1>
+    <div>
+      {/* Filters */}
+      <div className="p-4 bg-white rounded-4 shadow-sm mb-4">
+        <div className="d-md-flex justify-content-between align-items-center flex-wrap mb-3">
+          <h4 className="fw-bold" style={{ color: "#79253D" }}>
+            Contact Management
+          </h4>
+          <div className="text-muted">
+            Total Messages: <b>{filteredContacts.length}</b>
+          </div>
+        </div>
 
-      
-      
-     
-      <div style={{ overflowX: "auto" }}>
-        <div style={{  padding: "20px" ,marginLeft:"180px"}}>
-        <input
-          type="text"
-          placeholder="Search by ID or Name..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{
-            padding: "10px 15px",
-            width: "20%",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
-            fontSize: "16px",
-          }}
-        />
+        <div className="d-flex flex-wrap align-items-center gap-3">
+          <input
+            type="text"
+            placeholder="Search by name or ID"
+            style={{ width: "250px", height: "2.3rem" }}
+            className="form-control"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+
+          <Form.Select
+            style={{
+              width: "200px",
+              backgroundColor: "#FDFBF8",
+              border: "1px solid #79253D",
+              color: "#79253D",
+            }}
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="All">All Messages</option>
+            <option value="Unread">Unread Only</option>
+            <option value="Replied">Replied Only</option>
+          </Form.Select>
+
+          <Button
+            variant="outline-secondary"
+            className="ms-auto col-12 col-md-2 col-lg-1 px-0"
+            onClick={handleReset}
+          >
+            Reset Filters
+          </Button>
+        </div>
       </div>
 
-        <table className="m-auto" style={{
-          width: "80%",
-          borderCollapse: "collapse",
-          backgroundColor: "#fff",
-          borderRadius: "8px",
-          boxShadow: "0 3px 10px rgba(0,0,0,0.1)",
-          marginTop: "10px"
-        }}>
-          
+      {/* Table */}
+      <div className="table-responsive mt-4 bg-white rounded-4 shadow-sm d-none d-lg-block">
+        <table className="table align-middle table-hover">
+         
             <tr style={{ backgroundColor: "#79253D", color: "white" }}>
-              <th style={thStyle}>ID</th>
-              <th style={thStyle}>First Name</th>
-              <th style={thStyle}>Last Name</th>
-              <th style={thStyle}>Email</th>
-              <th style={thStyle}>Subject</th>
-              <th style={thStyle}>Message</th>
-              <th style={thStyle}>Created At</th>
+              <th className="p-3">ID</th>
+              <th className="p-3">Full Name</th>
+              <th className="p-3">Email</th>
+              <th className="p-3">Subject</th>
+              <th className="p-3">Message</th>
+              <th className="p-3">Created At</th>
+              <th className="p-3">Reply</th>
             </tr>
+       
           
-          <tbody>
             {currentContacts.map((contact) => (
-              <tr key={contact.id} style={{ borderBottom: "1px solid #eee" }}>
-                <td style={tdStyle}>{contact.id}</td>
-                <td style={tdStyle}>{contact.firstName}</td>
-                <td style={tdStyle}>{contact.lastName}</td>
-                <td style={tdStyle}>{contact.email}</td>
-                <td style={tdStyle}>{contact.subject}</td>
-                <td style={tdStyle}>{contact.message}</td>
-                <td style={tdStyle}>{new Date(contact.createdAt).toLocaleString()}</td>
+              <tr key={contact.id} style={{ borderBottom: "1px solid #ddd" }}>
+                <td className="ps-3">{contact.id}</td>
+                <td>{`${contact.firstName} ${contact.lastName}`}</td>
+                <td>{contact.email}</td>
+                <td className="ps-3">{contact.subject}</td>
+                <td>{contact.message}</td>
+                <td>{new Date(contact.createdAt).toLocaleString()}</td>
+                <td className="reply-cell">
+                  {contact.replay === "unRead" ? (
+                    <FaReply
+                      size={35}
+                      color="#79253D"
+                      className="btn btn-emojiShow btn-sm"
+                      title="Reply"
+                      onClick={() => setSelectedContact(contact)}
+                    />
+                  ) : (
+                    <div>
+                      <span className="sent-label">
+                        <i
+                          className="fa-solid fa-check"
+                          style={{ backgroundColor: "white", color: "#79253D" }}
+                        ></i>
+                      </span>
+                    </div>
+                  )}
+                </td>
               </tr>
             ))}
-          </tbody>
+         
         </table>
       </div>
 
-     
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <button
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((p) => p - 1)}
-          style={btnStyle}
-        >
-          ⬅ Prev
-        </button>
-        <span style={{ margin: "0 15px" }}>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage((p) => p + 1)}
-          style={btnStyle}
-        >
-          Next ➡
-        </button>
-      </div>
+      {/* Pagination */}
+      {filteredContacts.length > itemsPerPage && (
+        <div className="pagination-bar d-flex justify-content-center align-items-center mt-4 gap-2 flex-wrap">
+          <button
+            className="btn btn-sm btn-outline-secondary"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          >
+            ‹ Prev
+          </button>
+
+          {[...Array(totalPages)].map((_, index) => {
+            const pageNum = index + 1;
+            return (
+              <button
+                key={pageNum}
+                className={`btn btn-sm ${
+                  currentPage === pageNum
+                    ? "btn-success"
+                    : "btn-outline-secondary"
+                }`}
+                onClick={() => setCurrentPage(pageNum)}
+              >
+                {pageNum}
+              </button>
+            );
+          })}
+
+          <button
+            className="btn btn-sm btn-outline-secondary"
+            disabled={currentPage === totalPages}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+          >
+            Next ›
+          </button>
+        </div>
+      )}
+
+      {/* Reply Modal */}
+      {selectedContact && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Reply to {selectedContact.firstName}</h2>
+            <p>
+              <b>Subject:</b> {selectedContact.subject}
+            </p>
+            <p className="message-box">{selectedContact.message}</p>
+            <textarea
+              placeholder="Type your reply..."
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+            />
+            <div className="modal-actions">
+              <button
+                className="cancel-btn"
+                onClick={() => setSelectedContact(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="send-btn"
+                onClick={handleSendReply}
+                disabled={replyMutation.isPending}
+              >
+                {replyMutation.isPending ? "Sending..." : "Send Reply"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
-
-const thStyle: React.CSSProperties = {
-  textAlign: "left",
-  padding: "12px 15px",
-  fontWeight: "600",
-};
-
-const tdStyle: React.CSSProperties = {
-  padding: "12px 15px",
-  color: "#333",
-};
-
-const btnStyle: React.CSSProperties = {
-  padding: "8px 15px",
-  backgroundColor: "#79253D",
-  color: "#fff",
-  border: "none",
-  borderRadius: "5px",
-  cursor: "pointer",
-  fontWeight: "bold",
 };
 
 export default AdminContacts;
