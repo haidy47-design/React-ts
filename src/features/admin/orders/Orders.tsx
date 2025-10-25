@@ -213,7 +213,7 @@ const Orders: React.FC = () => {
     <>
       <HelmetWrapper title="Orders" />
       
-      {/* 🔹 Filters Section */}
+  
       <div className="p-3 p-md-4 bg-white rounded-4 shadow-sm mb-4">
         <div className="mb-3">
           <h4 className="fw-bold mb-2" style={{ color: "#79253D" }}>
@@ -264,7 +264,7 @@ const Orders: React.FC = () => {
         </div>
       </div>
 
-      {/* 🔹 Desktop Table View */}
+    
       <div className="d-none d-lg-block">
         <div className="table-responsive bg-white rounded-4 shadow-sm">
           <table className="table align-middle table-hover text-center mb-0">
@@ -403,7 +403,7 @@ const Orders: React.FC = () => {
         </div>
       </div>
 
-      {/* 🔹 Mobile Card View */}
+      {/* Mobile Card View */}
       <div className="d-lg-none">
         {currentOrders.map((order) => (
           <div key={order.id} className="card mb-3 shadow-sm">
@@ -551,8 +551,8 @@ const Orders: React.FC = () => {
         )}
       </div>
 
-      {/* 🔹 Modal */}
-      <Modal show={showModal} onHide={handleCloseModal} centered size="lg">
+
+      <Modal show={showModal} onHide={handleCloseModal} centered size="lg" className="my-5">
         <Modal.Header closeButton style={{ backgroundColor: "#fad7a5ff" }}>
           <Modal.Title className="main-color">Order Details</Modal.Title>
         </Modal.Header>

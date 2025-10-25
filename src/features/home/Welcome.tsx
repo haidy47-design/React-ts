@@ -82,7 +82,7 @@ export default function Welcome(): React.ReactElement {
         </Carousel.Item>
       </Carousel>
 
-      {/* Content */}
+    
       <div 
         ref={textRef}
         className="container position-relative text-center d-flex flex-column justify-content-center align-items-center h-100 fade-up" 

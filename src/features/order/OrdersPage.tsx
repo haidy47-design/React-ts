@@ -157,7 +157,7 @@ export default function OrdersPage(): React.ReactElement {
         Orders
       </h3>
 
-      {/* 🔍 Search Input */}
+    
       <div className="row justify-content-center">
         <div className="col-10 col-md-8 col-lg-6 ">
           <input
@@ -242,7 +242,7 @@ export default function OrdersPage(): React.ReactElement {
             ))}
           </table>
 
-          {/* ✅ Pagination */}
+      
           {filteredOrders.length > itemsPerPage && (
             <div className="pagination-bar d-flex justify-content-center align-items-center mt-5 gap-2 flex-wrap">
               <button

@@ -8,10 +8,10 @@ import AdminSidebar from "./SideBar";
 export default function AdminLayout(): React.ReactElement {
   return (
     <Box sx={{ display: "flex" }}>
-      {/* الشريط الجانبي */}
+
       <AdminSidebar />
 
-      {/* المحتوى الرئيسي */}
+  
       <Box
         component="main"
         sx={{
@@ -21,11 +21,11 @@ export default function AdminLayout(): React.ReactElement {
           minHeight: "100vh",
         }}
       >
-        {/* عشان المحتوى ما يدخلش تحت الـ AppBar */}
+    
         <Toolbar />
       
 
-        {/* هنا بيتحمل كل صفحات الـ admin حسب الراوت */}
+        
         <Outlet />
       </Box>
     </Box>

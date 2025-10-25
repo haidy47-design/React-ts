@@ -30,7 +30,7 @@ const AdminContacts: React.FC = () => {
   const [replyText, setReplyText] = useState("");
   const itemsPerPage = 5;
 
-  // 🟢 استخدام React Query
+
   const {
     data: contacts = [],
     isLoading,
@@ -40,7 +40,7 @@ const AdminContacts: React.FC = () => {
     queryFn: fetchContacts,
   });
 
-  // 🟣 Mutation باستخدام sendReply
+
   const replyMutation = useMutation({
     mutationFn: async ({ id, reply }: { id: string; reply: string }) => {
       await sendReply(id, reply);
@@ -59,7 +59,7 @@ const AdminContacts: React.FC = () => {
   if (isLoading) return <div className="loading">Loading...</div>;
   if (isError) return <div className="loading">Failed to load contacts.</div>;
 
-  // 🧮 فلترة و بحث
+
   const filteredContacts = contacts.filter((c) => {
     const term = searchTerm.toLowerCase();
     const matchesSearch =
@@ -101,7 +101,7 @@ const AdminContacts: React.FC = () => {
   return (
     <>
     <HelmetWrapper title="Messages" />
-      {/* Filters */}
+      
       <div className="p-4 bg-white rounded-4 shadow-sm mb-4">
         <div className="d-md-flex justify-content-between align-items-center flex-wrap mb-3">
           <h4 className="fw-bold" style={{ color: "#79253D" }}>
@@ -147,7 +147,7 @@ const AdminContacts: React.FC = () => {
         </div>
       </div>
 
-      {/* Table */}
+  
       <div className="table-responsive mt-4 bg-white rounded-4 shadow-sm ">
         <table className="table align-middle table-hover">
          
@@ -196,7 +196,7 @@ const AdminContacts: React.FC = () => {
         </table>
       </div>
 
-      {/* Pagination */}
+  
       {filteredContacts.length > itemsPerPage && (
         <div className="pagination-bar d-flex justify-content-center align-items-center mt-4 gap-2 flex-wrap">
           <button

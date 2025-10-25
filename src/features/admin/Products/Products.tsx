@@ -78,7 +78,7 @@ const applyDiscountMutation = useMutation({
 
       const matchesPrice = !maxPrice || Number(p.price) <= Number(maxPrice);
 
-      // ? ????? ?????? ????? ??? ???????
+
       let stockStatus = "Active";
       if (p.stock === 0) stockStatus = "Out of Stock";
       else if (p.stock <= 3) stockStatus = "Low Stock";
@@ -153,7 +153,7 @@ const applyDiscountMutation = useMutation({
 
         <HelmetWrapper title="Product" />
 
-        {/* ?? Filters Section */}
+  
         <div className="p-4 bg-white rounded-4 shadow-sm mb-4">
           <div className="d-md-flex justify-content-between d-flex-column ">
             <h4 className="fw-bold mb-4" style={{ color: "#79253D" }}>
@@ -322,7 +322,7 @@ const applyDiscountMutation = useMutation({
           )}
         </div>
       
-        {/* ?? Card View - Mobile & Tablet (hidden on desktop) */}
+        {/*  Mobile & Tablet */}
         <div className="d-lg-none mt-4">
           <Row className="g-3">
             {currentProducts.map((product) => (
@@ -409,7 +409,7 @@ const applyDiscountMutation = useMutation({
           )}
         </div>
       
-        {/* ?? Pagination Section */}
+  
         {filteredProducts.length > itemsPerPage && (
           <div className="pagination-bar d-flex justify-content-center align-items-center mt-4 gap-2 flex-wrap">
             <button
