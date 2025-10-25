@@ -3,12 +3,21 @@ import axiosInstance from "../../app/axiosInstance";
 import { AdminOrder, AdminProduct, AdminUser } from "./types";
 import { IOrder } from "../order/OrdersPage";
 import { ReviewFormData, ReviewResponse } from "../product/ReviewForm";
+import { Contact } from "./Contact/ContactUs";
 
 const USERS_URL = "https://68e83849f2707e6128ca32fb.mockapi.io/users";
 const PRODUCTS_URL = "https://68e43ee28e116898997b5bf8.mockapi.io/product";
 const ORDERS_URL = "https://68e43ee28e116898997b5bf8.mockapi.io/orders";
 const REVIEWS_URL= "https://68f17bc0b36f9750dee96cbb.mockapi.io/reviews"
+const API_URL = "https://68f17bc0b36f9750dee96cbb.mockapi.io/contact";
 
+ export const fetchContacts = async (): Promise<Contact[]> => {
+  const { data } = await axiosInstance.get<Contact[]>(API_URL);
+  return data;
+};
+export const sendReply = async (id: string, reply: string): Promise<void> => {
+  await axiosInstance.put(`${API_URL}/${id}`, { replay: reply });
+};
 // Users
 export const fetchUsers = async (): Promise<AdminUser[]> => {
   const { data } = await axiosInstance.get<AdminUser[]>(USERS_URL);

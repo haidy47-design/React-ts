@@ -28,7 +28,7 @@ export default function ProfilePage(): React.ReactElement {
     }
   }, [navigate]);
 
-  // 📌 Form handlers
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
