@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, Link, useNavigate } from "react-router-dom";
-import { FaUser, FaClipboardList, FaHome, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
+import { Outlet, Link, useNavigate, NavLink } from "react-router-dom";
+import { FaUser, FaClipboardList, FaHome, FaSignOutAlt, FaBars, FaTimes, FaFacebookMessenger } from "react-icons/fa";
 import "../../styles/auth.css";
 
 export default function ProfileLayout(): React.ReactElement {
@@ -44,27 +44,31 @@ export default function ProfileLayout(): React.ReactElement {
           <p>{user?.email ?? "—"}</p>
         </div>
 
-        <ul className="drawer-links">
+        <ul className="drawer-links mt-3">
           <li>
-            <Link to="/profile/info" className="drawer-link" onClick={() => setIsOpen(false)}>
+            <NavLink to="/profile/info" className="drawer-link" onClick={() => setIsOpen(false)}>
               <FaUser /> Update account
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to="/profile/orders" className="drawer-link" onClick={() => setIsOpen(false)}>
+            <NavLink to="/profile/messages" className="drawer-link" onClick={() => setIsOpen(false)}>
+              <FaFacebookMessenger /> My Messages
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/profile/orders" className="drawer-link" onClick={() => setIsOpen(false)}>
               <FaClipboardList /> Orders
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to="/" className="drawer-link" onClick={() => setIsOpen(false)}>
+            <NavLink  to="/" className="drawer-link" onClick={() => setIsOpen(false)}>
               <FaHome /> Back to Home
-            </Link>
+            </NavLink>
           </li>
-        </ul>
-
-        <button onClick={handleLogout} className="logout-btn">
+            <button onClick={handleLogout} className="logout-btn mt-5 col-12">
           <FaSignOutAlt /> Logout
         </button>
+        </ul>
       </div>
 
       {/* Content */}

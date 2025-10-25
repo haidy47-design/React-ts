@@ -508,7 +508,7 @@ input:-webkit-autofill:active {
 
 /* ===== Modal ===== */
 
-.modal-overlay {
+/* .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -519,9 +519,9 @@ input:-webkit-autofill:active {
   align-items: center;
   justify-content: center;
   z-index: 999;
-}
+} */
 
-.modal-content {
+/* .modal-content {
   background-color: #fff;
   padding: 25px;
   border-radius: 10px;
@@ -554,7 +554,7 @@ input:-webkit-autofill:active {
 .modal-actions {
   margin-top: 15px;
   text-align: right;
-}
+} */
 
 .cancel-btn {
   background-color: #ccc;

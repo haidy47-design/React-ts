@@ -33,6 +33,7 @@ import ProfileLayout from "../features/auth/ProfileLayout";
 import Orders from "../features/admin/orders/Orders";
 import AdminContacts from "../features/admin/Contact/ContactUs";
 import ChatWidget from "../components/common/ChatWidget";
+import ContactMessage from "../features/auth/ContactMessage";
 
 
 export default function AppRoutes(): React.ReactElement {
@@ -83,6 +84,7 @@ export default function AppRoutes(): React.ReactElement {
           <Route index element={<Navigate to="info" replace />} />
           <Route path="info" element={<ProfilePage />} />
           <Route path="orders" element={<OrdersPage />} />
+          <Route path="messages" element={<ContactMessage />} />
         </Route>
 
       

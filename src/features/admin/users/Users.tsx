@@ -580,11 +580,11 @@ const UsersManagement: React.FC = () => {
       )}
 
       {/* Edit Modal */}
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)} backdrop="static" keyboard={false} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit User</Modal.Title>
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)} backdrop="static" keyboard={false} centered className="my-5">
+        <Modal.Header closeButton style={{backgroundColor:"#fad7a5ff"}}>
+          <Modal.Title className="main-color">Edit User</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{backgroundColor:"#F4EFE8"}}>
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
@@ -625,22 +625,22 @@ const UsersManagement: React.FC = () => {
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{backgroundColor:"#F4EFE8"}}>
           <Button variant="secondary" onClick={() => setShowEditModal(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSaveChanges}>
+          <Button variant="success" onClick={handleSaveChanges}>
             Save Changes
           </Button>
         </Modal.Footer>
       </Modal>
 
       {/* Add Modal (rePassword included) */}
-      <Modal show={showAddModal} onHide={() => setShowAddModal(false)} backdrop="static" keyboard={false} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Add User</Modal.Title>
+      <Modal show={showAddModal} onHide={() => setShowAddModal(false)} backdrop="static" keyboard={false} centered className="my-5">
+        <Modal.Header closeButton style={{backgroundColor:"#fad7a5ff"}}>
+          <Modal.Title className="main-color">Add User</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{backgroundColor:"#F4EFE8"}}>
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
@@ -699,22 +699,22 @@ const UsersManagement: React.FC = () => {
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{backgroundColor:"#F4EFE8"}}>
           <Button variant="secondary" onClick={() => setShowAddModal(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleAddUser}>
+          <Button variant="success" onClick={handleAddUser}>
             Add User
           </Button>
         </Modal.Footer>
       </Modal>
 
       {/* Orders Modal */}
-      <Modal show={showOrdersModal} onHide={() => setShowOrdersModal(false)} backdrop="static" keyboard={false} centered size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Orders</Modal.Title>
+      <Modal show={showOrdersModal} onHide={() => setShowOrdersModal(false)} backdrop="static" keyboard={false} centered size="lg" className="my-5">
+        <Modal.Header closeButton style={{backgroundColor:"#fad7a5ff"}}>
+          <Modal.Title className="main-color">Orders</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{backgroundColor:"#F4EFE8"}}>
           <div className="mb-4 p-3 rounded" style={{ backgroundColor: "#f8f9fa", border: "1px solid #ddd" }}>
             <h5 className="fw-bold mb-3">Customer Information</h5>
             {selectedOrders.length > 0 && (
@@ -739,7 +739,6 @@ const UsersManagement: React.FC = () => {
             <p>No orders found for this user.</p>
           ) : (
             <Table hover responsive className="align-middle table-hover">
-              <thead>
                 <tr style={{ backgroundColor: "#79253D", color: "white" }}>
                   <th className="p-3">Order ID</th>
                   <th className="p-3">Name</th>
@@ -748,16 +747,15 @@ const UsersManagement: React.FC = () => {
                   <th className="p-3">Items</th>
                   <th className="p-3">Total</th>
                 </tr>
-              </thead>
-              <tbody>
+    
                 {selectedOrders.map((o) => (
                   <tr key={o.id} style={{ borderBottom: "1px solid #ddd" }}>
                     <td>{o.id}</td>
                     <td>{o.userName}</td>
                     <td>{o.address}</td>
                     <td>{o.phone}</td>
-                    <td>
-                      <div className="d-flex align-items-center gap-2 flex-wrap">
+                    <td >
+                      <div className="d-flex align-items-center gap-2 flex-wrap bg-transparent">
                         <span className="fw-bold me-2">{o.items.length}x</span>
                         {o.items.map((item) => (
                           <img
@@ -779,11 +777,11 @@ const UsersManagement: React.FC = () => {
                     <td>${o.totalPrice}</td>
                   </tr>
                 ))}
-              </tbody>
+
             </Table>
           )}
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{backgroundColor:"#F4EFE8"}}>
           <Button variant="secondary" onClick={() => setShowOrdersModal(false)}>
             Close
           </Button>
