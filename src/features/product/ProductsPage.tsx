@@ -5,6 +5,7 @@ import Spinner from "../../components/common/Spinner";
 import ProductCard, { Product } from "../../components/product/ProductCard";
 import HelmetWrapper from "../../components/common/HelmetWrapper";
 import "./CartPage.css";
+import { useLocation } from "react-router";
 
 async function fetchProducts(): Promise<Product[]> {
   const res = await axios.get("https://68e43ee28e116898997b5bf8.mockapi.io/product");
@@ -22,6 +23,21 @@ export default function ProductsPage(): React.ReactElement {
   const [sortOption, setSortOption] = useState<string>("default");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [discountLimit, setDiscountLimit] = useState<number>(0);
+
+  const location = useLocation();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const categoryFromURL = params.get("category");
+
+    if (categoryFromURL) {
+      setSelectedCategory(categoryFromURL);
+    } else {
+      setSelectedCategory("All");
+    }
+  }, [location.search]);
+
+
+
 
   const products = useMemo(() => data ?? [], [data]);
 
@@ -85,7 +101,7 @@ export default function ProductsPage(): React.ReactElement {
 
   return (
     <div className="container py-5 products-page">
-      <HelmetWrapper title="Beautiful Flowers" />
+      <HelmetWrapper title="Roséa Shop" />
 
       <div className="text-center mb-5">
         <h2 className="fw-bold">Beautiful Flowers</h2>

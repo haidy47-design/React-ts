@@ -47,21 +47,25 @@ const handleAddToCart = () => {
 
   const wishlist = useAppSelector((state) => state.wishlist.items);
 const isInWishlist = wishlist.some(
-  (item) => String(item.productId) === String(product.id)
+  (item) =>  String(item.productId) === String(product.id) || String(item.id) === String(product.id)
 );
 
-const handleToggleWishlist = () => {
+const handleToggleWishlist = async() => {
   const storedUser = localStorage.getItem("user");
   if (!storedUser) {
     showLoginRequired("Login first");
     return; 
   }
-  dispatch(toggleWishlist(product));
+  try {
+    const result = await dispatch(toggleWishlist(product)).unwrap();
 
-  if (isInWishlist) {
-    showSuccessAlert("Removed from wishlist 💔");
-  } else {
-    showSuccessAlert("Added to wishlist ❤️");
+    if (result?.removedId) {
+      showSuccessAlert("Removed from wishlist");
+    } else if (result?.added) {
+      showSuccessAlert("Added to wishlist ❤️");
+    }
+  } catch (err) {
+    showErrorAlert("Failed to update wishlist");
   }
 };
 
@@ -100,7 +104,7 @@ const handleToggleWishlist = () => {
         </div>
       )}
 
-      {/* image */}
+    
       <div className="position-relative">
         <Link
           to={`/products/${product.id}`}
@@ -117,10 +121,11 @@ const handleToggleWishlist = () => {
 
         
 
-        {/* hover overlay */}
+      
         <div className="hover-overlay">
+
               {/*Wishlist*/}
-              
+
               <button
                   className={`wishlist-btn btn rounded-circle p-3 shadow-sm ${
                     isInWishlist ? "active" : ""
@@ -151,7 +156,7 @@ const handleToggleWishlist = () => {
             </div>
           </div>
 
-      {/* info */}
+  
       <div className="text-center">
         <h5 className="mt-3 mb-2">{product.title}</h5>
 

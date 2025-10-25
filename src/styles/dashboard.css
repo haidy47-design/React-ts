@@ -21,12 +21,7 @@ h3{
 }
 
 
-/* Page container */
-.dashboard-container {
-  background: linear-gradient(180deg, var(--rose-secondary), #fff);
-  min-height: 100%;
-  padding-bottom: 3rem;
-}
+
 
 /* Summary Cards */
 .dashboard-card {

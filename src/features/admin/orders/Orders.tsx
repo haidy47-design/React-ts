@@ -10,6 +10,7 @@ import {
 } from "../../../components/common/CustomSwal";
 import { IOrder } from "src/features/order/OrdersPage";
 import { fetchOrders } from "../api";
+import HelmetWrapper from "../../../components/common/HelmetWrapper";
 
 const Orders: React.FC = () => {
   const navigate = useNavigate();
@@ -65,53 +66,53 @@ const Orders: React.FC = () => {
   const [editingOrderId, setEditingOrderId] = useState<string | null>(null);
   const [editedStatus, setEditedStatus] = useState<string>("");
 
-const updateMutation = useMutation({
-  mutationFn: async ({ id, status }: { id: string; status: string }) => {
-    const { data: updatedOrder } = await axios.put(
-      `https://68e43ee28e116898997b5bf8.mockapi.io/orders/${id}`,
-      { status }
-    );
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      const { data: updatedOrder } = await axios.put(
+        `https://68e43ee28e116898997b5bf8.mockapi.io/orders/${id}`,
+        { status }
+      );
 
-    if (status === "Cancelled") {
-      const restoreStockPromises = updatedOrder.items.map(async (item: any) => {
-        try {
-          const { data: products } = await axios.get(
-            "https://68e43ee28e116898997b5bf8.mockapi.io/product"
-          );
+      if (status === "Cancelled") {
+        const restoreStockPromises = updatedOrder.items.map(async (item: any) => {
+          try {
+            const { data: products } = await axios.get(
+              "https://68e43ee28e116898997b5bf8.mockapi.io/product"
+            );
 
-          const matchedProduct = products.find(
-            (p: any) =>
-              p.title.trim().toLowerCase() === item.title.trim().toLowerCase()
-          );
+            const matchedProduct = products.find(
+              (p: any) =>
+                p.title.trim().toLowerCase() === item.title.trim().toLowerCase()
+            );
 
-          if (!matchedProduct) return null;
+            if (!matchedProduct) return null;
 
-          const newStock =
-            (Number(matchedProduct.stock) || 0) + Number(item.quantity);
+            const newStock =
+              (Number(matchedProduct.stock) || 0) + Number(item.quantity);
 
-          await axios.put(
-            `https://68e43ee28e116898997b5bf8.mockapi.io/product/${matchedProduct.id}`,
-            { ...matchedProduct, stock: newStock }
-          );
-        } catch (err) {
-          console.error(`Error restoring stock for ${item.title}`, err);
-        }
-      });
+            await axios.put(
+              `https://68e43ee28e116898997b5bf8.mockapi.io/product/${matchedProduct.id}`,
+              { ...matchedProduct, stock: newStock }
+            );
+          } catch (err) {
+            console.error(`Error restoring stock for ${item.title}`, err);
+          }
+        });
 
-      await Promise.all(restoreStockPromises);
-    }
-  },
-  onSuccess: (_, variables) => {
-    queryClient.setQueryData<IOrder[]>(["orders"], (old) =>
-      old?.map((o) =>
-        o.id === variables.id ? { ...o, status: variables.status } : o
-      )
-    );
-    showSuccessAlert("Order status updated!");
-    setEditingOrderId(null);
-  },
-  onError: () => showErrorAlert("Failed to update order status!"),
-});
+        await Promise.all(restoreStockPromises);
+      }
+    },
+    onSuccess: (_, variables) => {
+      queryClient.setQueryData<IOrder[]>(["orders"], (old) =>
+        old?.map((o) =>
+          o.id === variables.id ? { ...o, status: variables.status } : o
+        )
+      );
+      showSuccessAlert("Order status updated!");
+      setEditingOrderId(null);
+    },
+    onError: () => showErrorAlert("Failed to update order status!"),
+  });
 
   const handleSave = (order: IOrder) => {
     if (editedStatus !== order.status) {
@@ -181,7 +182,6 @@ const updateMutation = useMutation({
     }
   };
 
-  
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
 
@@ -205,237 +205,417 @@ const updateMutation = useMutation({
   if (isError)
     return (
       <div className="text-center text-danger mt-4">
-        Failed to load orders 😔
+        Failed to load orders <span className="text-danger">X</span>
       </div>
     );
 
   return (
-    <div>
+    <>
+      <HelmetWrapper title="Orders" />
+      
       {/* 🔹 Filters Section */}
-      <div className="p-4 bg-white rounded-4 shadow-sm mb-4 ">
-        <div className="d-md-flex justify-content-between flex-column ">
-          <h4 className="fw-bold mb-4" style={{ color: "#79253D" }}>
+      <div className="p-3 p-md-4 bg-white rounded-4 shadow-sm mb-4">
+        <div className="mb-3">
+          <h4 className="fw-bold mb-2" style={{ color: "#79253D" }}>
             Orders Management
           </h4>
+          <p className="text-muted mb-0">Total Orders: {orders.length}</p>
         </div>
 
-        <div className="d-flex flex-wrap align-items-center gap-3 ">
-          <input
-            type="text"
-            placeholder="Search by user, phone or item..."
-            style={{ width: "250px", height: "2.3rem" }}
-            className="form-control"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="row g-2 g-md-3 align-items-end">
+          <div className="col-12 col-md-4 col-lg-4">
+            <input
+              type="text"
+              placeholder="Search by user, phone or item..."
+              className="form-control"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
 
-          <Form.Select
-            style={{
-              width: "200px",
-              backgroundColor: "#FDFBF8",
-              border: "1px solid #79253D",
-              color: "#79253D",
-            }}
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="All">All Status</option>
-            <option value="Pending">Pending</option>
-            <option value="Cancelled">Cancelled</option>
-            <option value="Proccessing">Proccessing</option>
-            <option value="Shipped">Shipped</option>
-            <option value="Delivered">Delivered</option>
-          </Form.Select>
+          <div className="col-12 col-md-4 col-lg-3">
+            <Form.Select
+              style={{
+                backgroundColor: "#FDFBF8",
+                border: "1px solid #79253D",
+                color: "#79253D",
+              }}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="All">All Status</option>
+              <option value="Pending">Pending</option>
+              <option value="Cancelled">Cancelled</option>
+              <option value="Proccessing">Proccessing</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+            </Form.Select>
+          </div>
 
-          <Button
-            variant="outline-secondary"
-            className="ms-auto col-12 col-md-2 col-lg-1 px-0"
-            onClick={handleReset}
-          >
-            Reset
-          </Button>
+          <div className="col-12 col-md-4 col-lg-5 text-end ">
+            <Button
+              variant="outline-secondary"
+              className="col-12 col-md-12 col-lg-3"
+              onClick={handleReset}
+            >
+              Reset Filters
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* 🔹 Table View */}
-      <div className="table-responsive mt-4 bg-white rounded-4 shadow-sm">
-        <table className="table align-middle table-hover text-center">
-          <tr className="bg-success text-white">
-            <th className="p-3">Order Id</th>
-            <th className="p-3">User</th>
-            <th className="p-3">Address</th>
-            <th className="p-3">Phone</th>
-            <th className="p-3">Items Per Order</th>
-            <th className="p-3">Total</th>
-            <th className="p-3">Status</th>
-            <th className="p-3">Date</th>
-            <th className="p-3">Actions</th>
-          </tr>
-
-          {currentOrders.map((order) => (
-            <tr key={order.id} style={{ borderBottom: "1px solid #ddd" }}>
-              <td>{order.id}</td>
-              <td>{order.userName}</td>
-              <td>{order.address}</td>
-              <td>{order.phone}</td>
-              <td>{order.items.length}</td>
-              <td>${parseFloat(order.totalPrice).toFixed(2)}</td>
-
-              <td>
-              {editingOrderId === order.id ? (
-                 order.status === "Cancelled" ? (
-                   <span
-                     className="badge text-white w-75"
-                     style={{
-                       backgroundColor: getStatusBadgeColor(order.status),
-                       opacity: 0.7,
-                       cursor: "not-allowed",
-                     }}
-                   >
-                     {order.status}
-                       </span>
-                         ) : (
-                       <Form.Select
-                         size="sm"
-                         value={editedStatus}
-                         onChange={(e) => setEditedStatus(e.target.value)}
-                         style={{
-                           border: "1px solid #79253D",
-                           color: "#79253D",
-                           fontWeight: "500",
-                         }}
-                       >
-                         <option value="Pending">Pending</option>
-                         <option value="Cancelled">Cancelled</option>
-                         <option value="Proccessing">Proccessing</option>
-                         <option value="Shipped">Shipped</option>
-                         <option value="Delivered">Delivered</option>
-                       </Form.Select>
-                             )
-                           ) : (
-                             <span
-                               className="badge text-white w-75"
-                               style={{
-                                 backgroundColor: getStatusBadgeColor(order.status),
-                               }}
-                             >
-                               {order.status}
-                             </span>
-                           )}
-
-              </td>
-
-              <td>{new Date(order.createdAt).toLocaleDateString()}</td>
-
-              <td>
-                <div className="d-flex justify-content-center bg-transparent">
-                  <button
-                    className="btn btn-emojiShow btn-sm"
-                    onClick={() => handleShowModal(order)}
-                  >
-                    <i className="fa-solid fa-eye m-1" />
-                  </button>
-
-                  {editingOrderId === order.id ? (
-                    <>
-                      <button
-                        className="btn btn-success btn-sm mx-1"
-                        onClick={() => handleSave(order)}
-                        disabled={updateMutation.isPending}
+      {/* 🔹 Desktop Table View */}
+      <div className="d-none d-lg-block">
+        <div className="table-responsive bg-white rounded-4 shadow-sm">
+          <table className="table align-middle table-hover text-center mb-0">
+          
+              <tr className="bg-success text-white">
+                <th className="p-3">Order Id</th>
+                <th className="p-3">User</th>
+                <th className="p-3">Address</th>
+                <th className="p-3">Phone</th>
+                <th className="p-3">Items</th>
+                <th className="p-3">Total</th>
+                <th className="p-3">Status</th>
+                <th className="p-3">Date</th>
+                <th className="p-3">Actions</th>
+              </tr>
+          
+          
+              {currentOrders.map((order) => (
+                <tr key={order.id} style={{ borderBottom: "1px solid #ddd" }}>
+                  <td>{order.id}</td>
+                  <td>{order.userName}</td>
+                  <td className="text-truncate" style={{ maxWidth: "150px" }}>
+                    {order.address}
+                  </td>
+                  <td>{order.phone}</td>
+                  <td>{order.items.length}</td>
+                  <td>${parseFloat(order.totalPrice).toFixed(2)}</td>
+                  <td>
+                    {editingOrderId === order.id ? (
+                      order.status === "Cancelled" ? (
+                        <span
+                          className="badge text-white"
+                          style={{
+                            backgroundColor: getStatusBadgeColor(order.status),
+                            opacity: 0.7,
+                            cursor: "not-allowed",
+                            minWidth: "100px",
+                          }}
+                        >
+                          {order.status}
+                        </span>
+                      ) : (
+                        <Form.Select
+                          size="sm"
+                          value={editedStatus}
+                          onChange={(e) => setEditedStatus(e.target.value)}
+                          style={{
+                            border: "1px solid #79253D",
+                            color: "#79253D",
+                            fontWeight: "500",
+                            minWidth: "120px",
+                          }}
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="Cancelled">Cancelled</option>
+                          <option value="Proccessing">Proccessing</option>
+                          <option value="Shipped">Shipped</option>
+                          <option value="Delivered">Delivered</option>
+                        </Form.Select>
+                      )
+                    ) : (
+                      <span
+                        className="badge text-white"
+                        style={{
+                          backgroundColor: getStatusBadgeColor(order.status),
+                          minWidth: "100px",
+                        }}
                       >
-                        {updateMutation.isPending ? (
+                        {order.status}
+                      </span>
+                    )}
+                  </td>
+                  <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                  <td>
+                    <div className="d-flex justify-content-center gap-1">
+                      <button
+                        className="btn btn-emojiShow btn-sm"
+                        onClick={() => handleShowModal(order)}
+                      >
+                        <i className="fa-solid fa-eye" />
+                      </button>
+
+                      {editingOrderId === order.id ? (
+                        <>
+                          <button
+                            className="btn btn-success btn-sm"
+                            onClick={() => handleSave(order)}
+                            disabled={updateMutation.isPending}
+                          >
+                            {updateMutation.isPending ? (
+                              <i className="fa-solid fa-spinner fa-spin" />
+                            ) : (
+                              <i className="fa-solid fa-check" />
+                            )}
+                          </button>
+                          <button
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => setEditingOrderId(null)}
+                          >
+                            <i className="fa-solid fa-xmark" />
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          className="btn btn-emojiShow btn-sm"
+                          onClick={() => {
+                            setEditingOrderId(order.id);
+                            setEditedStatus(order.status);
+                          }}
+                        >
+                          <i className="fa-solid fa-pen-to-square"></i>
+                        </button>
+                      )}
+
+                      <button
+                        className="btn btn-emojiDelete btn-sm"
+                        disabled={deleteMutation.isPending}
+                        onClick={() => handleDelete(order)}
+                      >
+                        {deleteMutation.isPending ? (
                           <i className="fa-solid fa-spinner fa-spin" />
                         ) : (
-                          <i className="fa-solid fa-check" />
+                          <i className="fa-solid fa-trash" />
                         )}
                       </button>
-                      <button
-                        className="btn btn-secondary btn-sm"
-                        onClick={() => setEditingOrderId(null)}
-                      >
-                        <i className="fa-solid fa-xmark" />
-                      </button>
-                    </>
-                  ) : (
-                    <button
-                      className="btn btn-emojiShow btn-sm"
-                      onClick={() => {
-                        setEditingOrderId(order.id);
-                        setEditedStatus(order.status);
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            
+          </table>
+
+          {!currentOrders.length && (
+            <div className="text-center text-muted py-5">No orders found</div>
+          )}
+        </div>
+      </div>
+
+      {/* 🔹 Mobile Card View */}
+      <div className="d-lg-none">
+        {currentOrders.map((order) => (
+          <div key={order.id} className="card mb-3 shadow-sm">
+            <div className="card-body p-3">
+              <div className="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <h6 className="mb-1 fw-bold">Order #{order.id}</h6>
+                  <small className="text-muted">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </small>
+                </div>
+                {editingOrderId === order.id ? (
+                  order.status === "Cancelled" ? (
+                    <span
+                      className="badge text-white"
+                      style={{
+                        backgroundColor: getStatusBadgeColor(order.status),
+                        opacity: 0.7,
                       }}
                     >
-                      <i className="fa-solid fa-pen-to-square m-1"></i>
-                    </button>
-                  )}
-
-                  <button
-                    className="btn btn-emojiDelete btn-sm"
-                    disabled={deleteMutation.isPending}
-                    onClick={() => handleDelete(order)}
+                      {order.status}
+                    </span>
+                  ) : (
+                    <Form.Select
+                      size="sm"
+                      value={editedStatus}
+                      onChange={(e) => setEditedStatus(e.target.value)}
+                      style={{
+                        border: "1px solid #79253D",
+                        color: "#79253D",
+                        fontWeight: "500",
+                        width: "auto",
+                      }}
+                    >
+                      <option value="Pending">Pending</option>
+                      <option value="Cancelled">Cancelled</option>
+                      <option value="Proccessing">Proccessing</option>
+                      <option value="Shipped">Shipped</option>
+                      <option value="Delivered">Delivered</option>
+                    </Form.Select>
+                  )
+                ) : (
+                  <span
+                    className="badge text-white"
+                    style={{
+                      backgroundColor: getStatusBadgeColor(order.status),
+                    }}
                   >
-                    {deleteMutation.isPending ? (
-                      <i className="fa-solid fa-spinner fa-spin m-1" />
-                    ) : (
-                      <i className="fa-solid fa-trash m-1" />
-                    )}
-                  </button>
+                    {order.status}
+                  </span>
+                )}
+              </div>
+
+              <div className="mb-2">
+                <div className="row g-2">
+                  <div className="col-6">
+                    <small className="text-muted">User:</small>
+                    <div className="fw-semibold">{order.userName}</div>
+                  </div>
+                  <div className="col-6">
+                    <small className="text-muted">Phone:</small>
+                    <div className="fw-semibold">{order.phone}</div>
+                  </div>
+                  <div className="col-12">
+                    <small className="text-muted">Address:</small>
+                    <div className="fw-semibold text-truncate">{order.address}</div>
+                  </div>
+                  <div className="col-6">
+                    <small className="text-muted">Items:</small>
+                    <div className="fw-semibold">{order.items.length}</div>
+                  </div>
+                  <div className="col-6">
+                    <small className="text-muted">Total:</small>
+                    <div className="fw-bold text-success">
+                      ${parseFloat(order.totalPrice).toFixed(2)}
+                    </div>
+                  </div>
                 </div>
-              </td>
-            </tr>
-          ))}
-        </table>
+              </div>
+
+              <div className="d-flex gap-2 mt-3 ">
+                <button
+                  className="btn btn-emojiShow btn-sm col-4 "
+                  onClick={() => handleShowModal(order)}
+                >
+                  <i className="fa-solid fa-eye me-1" />
+                  View
+                </button>
+
+                {editingOrderId === order.id ? (
+                  <>
+                    <button
+                      className="btn btn-success btn-sm  "
+                      onClick={() => handleSave(order)}
+                      disabled={updateMutation.isPending}
+                    >
+                      {updateMutation.isPending ? (
+                        <i className="fa-solid fa-spinner fa-spin" />
+                      ) : (
+                        <>
+                          <i className="fa-solid fa-check me-1" />
+                          Save
+                        </>
+                      )}
+                    </button>
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => setEditingOrderId(null)}
+                    >
+                      <i className="fa-solid fa-xmark" />
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="btn btn-emojiShow btn-sm col-4 "
+                    onClick={() => {
+                      setEditingOrderId(order.id);
+                      setEditedStatus(order.status);
+                    }}
+                  >
+                    <i className="fa-solid fa-pen-to-square me-1"></i>
+                    Edit
+                  </button>
+                )}
+                <button
+                  className="btn btn-emojiDelete btn-sm col-4"
+                  disabled={deleteMutation.isPending}
+                  onClick={() => handleDelete(order)}
+                >
+                  {deleteMutation.isPending ? (
+                    <i className="fa-solid fa-spinner fa-spin" />
+                  ) : (
+                    <i className="fa-solid fa-trash" />
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
 
         {!currentOrders.length && (
-          <div className="text-center text-muted py-5">No orders found</div>
+          <div className="text-center text-muted py-5 bg-white rounded-4">
+            No orders found
+          </div>
         )}
       </div>
 
-      <Modal show={showModal} onHide={handleCloseModal} centered size="lg" className="my-5">
-        <Modal.Header closeButton style={{backgroundColor:"#fad7a5ff"}}>
-          <Modal.Title  className="main-color">Order Details</Modal.Title>
+      {/* 🔹 Modal */}
+      <Modal show={showModal} onHide={handleCloseModal} centered size="lg">
+        <Modal.Header closeButton style={{ backgroundColor: "#fad7a5ff" }}>
+          <Modal.Title className="main-color">Order Details</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{backgroundColor:"#F4EFE8"}}>
+        <Modal.Body style={{ backgroundColor: "#F4EFE8" }}>
           {selectedOrder ? (
             <>
-              
-              
-                <div className="row">
-                  <div className="col-4">
-                    <p><strong>UserName:</strong> {selectedOrder.userName}</p>
-                  </div>
-                  <div className="col-5">
-                      <p><strong>Email:</strong> {selectedOrder.email}</p>
-                  </div>
-                  <div className="col-3">
-                      <p><strong>Phone:</strong> {selectedOrder.phone}</p>
-                  </div>
-                  
+              <div className="row g-3">
+                <div className="col-12 col-md-4">
+                  <strong>UserName:</strong>
+                  <p className="mb-0">{selectedOrder.userName}</p>
                 </div>
-              <div className="row">
-                  <div className="col-4">
-                    <p><strong>Status:</strong> {selectedOrder.status}</p>
-                  </div>
-                    <div className="col-5">
-                    <p><strong>Address:</strong> {selectedOrder.address}</p>
-                  </div>
-                  <div className="col-3">
-                    <p><strong>Total:</strong> ${parseFloat(selectedOrder.totalPrice).toFixed(2)}</p>
-                  </div>
+                <div className="col-12 col-md-5">
+                  <strong>Email:</strong>
+                  <p className="mb-0 text-break">{selectedOrder.email}</p>
+                </div>
+                <div className="col-12 col-md-3">
+                  <strong>Phone:</strong>
+                  <p className="mb-0">{selectedOrder.phone}</p>
+                </div>
               </div>
-                  
 
-              <h5 className="mt-3 mb-2 fw-bold main-color">Items:</h5>
+              <div className="row g-3 mt-2">
+                <div className="col-12 col-md-4">
+                  <strong>Status:</strong>
+                  <p className="mb-0">{selectedOrder.status}</p>
+                </div>
+                <div className="col-12 col-md-5">
+                  <strong>Address:</strong>
+                  <p className="mb-0">{selectedOrder.address}</p>
+                </div>
+                <div className="col-12 col-md-3">
+                  <strong>Total:</strong>
+                  <p className="mb-0 fw-bold text-success">
+                    ${parseFloat(selectedOrder.totalPrice).toFixed(2)}
+                  </p>
+                </div>
+              </div>
+
+              <h5 className="mt-4 mb-3 fw-bold main-color">Items:</h5>
               <ListGroup>
                 {selectedOrder.items.map((item, idx) => (
-                  <ListGroup.Item key={idx} className="d-flex justify-content-between p-3 align-items-center" style={{backgroundColor:"#F4EFE8"}}>
-                  <div className="d-flex align-items-center">
-                      <img src={item.image} className="rounded-3" alt="" style={{width:"100px",height:"100px"}} />
-                      <div className="d-flex flex-column ms-3">
-                        <span>{item.title}</span>
-                        <span>Qty: {item.quantity}</span>
+                  <ListGroup.Item
+                    key={idx}
+                    className="p-3"
+                    style={{ backgroundColor: "#F4EFE8" }}
+                  >
+                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+                      <div className="d-flex align-items-center gap-3">
+                        <img
+                          src={item.image}
+                          className="rounded-3"
+                          alt={item.title}
+                          style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                        />
+                        <div>
+                          <div className="fw-semibold">{item.title}</div>
+                          <small className="text-muted">Qty: {item.quantity}</small>
+                        </div>
                       </div>
-                  </div>
-                <p className="mb-0 fw-bold">${(item.discount * item.quantity).toFixed(2)}</p>
+                      <p className="mb-0 fw-bold">
+                        ${(item.discount * item.quantity).toFixed(2)}
+                      </p>
+                    </div>
                   </ListGroup.Item>
                 ))}
               </ListGroup>
@@ -444,7 +624,7 @@ const updateMutation = useMutation({
             <p>No data available</p>
           )}
         </Modal.Body>
-        <Modal.Footer style={{backgroundColor:"#F4EFE8"}}>
+        <Modal.Footer style={{ backgroundColor: "#F4EFE8" }}>
           <Button variant="secondary" onClick={handleCloseModal}>
             Close
           </Button>
@@ -488,7 +668,7 @@ const updateMutation = useMutation({
           </button>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

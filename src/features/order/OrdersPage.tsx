@@ -8,6 +8,7 @@ import {
   showSuccessAlert,
   showErrorAlert,
 } from "../../components/common/CustomSwal";
+import HelmetWrapper from "../../components/common/HelmetWrapper";
 
 export interface IOrder {
   id: string;
@@ -151,6 +152,7 @@ export default function OrdersPage(): React.ReactElement {
 
   return (
     <div className="container py-4">
+        <HelmetWrapper title="Orders" />
       <h3 className="mb-4 text-center" style={{ color: "#79253D" }}>
         Orders
       </h3>

@@ -8,6 +8,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import "../../styles/auth.css";
 import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
+import HelmetWrapper from "../../components/common/HelmetWrapper";
 
 const schema = z
   .object({
@@ -65,7 +66,7 @@ export default function ResetPassword() {
       
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
-      showSuccessAlert("🔒 Password updated successfully!");
+      showSuccessAlert("Password updated successfully!");
       setTimeout(() => navigate("/login"), 1500);
     } catch (error) {
       toast.error("⚠️ Something went wrong. Try again later.");
@@ -75,9 +76,7 @@ export default function ResetPassword() {
 
   return (
     <>
-      <Helmet>
-        <title>Reset Password</title>
-      </Helmet>
+        <HelmetWrapper title="Reset Password" />
       <Toaster position="top-center" />
 
       <div className="auth-container">

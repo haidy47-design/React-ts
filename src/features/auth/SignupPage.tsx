@@ -8,6 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
 import "../../styles/auth.css";
 import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
+import HelmetWrapper from "../../components/common/HelmetWrapper";
 
 const schema = z
   .object({
@@ -16,7 +17,7 @@ const schema = z
     email: z.string().email("Invalid email"),
     password: z
       .string()
-      .regex(/^[A-Z][a-z0-9]{3,8}$/, "Must start with uppercase and 4–9 chars"),
+      .regex(/^[A-Z][a-z0-9]{3,8}$/, "Must start with uppercase and 4-9 chars"),
     "re-password": z.string(),
   })
   .refine((data) => data.password === data["re-password"], {
@@ -61,9 +62,7 @@ export default function Register() {
 
   return (
     <>
-      <Helmet>
-        <title>Register</title>
-      </Helmet>
+        <HelmetWrapper title="SignUp" />
       <Toaster position="top-center" />
 
       <div className="auth-container">

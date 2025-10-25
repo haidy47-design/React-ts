@@ -51,7 +51,7 @@ const InstagramPhotos: React.FC = () => {
         Roséa Flower Shop
       </motion.h2>
 
-      {/* Carousel */}
+    
       <div className="container">
         <Slider {...settings}>
           {images.map((src, index) => (
@@ -68,7 +68,7 @@ const InstagramPhotos: React.FC = () => {
           ))}
         </Slider>
 
-        {/* Button */}
+    
         <div className="mt-4">
           <motion.button
             whileHover={{ scale: 1.05 }}

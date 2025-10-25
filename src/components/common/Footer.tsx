@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
       <div className="container">
         <div className="row text-center  border"> 
 
-          {/* Logo */}
+        
           <div className="col-12 col-md-3 p-4 border-end d-flex flex-column align-items-center ">
             <Link to="/" className="navbar-brand">
           <img
@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
           <span className="mt-2 footer-text">Flower Shop</span>
           </div>
 
-          {/* Menu */}
+
           <div className="col-12 col-sm-6 col-md-3 p-4 border-end">
             <h6 className="footer-title">Quick Menu</h6>
             <ul className="list-unstyled mt-3">
@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Policy */}
+  
           <div className="col-12 col-sm-6 col-md-3 p-4 border-end">
             <h6 className="footer-title">Policy</h6>
             <ul className="list-unstyled mt-3">
@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Address */}
+      
           <div className="col-12 col-md-3 p-4">
             <h6 className="footer-title">Address</h6>
             <p className="mb-1 mt-3 footer-text">500 Terry Francine Street</p>
@@ -57,7 +57,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Text */}
+    
         <div className="text-center mt-4">
           <small className="footer-text">
             © 2025 by  Roséa. Powered and secured by <a href="#" className="footer-link">ITI</a>

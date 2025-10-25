@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import Spinner from "../../components/common/Spinner";
 import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
+import HelmetWrapper from "../../components/common/HelmetWrapper";
 
 
 const schema = z.object({
@@ -143,143 +144,148 @@ export default function CheckoutPage(): React.ReactElement {
   }
 
   return (
-    <div className="checkout-container container py-3 py-md-4 py-lg-4">
-      <h2 className="col-12 mb-4 pb-3 border-bottom border-secondary border-opacity-50">Checkout</h2>
+  <>
 
-      <div className="row ms-lg-1 justify-content-center justify-content-md-between">
-        {/* 🧾 Order Summary */}
-        {items.length === 0 ? (
-          <div className="text-center py-5 text-secondary p-lg-4 mb-lg-4 ms-lg-4 col-11 col-md-7 col-lg-6">
-            <p>Your cart is empty.</p>
-          </div>
-        ) : (
-          <div className="order-summary-checkout col-12 col-md-12 col-lg-6 col-xl-6 px-3 pe-md-0 ps-md-5">
-            <h5 className="mb-3 text-secondary">Order Summary</h5>
+      <HelmetWrapper title="Checkout" />
 
-            {/* Scrollable items */}
-            <div className="order-items-scroll">
-              {items.map((item) => (
-                <div
-                  key={item.id}
-                  className="d-flex justify-content-between align-items-center py-3 border-bottom border-secondary border-opacity-50"
-                >
-                  <div className="d-flex align-items-center">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="me-3"
-                      width={100}
-                      height={100}
-                      style={{ objectFit: "cover" }}
-                    />
-                    <div>
-                      <div>{item.title}</div>
-                      <div className="text-muted small">Qty: {item.quantity}</div>
+      <div className="checkout-container container py-3 py-md-4 py-lg-4">
+        <h2 className="col-12 mb-4 pb-3 border-bottom border-secondary border-opacity-50">Checkout</h2>
+    
+        <div className="row ms-lg-1 justify-content-center justify-content-md-between">
+          {/* 🧾 Order Summary */}
+          {items.length === 0 ? (
+            <div className="text-center py-5 text-secondary p-lg-4 mb-lg-4 ms-lg-4 col-11 col-md-7 col-lg-6">
+              <p>Your cart is empty.</p>
+            </div>
+          ) : (
+            <div className="order-summary-checkout col-12 col-md-12 col-lg-6 col-xl-6 px-3 pe-md-0 ps-md-5">
+              <h5 className="mb-3 text-secondary">Order Summary</h5>
+    
+              {/* Scrollable items */}
+              <div className="order-items-scroll">
+                {items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="d-flex justify-content-between align-items-center py-3 border-bottom border-secondary border-opacity-50"
+                  >
+                    <div className="d-flex align-items-center">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="me-3"
+                        width={100}
+                        height={100}
+                        style={{ objectFit: "cover" }}
+                      />
+                      <div>
+                        <div>{item.title}</div>
+                        <div className="text-muted small">Qty: {item.quantity}</div>
+                      </div>
                     </div>
+                    <div>${(item.discount * item.quantity).toFixed(2)}</div>
                   </div>
-                  <div>${(item.discount * item.quantity).toFixed(2)}</div>
+                ))}
+              </div>
+    
+              {/* Fixed summary footer */}
+              <div className=" mt-3 py-4">
+                <div className="d-flex justify-content-between">
+                  <span>Subtotal</span>
+                  <span>${total.toFixed(2)}</span>
                 </div>
-              ))}
-            </div>
-
-            {/* Fixed summary footer */}
-            <div className=" mt-3 py-4">
-              <div className="d-flex justify-content-between">
-                <span>Subtotal</span>
-                <span>${total.toFixed(2)}</span>
-              </div>
-              <div className="d-flex justify-content-between mt-1">
-                <span>Shipping</span>
-                <span>Free</span>
-              </div>
-              <div className="fs-5 border-top border-secondary border-opacity-50 mt-3 py-2 d-flex justify-content-between border-bottom">
-                <span>Total</span>
-                <span className="fw-semibold">${total.toFixed(2)}</span>
+                <div className="d-flex justify-content-between mt-1">
+                  <span>Shipping</span>
+                  <span>Free</span>
+                </div>
+                <div className="fs-5 border-top border-secondary border-opacity-50 mt-3 py-2 d-flex justify-content-between border-bottom">
+                  <span>Total</span>
+                  <span className="fw-semibold">${total.toFixed(2)}</span>
+                </div>
               </div>
             </div>
+          )}
+    
+          {/* 👤 Checkout Form */}        
+          <div className="checkout-form col-12 col-md-12 col-lg-5 col-xl-5 ">
+            <h5 className="mb-3 text-secondary">User Details</h5>
+    
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
+              <div className="form-floating mb-3">
+                <input
+                  type="text"
+                  className="form-control rounded-0"
+                  {...register("name")}
+                  id="name"
+                  placeholder="Name"
+                />
+                <label htmlFor="name">Name</label>
+                {formState.errors.name && (
+                  <p className="alert alert-danger p-1 mt-1 text-center">
+                    {formState.errors.name.message}
+                  </p>
+                )}
+              </div>
+    
+              <div className="form-floating mb-3">
+                <input
+                  type="email"
+                  className="form-control rounded-0"
+                  {...register("email")}
+                  id="email"
+                  placeholder="Email"
+                />
+                <label htmlFor="email">Email</label>
+                {formState.errors.email && (
+                  <p className="alert alert-danger p-1 mt-1 text-center">
+                    {formState.errors.email.message}
+                  </p>
+                )}
+              </div>
+    
+              <div className="form-floating mb-3">
+                <input
+                  type="text"
+                  className="form-control rounded-0"
+                  {...register("address")}
+                  id="address"
+                  placeholder="Address"
+                />
+                <label htmlFor="address">Address</label>
+                {formState.errors.address && (
+                  <p className="alert alert-danger p-1 mt-1 text-center">
+                    {formState.errors.address.message}
+                  </p>
+                )}
+              </div>
+    
+              <div className="form-floating mb-3">
+                <input
+                  type="text"
+                  className="form-control rounded-0"
+                  {...register("phone")}
+                  id="phone"
+                  placeholder="Phone"
+                />
+                <label htmlFor="phone">Phone</label>
+                {formState.errors.phone && (
+                  <p className="alert alert-danger p-1 mt-1 text-center">
+                    {formState.errors.phone.message}
+                  </p>
+                )}
+              </div>
+    
+    
+              <button
+                type="submit"
+                disabled={!items.length || isSubmitting}
+                className="btn col-12 px-4 py-2 rounded-0 btn-success mt-3"
+              >
+                {isSubmitting ? "Processing..." : "Place Order"}
+              </button>
+            </form>
           </div>
-        )}
-
-        {/* 👤 Checkout Form */}        
-        <div className="checkout-form col-12 col-md-12 col-lg-5 col-xl-5 ">
-          <h5 className="mb-3 text-secondary">User Details</h5>
-
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-            <div className="form-floating mb-3">
-              <input
-                type="text"
-                className="form-control rounded-0"
-                {...register("name")}
-                id="name"
-                placeholder="Name"
-              />
-              <label htmlFor="name">Name</label>
-              {formState.errors.name && (
-                <p className="alert alert-danger p-1 mt-1 text-center">
-                  {formState.errors.name.message}
-                </p>
-              )}
-            </div>
-
-            <div className="form-floating mb-3">
-              <input
-                type="email"
-                className="form-control rounded-0"
-                {...register("email")}
-                id="email"
-                placeholder="Email"
-              />
-              <label htmlFor="email">Email</label>
-              {formState.errors.email && (
-                <p className="alert alert-danger p-1 mt-1 text-center">
-                  {formState.errors.email.message}
-                </p>
-              )}
-            </div>
-
-            <div className="form-floating mb-3">
-              <input
-                type="text"
-                className="form-control rounded-0"
-                {...register("address")}
-                id="address"
-                placeholder="Address"
-              />
-              <label htmlFor="address">Address</label>
-              {formState.errors.address && (
-                <p className="alert alert-danger p-1 mt-1 text-center">
-                  {formState.errors.address.message}
-                </p>
-              )}
-            </div>
-
-            <div className="form-floating mb-3">
-              <input
-                type="text"
-                className="form-control rounded-0"
-                {...register("phone")}
-                id="phone"
-                placeholder="Phone"
-              />
-              <label htmlFor="phone">Phone</label>
-              {formState.errors.phone && (
-                <p className="alert alert-danger p-1 mt-1 text-center">
-                  {formState.errors.phone.message}
-                </p>
-              )}
-            </div>
-
-
-            <button
-              type="submit"
-              disabled={!items.length || isSubmitting}
-              className="btn col-12 px-4 py-2 rounded-0 btn-success mt-3"
-            >
-              {isSubmitting ? "Processing..." : "Place Order"}
-            </button>
-          </form>
         </div>
       </div>
-    </div>
+  </>
   );
 }

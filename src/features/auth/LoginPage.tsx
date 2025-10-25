@@ -11,6 +11,7 @@ import { FaSignInAlt } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setUser } from "../auth/authSlice";
 import { showLoginError, showLoginSuccess } from "../../components/common/CustomSwal";
+import HelmetWrapper from "../../components/common/HelmetWrapper";
 
 const schema = z.object({
   email: z.string().email("Invalid email"),
@@ -48,7 +49,7 @@ export default function Login() {
       if (user) {
         dispatch(setUser(user)); 
         showLoginSuccess(" Logged in successfully" ,user.name);
-        setTimeout(() => navigate("/home"), 1200);
+        setTimeout(() => navigate("/"), 1200);
       } else {
         showLoginError("Invalid email or password!");
       }
@@ -63,9 +64,7 @@ export default function Login() {
 
   return (
     <>
-      <Helmet>
-        <title>Login</title>
-      </Helmet>
+        <HelmetWrapper title="login" />
       <Toaster position="top-center" />
 
       <div className="auth-container">

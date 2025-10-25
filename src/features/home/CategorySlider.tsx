@@ -88,7 +88,7 @@ export default function CategorySlider(): React.ReactElement {
         </div>
       )}
 
-      {/* Swiper only when data ready */}
+    
       {!isLoading && categories.length > 0 && (
         <Swiper
           modules={[Navigation, Autoplay, Pagination]}
@@ -116,13 +116,13 @@ export default function CategorySlider(): React.ReactElement {
                   alt={cat.name}
                   className="category-img"
                 />
-                {/* Overlay gradient */}
+              
                 <div className="overlay"></div>
 
-                {/* Card text */}
+            
                 <div className="card-body text-center position-absolute bottom-0 start-0 end-0 text-white">
                   <h5 className="card-title mb-1">{cat.name}</h5>
-                  {/* <small>{cat.count} products</small> */}
+                
                 </div>
               </Link>
             </SwiperSlide>
@@ -130,32 +130,7 @@ export default function CategorySlider(): React.ReactElement {
         </Swiper>
       )}
 
-      {/* Custom styles
-      <style>{`
-        .category-card {
-          border-radius: 12px;
-          overflow: hidden;
-        }
-        .category-img {
-          width: 100%;
-          height: 300px;
-          object-fit: cover;
-          transition: transform 0.4s ease;
-        }
-        .overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
-          opacity: 0;
-          transition: opacity 0.4s ease;
-        }
-        .category-card:hover .category-img {
-          transform: scale(1.1);
-        }
-        .category-card:hover .overlay {
-          opacity: 1;
-        }
-      `}</style> */}
+
     </section>
   );
 }
