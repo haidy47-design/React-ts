@@ -86,7 +86,7 @@ export default function Contact() {
     setLoading(true);
 
     try {
-      await axios.post("https://68f17bc0b36f9750dee96cbb.mockapi.io/contact", values);
+      await axios.post("https://68f17bc0b36f9750dee96cbb.mockapi.io/contact",{ ...values,replay: "unRead"});
       showSuccessAlert("Thank you, your message has been sent.");
       reset();
     } catch (error) {

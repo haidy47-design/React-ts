@@ -301,7 +301,7 @@
   border: none;
   border-bottom: 2px solid #79253D;
   border-radius: 0;
-  background-color: transparent;
+  background-color: transparent !important;
   transition: border-color 0.3s;
   color: #333;
 }
@@ -449,4 +449,11 @@
     font-size: 14px;
     padding: 14px;
   }
+}
+
+
+
+.range-accent {
+  accent-color: #79253D !important;
+  width: 100px;
 }

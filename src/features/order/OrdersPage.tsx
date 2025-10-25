@@ -3,12 +3,16 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/orders.css";
-import { showConfirmAlert, showSuccessAlert, showErrorAlert } from "../../components/common/CustomSwal";
+import {
+  showConfirmAlert,
+  showSuccessAlert,
+  showErrorAlert,
+} from "../../components/common/CustomSwal";
 
 export interface IOrder {
   id: string;
   userName: string;
-  email:string;
+  email: string;
   address: string;
   phone: string;
   items: {
@@ -29,27 +33,30 @@ export default function OrdersPage(): React.ReactElement {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // ✅ استخدم id بدل الإيميل
+
   const storedUser = localStorage.getItem("user");
   const currentUserID = storedUser ? JSON.parse(storedUser).id : null;
 
   const { data: allOrders, isLoading } = useQuery<IOrder[]>({
     queryKey: ["orders"],
     queryFn: async () => {
-      const res = await axios.get("https://68e43ee28e116898997b5bf8.mockapi.io/orders");
+      const res = await axios.get(
+        "https://68e43ee28e116898997b5bf8.mockapi.io/orders"
+      );
       return res.data;
     },
   });
 
-  // ✅ فلترة الطلبات حسب userID
+
   const userOrders = allOrders?.filter((o) => o.userID === currentUserID) || [];
 
   const deleteMutation = useMutation({
     mutationFn: async (order: IOrder) => {
-      // 1️⃣ امسح الطلب
-      await axios.delete(`https://68e43ee28e116898997b5bf8.mockapi.io/orders/${order.id}`);
+      await axios.delete(
+        `https://68e43ee28e116898997b5bf8.mockapi.io/orders/${order.id}`
+      );
 
-      // 2️⃣ ارجع الكمية للمخزون
+
       const restoreStockPromises = order.items.map(async (item) => {
         try {
           const { data: products } = await axios.get(
@@ -57,24 +64,21 @@ export default function OrdersPage(): React.ReactElement {
           );
 
           const matchedProduct = products.find(
-            (p: any) => p.title.trim().toLowerCase() === item.title.trim().toLowerCase()
+            (p: any) =>
+              p.title.trim().toLowerCase() === item.title.trim().toLowerCase()
           );
 
-          if (!matchedProduct) {
-            console.warn(`⚠️ No matching product found for: ${item.title}`);
-            return null;
-          }
+          if (!matchedProduct) return null;
 
-          const currentStock = Number(matchedProduct.stock) || 0;
-          const returnedQty = Number(item.quantity) || 0;
-          const newStock = currentStock + returnedQty;
+          const newStock =
+            (Number(matchedProduct.stock) || 0) + (Number(item.quantity) || 0);
 
           await axios.put(
             `https://68e43ee28e116898997b5bf8.mockapi.io/product/${matchedProduct.id}`,
             { ...matchedProduct, stock: newStock }
           );
 
-          console.log(`✅ Returned ${returnedQty} to ${item.title}`);
+          
         } catch (error) {
           console.error(`Error restoring stock for ${item.title}`, error);
         }
@@ -89,16 +93,14 @@ export default function OrdersPage(): React.ReactElement {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       showSuccessAlert("Order deleted successfully!");
     },
-    onError: () => {
-      showErrorAlert("Failed to delete order. Please try again.");
-    },
+    onError: () => showErrorAlert("Failed to delete order. Please try again."),
   });
 
   const handleDelete = async (order: IOrder) => {
-    const confirmed = await showConfirmAlert("This will delete the order and restore stock.");
-    if (confirmed) {
-      deleteMutation.mutate(order);
-    }
+    const confirmed = await showConfirmAlert(
+      "This will delete the order and restore stock."
+    );
+    if (confirmed) deleteMutation.mutate(order);
   };
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -107,20 +109,35 @@ export default function OrdersPage(): React.ReactElement {
     (o) =>
       o.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       o.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      o.items.some((i) => i.title.toLowerCase().includes(searchTerm.toLowerCase()))
+      o.items.some((i) =>
+        i.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
   );
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentOrders = filteredOrders.slice(startIndex, startIndex + itemsPerPage);
+  const currentOrders = filteredOrders.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
-  const goToNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
-  };
-  const goToPreviousPage = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  const getStatusBadgeColor = (status: string) => {
+    switch (status) {
+      case "Pending":
+        return "#FFC107";
+      case "Cancelled":
+        return "#DC3545";
+      case "Proccessing":
+        return "#0D6EFD";
+      case "Shipped":
+        return "#24A167";
+      case "Delivered":
+        return "#79253D";
+      default:
+        return "#6C757D";
+    }
   };
 
   if (isLoading) {
@@ -131,26 +148,6 @@ export default function OrdersPage(): React.ReactElement {
       </div>
     );
   }
-
-
-  const getStatusBadgeColor = (status: string) => {
-  switch (status) {
-    case "Pending":
-      return "#FFC107"; 
-    case "Cancelled":
-      return "#DC3545"; 
-    case "Proccessing":
-      return "#0D6EFD"; 
-    case "Shipped":
-      return "#24A167"; 
-    case "Delivered":
-      return "#79253D";
-    default:
-      return "#6C757D"; 
-  }
-};
-
-
 
   return (
     <div className="container py-4">
@@ -176,11 +173,17 @@ export default function OrdersPage(): React.ReactElement {
       </div>
 
       {!filteredOrders || filteredOrders.length === 0 ? (
-        <div className="alert" style={{ backgroundColor: "#ec6e92ff" }}>
+        <div className="alert mt-4" style={{ backgroundColor: "#ec6e92ff" }}>
           No matching orders found.
         </div>
       ) : (
-        <div className="table-responsive mt-5">
+        <div
+          className="mt-5"
+          style={{
+            overflow: "visible",
+            maxWidth: "100%",
+          }}
+        >
           <table className="table align-middle table-hover text-center">
             <tr className="text-center text-white" style={{ backgroundColor: "#79253D" }}>
               <th className="py-2">#</th>
@@ -196,24 +199,39 @@ export default function OrdersPage(): React.ReactElement {
 
             {currentOrders?.map((o, index) => (
               <tr key={o.id} style={{ borderBottom: "1px solid #79253D" }}>
-                <td className="text-center fw-semibold">{startIndex + index + 1}</td>
+                <td className="text-center fw-semibold">
+                  {startIndex + index + 1}
+                </td>
                 <td>{o.userName}</td>
                 <td>{o.address}</td>
                 <td>{o.phone}</td>
                 <td>{o.items.length}</td>
                 <td>${parseFloat(o.totalPrice).toFixed(2)}</td>
-                <td className="small text-muted">{new Date(o.createdAt).toLocaleString()}</td>
+                <td className="small text-muted">
+                  {new Date(o.createdAt).toLocaleString()}
+                </td>
                 <td>
-                  <span className="badge text-white w-75" style={{ backgroundColor:  getStatusBadgeColor(o.status)  }}>
+                  <span
+                    className="badge text-white w-75"
+                    style={{
+                      backgroundColor: getStatusBadgeColor(o.status),
+                    }}
+                  >
                     {o.status}
                   </span>
                 </td>
                 <td>
                   <div className="d-flex justify-content-center bg-transparent">
-                    <button className="btn btn-emojiShow btn-sm" onClick={() => navigate(`/orders/${o.id}`)}>
+                    <button
+                      className="btn btn-emojiShow btn-sm"
+                      onClick={() => navigate(`/orders/${o.id}`)}
+                    >
                       <i className="fa-solid fa-eye m-1" />
                     </button>
-                    <button className="btn btn-emojiDelete btn-sm" onClick={() => handleDelete(o)}>
+                    <button
+                      className="btn btn-emojiDelete btn-sm"
+                      onClick={() => handleDelete(o)}
+                    >
                       <i className="fa-solid fa-trash m-1" />
                     </button>
                   </div>
@@ -222,25 +240,43 @@ export default function OrdersPage(): React.ReactElement {
             ))}
           </table>
 
-          <div className="d-flex justify-content-center align-items-center mt-5">
-            <button
-              className="btn btn-sm btn-outline-secondary me-2"
-              disabled={currentPage === 1}
-              onClick={goToPreviousPage}
-            >
-              Previous
-            </button>
-            <span className="fw-bold">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              className="btn btn-sm btn-outline-success ms-2"
-              disabled={currentPage === totalPages}
-              onClick={goToNextPage}
-            >
-              Next
-            </button>
-          </div>
+          {/* ✅ Pagination */}
+          {filteredOrders.length > itemsPerPage && (
+            <div className="pagination-bar d-flex justify-content-center align-items-center mt-5 gap-2 flex-wrap">
+              <button
+                className="btn btn-sm btn-outline-secondary"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => p - 1)}
+              >
+                ‹ Prev
+              </button>
+
+              {[...Array(totalPages)].map((_, index) => {
+                const pageNum = index + 1;
+                return (
+                  <button
+                    key={pageNum}
+                    className={`btn btn-sm ${
+                      currentPage === pageNum
+                        ? "btn-success"
+                        : "btn-outline-secondary"
+                    }`}
+                    onClick={() => setCurrentPage(pageNum)}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+
+              <button
+                className="btn btn-sm btn-outline-secondary"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((p) => p + 1)}
+              >
+                Next ›
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

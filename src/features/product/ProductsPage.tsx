@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Spinner from "../../components/common/Spinner";
 import ProductCard, { Product } from "../../components/product/ProductCard";
 import HelmetWrapper from "../../components/common/HelmetWrapper";
-import "./CartPage.css"; 
+import "./CartPage.css";
 
 async function fetchProducts(): Promise<Product[]> {
   const res = await axios.get("https://68e43ee28e116898997b5bf8.mockapi.io/product");
@@ -21,8 +21,25 @@ export default function ProductsPage(): React.ReactElement {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [sortOption, setSortOption] = useState<string>("default");
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [discountLimit, setDiscountLimit] = useState<number>(0);
 
   const products = useMemo(() => data ?? [], [data]);
+
+  // أقل وأعلى خصم
+  const [minDiscount, maxDiscount] = useMemo(() => {
+    if (!products.length) return [0, 0];
+    const discounts = products.map((p) => p.discount || 0);
+    return [Math.min(...discounts), Math.max(...discounts)];
+  }, [products]);
+
+  // ضبط السلايدر
+  useEffect(() => {
+    if (products.length) {
+      const discounts = products.map((p) => p.discount || 0);
+      const max = Math.max(...discounts);
+      setDiscountLimit(max);
+    }
+  }, [products]);
 
   const categories = useMemo(() => {
     const cats = Array.from(new Set(products.map((p) => p.category))).sort();
@@ -32,16 +49,22 @@ export default function ProductsPage(): React.ReactElement {
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
+    // البحث
     if (searchTerm.trim() !== "") {
       result = result.filter((p) =>
         p.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
+    // الفئة
     if (selectedCategory !== "All") {
       result = result.filter((p) => p.category === selectedCategory);
     }
 
+    // الفلترة بالخصم
+    result = result.filter((p) => (p.discount || 0) <= discountLimit);
+
+    // الفرز
     if (sortOption === "price-asc") {
       result.sort((a, b) => a.price - b.price);
     } else if (sortOption === "price-desc") {
@@ -52,20 +75,13 @@ export default function ProductsPage(): React.ReactElement {
 
     setCurrentPage(1);
     return result;
-  }, [products, searchTerm, selectedCategory, sortOption]);
+  }, [products, searchTerm, selectedCategory, sortOption, discountLimit]);
 
   const itemsPerPage = 9;
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
 
-  const goToNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
-  };
 
   return (
     <div className="container py-5 products-page">
@@ -78,10 +94,11 @@ export default function ProductsPage(): React.ReactElement {
         </p>
       </div>
 
-      
+      {/* Filters */}
       <div className="row mb-4">
         <div className="col-12">
           <div className="filters-bar d-flex flex-wrap gap-4 align-items-center justify-content-center justify-content-md-start mb-4">
+            {/* Search */}
             <div className="filter-item">
               <label htmlFor="searchInput" className="form-label mb-1">
                 Search by name:
@@ -95,6 +112,7 @@ export default function ProductsPage(): React.ReactElement {
               />
             </div>
 
+            {/* Category */}
             <div className="filter-item">
               <label htmlFor="categorySelect" className="form-label mb-1">
                 Category:
@@ -113,39 +131,40 @@ export default function ProductsPage(): React.ReactElement {
               </select>
             </div>
 
-            <div className="filter-item">
-              <label htmlFor="sortSelect" className="form-label mb-1">
-                Sort by:
-              </label>
-              <select
-                id="sortSelect"
-                className="form-select custom-select"
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
-              >
-                <option value="title-asc">Name</option>
-                <option value="price-asc">Price: Low → High</option>
-                <option value="price-desc">Price: High → Low</option>
-              </select>
+            {/* Discount Range */}
+            <div className="filter-item" style={{ minWidth: "250px" }}>
+              <label className="form-label d-block">Max Discount:</label>
+              <input
+                type="range"
+                min={minDiscount}
+                max={maxDiscount}
+                value={discountLimit}
+                onChange={(e) => setDiscountLimit(Number(e.target.value))}
+                className="range-accent mt-2 w-100"
+              />
+              <small className="text-muted d-block">
+                Showing up to {discountLimit} $
+              </small>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Loading */}
       {isLoading && (
         <div className="d-flex justify-content-center my-5">
           <Spinner />
         </div>
       )}
 
-     
+      {/* Error */}
       {isError && (
         <div className="alert alert-danger text-center">
           Failed to load products. Please try again.
         </div>
       )}
 
-     
+      {/* Products */}
       {!isLoading && !isError && (
         <>
           <div className="row g-4">
@@ -157,30 +176,45 @@ export default function ProductsPage(): React.ReactElement {
               ))
             ) : (
               <div className="text-center py-5 text-muted">
-                No products found for this category.
+                No products found for this discount range or category.
               </div>
             )}
           </div>
 
-         
+          {/* 🔹 Pagination (نفس شكل Orders) */}
           {filteredProducts.length > itemsPerPage && (
-            <div className="pagination-bar d-flex justify-content-center align-items-center mt-5">
+            <div className="pagination-bar d-flex justify-content-center align-items-center mt-5 gap-2 flex-wrap">
               <button
-                className="btn btn-sm btn-outline-secondary me-2"
+                className="btn btn-sm btn-outline-secondary"
                 disabled={currentPage === 1}
-                onClick={goToPreviousPage}
+                onClick={() => setCurrentPage((p) => p - 1)}
               >
-                Previous
+                ‹ Prev
               </button>
-              <span className="fw-bold">
-                Page {currentPage} of {totalPages}
-              </span>
+
+              {[...Array(totalPages)].map((_, index) => {
+                const pageNum = index + 1;
+                return (
+                  <button
+                    key={pageNum}
+                    className={`btn btn-sm ${
+                      currentPage === pageNum
+                        ? "btn-success"
+                        : "btn-outline-secondary"
+                    }`}
+                    onClick={() => setCurrentPage(pageNum)}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+
               <button
-                className="btn btn-sm btn-outline-success ms-2"
+                className="btn btn-sm btn-outline-secondary"
                 disabled={currentPage === totalPages}
-                onClick={goToNextPage}
+                onClick={() => setCurrentPage((p) => p + 1)}
               >
-                Next
+                Next ›
               </button>
             </div>
           )}

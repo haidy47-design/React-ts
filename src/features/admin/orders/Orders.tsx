@@ -260,7 +260,7 @@ const updateMutation = useMutation({
       {/* 🔹 Table View */}
       <div className="table-responsive mt-4 bg-white rounded-4 shadow-sm">
         <table className="table align-middle table-hover text-center">
-          <tr style={{ backgroundColor: "#79253D", color: "white" }}>
+          <tr className="bg-success text-white">
             <th className="p-3">Order Id</th>
             <th className="p-3">User</th>
             <th className="p-3">Address</th>
