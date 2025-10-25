@@ -125,3 +125,30 @@ export const showLogout = (navigate?: NavigateFunction, dispatch?: AppDispatch) 
     }
   });
 };
+
+
+
+export const showDiscountPrompt = async () => {
+  const { value: discount } = await Swal.fire({
+    title: "Apply Discount",
+    input: "number",
+    inputLabel: "Enter discount percentage (0 - 100)",
+    inputAttributes: {
+      min: "0",
+      max: "100",
+      step: "1",
+    },
+    showCancelButton: true,
+    confirmButtonText: "Apply",
+    cancelButtonText: "Cancel",
+    inputValidator: (value) => {
+      if (!value) return "Please enter a discount percentage!";
+      if (isNaN(value) || value < 0 || value > 100)
+        return "Discount must be between 0 and 100!";
+    },
+  });
+
+  return discount ? Number(discount) : null;
+};
+
+

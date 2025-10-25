@@ -40,6 +40,23 @@ export const updateProduct = async (id: string, product: Partial<Product>): Prom
   return data;
 };
 
+export const applyDiscountForAllProducts = async (discount: number): Promise<void> => {
+
+  const { data: products } = await axiosInstance.get<Product[]>(PRODUCTS_URL);
+
+  await Promise.all(
+    products.map((p) => {
+      const discountAmount = (Number(p.price) * discount) / 100;
+      const newPrice = Number(p.price) - discountAmount;
+
+      return updateProduct(p.id, {
+        discount: parseFloat(newPrice.toFixed(2)),
+      });
+    })
+  );
+};
+
+
 export const deleteProduct = async (id: string): Promise<void> => {
   await axiosInstance.delete(`${PRODUCTS_URL}/${id}`);
 };
