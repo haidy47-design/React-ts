@@ -8,6 +8,9 @@ import { fetchUsers, fetchProducts, fetchOrders } from "./api";
 import { AdminUser, AdminProduct } from "./types";
 import { IOrder } from "../order/OrdersPage";
 import Spinner from "../../components/common/Spinner"; 
+import { Users, Package, DollarSign, ShoppingCart } from 'lucide-react';
+
+
 
 // animated count-up hook 
 function useCountUp(target: number, duration = 800) {
@@ -43,7 +46,6 @@ const Dashboard: React.FC = () => {
   // Filters
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [productTypeFilter, setProductTypeFilter] = useState<string>("all");
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
@@ -65,10 +67,9 @@ const Dashboard: React.FC = () => {
   const hasActiveFilters = useMemo(() => {
     return categoryFilter !== "all" || 
            statusFilter !== "all" || 
-           productTypeFilter !== "all" || 
            dateFrom !== "" || 
            dateTo !== "";
-  }, [categoryFilter, statusFilter, productTypeFilter, dateFrom, dateTo]);
+  }, [categoryFilter, statusFilter, dateFrom, dateTo]);
 
   // Enhanced filtering logic
   const filteredOrders = useMemo(() => {
@@ -77,7 +78,8 @@ const Dashboard: React.FC = () => {
       const created = o.createdAt ? new Date(o.createdAt) : new Date();
       
       // status filter
-      if (statusFilter !== "all" && o.status !== statusFilter) return false;
+      if (statusFilter !== "all" && o.status.toLowerCase() !== statusFilter.toLowerCase()) return false;
+
       
       // dateFrom
       if (dateFrom) {
@@ -92,25 +94,27 @@ const Dashboard: React.FC = () => {
       }
       
       // category filter - check if any item in order matches category
-      if (categoryFilter !== "all") {
-        const hasCategory = (o.items ?? []).some((it) => {
-          return it.category === categoryFilter;
-        });
-        if (!hasCategory) return false;
-      }
-      
-      // product type filter - check if any item matches product type
-      if (productTypeFilter !== "all") {
-        const hasProductType = (o.items ?? []).some((it) => {
-          const prod = products.find((p) => p.title === it.title);
-          return prod && prod.category === productTypeFilter;
-        });
-        if (!hasProductType) return false;
-      }
+      if (categoryFilter && categoryFilter.toLowerCase() !== "all") {
+  const hasCategory = (o.items ?? []).some((it) => {
+    const cat = (it.category ?? "").toLowerCase().trim();
+    const selected = categoryFilter.toLowerCase().trim();
+
+    return (
+      cat.includes(selected) || 
+      selected.includes(cat) || 
+      cat.startsWith(selected) || 
+      selected.startsWith(cat)
+    );
+  });
+  if (!hasCategory) return false;
+}
+
+
+
       
       return true;
     });
-  }, [orders, products, statusFilter, dateFrom, dateTo, categoryFilter, productTypeFilter]);
+  }, [orders, products, statusFilter, dateFrom, dateTo, categoryFilter]);
 
   // Handle loading state for filtering
   useEffect(() => {
@@ -130,19 +134,15 @@ const Dashboard: React.FC = () => {
   const totalProducts = products.length;
   const totalOrders = filteredOrders.length;
 
-  // total revenue: sum items price*qty or fallback to order.total
+  // total revenue from filtered orders
   const totalRevenue = useMemo(() => {
-    return filteredOrders.reduce((sum: number, o: IOrder) => {
-      if (o.items && o.items.length > 0) {
-        const itemsSum = o.items.reduce((s: number, it) => {
-          const itemPrice = it.discount ? (it.discount * it.quantity) : 0;
-          return s + itemPrice;
-        }, 0);
-        return sum + itemsSum;
-      }
-      return sum + (parseFloat(o.totalPrice) || 0);
-    }, 0);
-  }, [filteredOrders]);
+  return filteredOrders.reduce((sum: number, o: IOrder) => {
+    const total = parseFloat(o.totalPrice) || 0;
+    return sum + total;
+  }, 0);
+}, [filteredOrders]);
+
+
 
   // animated counts
   const usersCount = useCountUp(totalUsers, 900);
@@ -162,18 +162,35 @@ const Dashboard: React.FC = () => {
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [filteredOrders]);
 
-  // Revenue by product for BarChart
+  // Revenue by Product (BarChart)
+
   const revenueByProduct = useMemo(() => {
-    const map = new Map<string, number>();
-    filteredOrders.forEach((o: IOrder) => {
-      (o.items ?? []).forEach((it) => {
-        const key = it.title ?? "Unknown";
-        const itemPrice = it.discount ? (it.discount * it.quantity) : 0;
-        map.set(key, (map.get(key) || 0) + itemPrice);
-      });
+  const map = new Map<string, number>();
+
+  filteredOrders.forEach((o: IOrder) => {
+    (o.items ?? []).forEach((it) => {
+      const key = it.title ?? "Unknown";
+
+      const product = products.find(
+        (p) => p.title.toLowerCase().trim() === (it.title ?? "").toLowerCase().trim()
+      );
+      const basePrice = product ? Number(product.price) : 0;
+
+      const priceAfterDiscount = it.discount
+        ? basePrice - Number(it.discount)
+        : basePrice;
+
+      const itemRevenue = priceAfterDiscount * Number(it.quantity ?? 1);
+
+      map.set(key, (map.get(key) || 0) + itemRevenue);
     });
-    return Array.from(map.entries()).map(([productName, revenue]) => ({ productName, revenue })).sort((a, b) => b.revenue - a.revenue);
-  }, [filteredOrders, products]);
+  });
+
+  return Array.from(map.entries())
+    .map(([productName, revenue]) => ({ productName, revenue }))
+    .sort((a, b) => b.revenue - a.revenue);
+}, [filteredOrders, products]);
+
 
   // Status distribution (Pie)
   const statusDistribution = useMemo(() => {
@@ -183,6 +200,22 @@ const Dashboard: React.FC = () => {
     });
     return Array.from(map.entries()).map(([name, value]) => ({ name, value }));
   }, [filteredOrders]);
+
+
+
+const COLORS = [
+  "#5c1a1f", // dark maroon
+  "#722f37", // rose-primary
+  "#8b3a3a", // maroon-secondary
+  "#a03a3a", // deep maroon
+  "#9f4f4f", // brick red
+  // "#f4efe8", // rose-light
+  "#b66a6a", // muted rose 
+  "#d9b5b5", // soft pink
+  "#c48b8b", // warm pink 
+  "#e6caca", // very soft rose
+    
+];
 
   // available categories for filter
   const categories = useMemo(() => {
@@ -206,7 +239,6 @@ const Dashboard: React.FC = () => {
   const clearAllFilters = useCallback(() => {
     setCategoryFilter("all");
     setStatusFilter("all");
-    setProductTypeFilter("all");
     setDateFrom("");
     setDateTo("");
   }, []);
@@ -216,11 +248,10 @@ const Dashboard: React.FC = () => {
     let count = 0;
     if (categoryFilter !== "all") count++;
     if (statusFilter !== "all") count++;
-    if (productTypeFilter !== "all") count++;
     if (dateFrom !== "") count++;
     if (dateTo !== "") count++;
     return count;
-  }, [categoryFilter, statusFilter, productTypeFilter, dateFrom, dateTo]);
+  }, [categoryFilter, statusFilter, dateFrom, dateTo]);
 
   // UI 
   if (hasError) {
@@ -256,7 +287,10 @@ const Dashboard: React.FC = () => {
         <Col xs={6} md={3}>
           <Card className="dashboard-card text-center shadow-sm border-0">
             <Card.Body>
-              <div className="small text-muted">Users</div>
+              <div className="small text-muted">
+              <Users size={20} color="var(--rose-primary)" className="me-2" />
+
+                Users</div>
               <h4 className="mb-0 count-up">{usersCount}</h4>
               <small className="text-muted d-block">active users</small>
             </Card.Body>
@@ -266,7 +300,10 @@ const Dashboard: React.FC = () => {
         <Col xs={6} md={3}>
           <Card className="dashboard-card text-center shadow-sm border-0">
             <Card.Body>
-              <div className="small text-muted">Products</div>
+              <div className="small text-muted">
+                <Package size={20} color="var(--rose-primary)" className="me-2" />
+
+                Products</div>
               <h4 className="mb-0 count-up">{productsCount}</h4>
               <small className="text-muted d-block">catalog size</small>
             </Card.Body>
@@ -276,7 +313,10 @@ const Dashboard: React.FC = () => {
         <Col xs={6} md={3}>
           <Card className="dashboard-card text-center shadow-sm border-0">
             <Card.Body>
-              <div className="small text-muted">Orders</div>
+              <div className="small text-muted">
+                < ShoppingCart size={20} color="var(--rose-primary)" className="me-2" />
+
+                Orders</div>
               <h4 className="mb-0 count-up">{ordersCount}</h4>
               <small className="text-muted d-block">in selected filters</small>
             </Card.Body>
@@ -286,7 +326,10 @@ const Dashboard: React.FC = () => {
         <Col xs={6} md={3}>
           <Card className="dashboard-card text-center shadow-sm border-0">
             <Card.Body>
-              <div className="small text-muted">Revenue</div>
+              <div className="small text-muted">
+                < DollarSign  size={20} color="var(--rose-primary)" className="me-2" />
+
+                Revenue</div>
               <h4 className="mb-0 count-up">{revenueCount.toLocaleString()}</h4>
               <small className="text-muted d-block">filtered revenue (USD)</small>
             </Card.Body>
@@ -297,11 +340,11 @@ const Dashboard: React.FC = () => {
       {/* Enhanced Filters */}
       <Card className="mb-4 p-3 filter-card">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h6 className="mb-0 text-primary">
+          <h6 className="mb-0 ">
             <i className="fas fa-filter me-2"></i>
             Filters
             {hasActiveFilters && (
-              <Badge bg="primary" className="ms-2">
+              <Badge  className="ms-2 bg-secondary">
                 {activeFiltersCount}
               </Badge>
             )}
@@ -342,25 +385,6 @@ const Dashboard: React.FC = () => {
           <Col xs={12} sm={6} md={3}>
             <Form.Group>
               <Form.Label className="form-label">
-                <i className="fas fa-box me-1"></i>
-                Product Type
-              </Form.Label>
-              <Form.Select 
-                value={productTypeFilter} 
-                onChange={(e) => setProductTypeFilter(e.target.value)}
-                className={productTypeFilter !== "all" ? "border-primary" : ""}
-              >
-                <option value="all">All product types</option>
-                {productTypes.map((pt) => (
-                  <option key={pt} value={pt}>{pt}</option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
-
-          <Col xs={12} sm={6} md={3}>
-            <Form.Group>
-              <Form.Label className="form-label">
                 <i className="fas fa-clipboard-list me-1"></i>
                 Status
               </Form.Label>
@@ -371,7 +395,7 @@ const Dashboard: React.FC = () => {
               >
                 <option value="all">All statuses</option>
                 <option value="pending">Pending</option>
-                <option value="processing">Processing</option>
+                <option value="proccessing">Proccessing</option>
                 <option value="shipped">Shipped</option>
                 <option value="delivered">Delivered</option>
                 <option value="cancelled">Cancelled</option>
@@ -406,7 +430,7 @@ const Dashboard: React.FC = () => {
         </Row>
 
         {/* Quick Date Presets */}
-        <Row className="mt-3">
+        <Row className="mt-5">
           <Col xs={12}>
             <div className="d-flex flex-wrap gap-2">
               <small className="text-muted me-2">Quick presets:</small>
@@ -641,9 +665,7 @@ const Dashboard: React.FC = () => {
                           </small>
                         </div>
                       </div>
-                      <Button size="sm" variant="outline-primary" className="btn-sm">
-                        <i className="fas fa-eye"></i>
-                      </Button>
+                      
                     </li>
                   ))}
                 </ul>

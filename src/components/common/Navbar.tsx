@@ -130,11 +130,17 @@ export default function Navbar(): React.ReactElement {
                         Wishlist
                       </NavLink>
                     </li>
+
+                    {user?.role === "admin" && (
                       <li>
-                        <NavLink to="/reset-password" className="dropdown-item">
-                          Reset Password
+                        <NavLink to="/admin" className="dropdown-item">
+                          Dashboard
                         </NavLink>
                       </li>
+                    )}
+
+
+
                       <li>
                         <hr className="dropdown-divider" />
                       </li>
@@ -159,7 +165,7 @@ export default function Navbar(): React.ReactElement {
               <li className="nav-item ms-lg-3 mx-3">
                 <NavLink
                   to="/cart"
-                  className="text-decoration-none  d-flex align-items-center"
+                  className="text-decoration-none  d-flex align-items-center justify-content-center "
                   style={{
                     color: "#79253D",
                     fontSize: "18px",
