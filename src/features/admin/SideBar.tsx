@@ -189,20 +189,20 @@ export default function AdminSidebar() {
                 "&:hover": {
                   backgroundColor: "#a33b528a",
                 },
-                justifyContent: open || isMobile ? "initial" : "center",
+                justifyContent: "initial",
               }}
             >
               <ListItemIcon
                 sx={{
                   minWidth: 0,
-                  mr: open || isMobile ? 3 : "auto",
+                  mr: 3,
                   justifyContent: "center",
                   color: "inherit",
                 }}
               >
                 {item.icon}
               </ListItemIcon>
-              <ListItemText primary={item.text} sx={{ opacity: open || isMobile ? 1 : 0 }} />
+              <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -219,20 +219,20 @@ export default function AdminSidebar() {
               "&:hover": {
                 backgroundColor: "#a33b52",
               },
-              justifyContent: open || isMobile ? "initial" : "center",
+              justifyContent: "initial",
             }}
           >
             <ListItemIcon
               sx={{
                 minWidth: 0,
-                mr: open || isMobile ? 3 : "auto",
+                mr: 3,
                 justifyContent: "center",
                 color: "inherit",
               }}
             >
               <LogoutIcon />
             </ListItemIcon>
-            <ListItemText primary="Logout" sx={{ opacity: open || isMobile ? 1 : 0 }} />
+            <ListItemText primary="Logout" />
           </ListItemButton>
         </ListItem>
       </List>
@@ -261,10 +261,10 @@ export default function AdminSidebar() {
         </Toolbar>
       </AppBar>
 
-      {/* Mobile Drawer - Temporary, slides from top */}
+      {/* Mobile Drawer - Temporary, slides from left */}
       {isMobile ? (
         <MuiDrawer
-          anchor="top"
+          anchor="left"
           open={open}
           onClose={handleDrawerClose}
           ModalProps={{
@@ -274,15 +274,14 @@ export default function AdminSidebar() {
             "& .MuiDrawer-paper": {
               backgroundColor: "#79253D",
               color: "white",
-              width: "100%",
-              maxHeight: "80vh",
-              overflowY: "auto",
+              width: drawerWidth,
             },
           }}
         >
           {drawerContent}
         </MuiDrawer>
       ) : (
+        /* Desktop Drawer - Permanent, can be collapsed */
         <Drawer variant="permanent" open={open}>
           {drawerContent}
         </Drawer>

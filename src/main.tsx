@@ -36,23 +36,7 @@ root.render(
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <AppRoutes />
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                duration: 1500,
-                style: {
-                  background: "#333",
-                  color: "black",
-                  borderRadius: "10px",
-                },
-                success: {
-                  style: { background: "#f4dbb2ff" },
-                },
-                error: {
-                  style: { background: "#de4a5bff" },
-                },
-              }}
-            />
+            
           </BrowserRouter>
         </QueryClientProvider>
       </Provider>

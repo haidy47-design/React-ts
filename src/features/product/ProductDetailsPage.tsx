@@ -125,8 +125,10 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
   };
 
   return (
-    <div className="container py-5 product-details-page">
+    <>
       <HelmetWrapper title={product.title} />
+        <div className="container py-5 product-details-page">
+    
 
       {/* --- Product Info --- */}
       <div className="row g-5 align-items-start justify-content-between pb-5">
@@ -287,5 +289,8 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
         </div>
       )}
     </div>
+
+    </>
+
   );
 }

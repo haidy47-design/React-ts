@@ -34,11 +34,13 @@ import Orders from "../features/admin/orders/Orders";
 import AdminContacts from "../features/admin/Contact/ContactUs";
 import ChatWidget from "../components/common/ChatWidget";
 import ContactMessage from "../features/auth/ContactMessage";
+import NotFound from "../components/common/NotFound";
 
 
 export default function AppRoutes(): React.ReactElement {
 
 
+const user = JSON.parse(localStorage.getItem("user") || "null");
 
   
   const location = useLocation();
@@ -68,7 +70,7 @@ export default function AppRoutes(): React.ReactElement {
         <Route path="/contact" element={<Contact />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/products/:id" element={<ProductDetailsPage />} />
-        <Route path="/cart" element={<CartPage />} />
+
         <Route path="/wishlist" element={<Wishlist />} />
 
       
@@ -77,6 +79,7 @@ export default function AppRoutes(): React.ReactElement {
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetails />} />
           <Route path="info" element={<ProfilePage />} />
+          <Route path="/cart" element={<CartPage />} />
         </Route>
 
     
@@ -88,10 +91,23 @@ export default function AppRoutes(): React.ReactElement {
         </Route>
 
       
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+      
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" replace /> : <LoginPage />}
+        />
+        <Route
+          path="/signup"
+          element={user ? <Navigate to="/" replace /> : <SignupPage />}
+        />
+        <Route
+          path="/forgot-password"
+          element={user ? <Navigate to="/" replace /> : <ForgotPasswordPage />}
+        />
+        <Route
+          path="/reset-password"
+          element={user ? <Navigate to="/" replace /> : <ResetPassword />}
+        />
 
         
         <Route
@@ -115,7 +131,7 @@ export default function AppRoutes(): React.ReactElement {
         </Route>
 
        
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
      {!hideLayout && (

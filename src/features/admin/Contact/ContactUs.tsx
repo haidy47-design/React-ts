@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FaReply } from "react-icons/fa";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import "../../../styles/auth.css";
 import {
   showErrorAlert,
   showSuccessAlert,
 } from "../../../components/common/CustomSwal";
 import { fetchContacts, sendReply } from "../api";
+import HelmetWrapper from "../../../components/common/HelmetWrapper";
 
 export interface Contact {
   id: string;
@@ -98,7 +99,8 @@ const AdminContacts: React.FC = () => {
   };
 
   return (
-    <div>
+    <>
+    <HelmetWrapper title="Messages" />
       {/* Filters */}
       <div className="p-4 bg-white rounded-4 shadow-sm mb-4">
         <div className="d-md-flex justify-content-between align-items-center flex-wrap mb-3">
@@ -146,7 +148,7 @@ const AdminContacts: React.FC = () => {
       </div>
 
       {/* Table */}
-      <div className="table-responsive mt-4 bg-white rounded-4 shadow-sm d-none d-lg-block">
+      <div className="table-responsive mt-4 bg-white rounded-4 shadow-sm ">
         <table className="table align-middle table-hover">
          
             <tr style={{ backgroundColor: "#79253D", color: "white" }}>
@@ -234,39 +236,56 @@ const AdminContacts: React.FC = () => {
         </div>
       )}
 
-      {/* Reply Modal */}
-      {selectedContact && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Reply to {selectedContact.firstName}</h2>
-            <p>
-              <b>Subject:</b> {selectedContact.subject}
-            </p>
-            <p className="message-box">{selectedContact.message}</p>
-            <textarea
-              placeholder="Type your reply..."
-              value={replyText}
-              onChange={(e) => setReplyText(e.target.value)}
-            />
-            <div className="modal-actions">
-              <button
-                className="cancel-btn"
-                onClick={() => setSelectedContact(null)}
-              >
-                Cancel
-              </button>
-              <button
-                className="send-btn"
-                onClick={handleSendReply}
-                disabled={replyMutation.isPending}
-              >
-                {replyMutation.isPending ? "Sending..." : "Send Reply"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+  
+    <Modal
+  show={!!selectedContact} onHide={() => setSelectedContact(null)} centered className="my-5">
+  <Modal.Header closeButton style={{backgroundColor:"#fad7a5ff"}}>
+    <Modal.Title className="main-color">
+      Reply to {selectedContact?.firstName} {selectedContact?.lastName}
+    </Modal.Title>
+  </Modal.Header>
+
+  <Modal.Body style={{backgroundColor:"#F4EFE8"}}>
+    <p>
+      <b>Subject:</b> {selectedContact?.subject}
+    </p>
+    <p
+      className="p-2 rounded bg-light"
+      style={{
+        border: "1px solid #ddd",
+        whiteSpace: "pre-wrap",
+      }}
+    >
+      {selectedContact?.message}
+    </p>
+
+    <Form.Group className="mt-3">
+      <Form.Label>Your Reply</Form.Label>
+      <Form.Control
+        as="textarea"
+        rows={4}
+        placeholder="Type your reply..."
+        value={replyText}
+        onChange={(e) => setReplyText(e.target.value)}
+      />
+    </Form.Group>
+  </Modal.Body>
+
+  <Modal.Footer style={{backgroundColor:"#F4EFE8"}}>
+    <Button variant="secondary" onClick={() => setSelectedContact(null)}>
+      Cancel
+    </Button>
+    <Button
+      variant="success"
+      onClick={handleSendReply}
+      disabled={replyMutation.isPending}
+    >
+      {replyMutation.isPending ? "Sending..." : "Send Reply"}
+    </Button>
+  </Modal.Footer>
+</Modal>
+
+    </>
   );
 };
 

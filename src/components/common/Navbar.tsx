@@ -37,12 +37,12 @@ export default function Navbar(): React.ReactElement {
     <div className=" py-3 small w-75 mx-auto ">
         
       </div>
-      {/* 🔹 Top Promo Bar */}
+  
       <div className="container bg-success text-white text-center fs-6 py-3 small fw-semibold ">
         Valentine’s Day Promotions <Link to="/products"className= "text-decoration-underline text-white">Shop Now</Link> <span className="ms-1">♡</span>
       </div>
 
-      {/* 🔹 Main Navbar */}
+
       <nav className="container navbar navbar-expand-lg sticky-top shadow-sm mx-auto " style={{backgroundColor:"#F4EFE8"}}>
         <div className="container ">
           {/* Brand */}
@@ -56,7 +56,7 @@ export default function Navbar(): React.ReactElement {
           </Link>
 
 
-          {/* Toggle Button */}
+
           <button
             className="navbar-toggler border-0"
             type="button"
@@ -69,9 +69,9 @@ export default function Navbar(): React.ReactElement {
             <span className="navbar-toggler-icon"></span>
           </button>
 
-          {/* Navbar Content */}
+
           <div className="collapse navbar-collapse" id="mainNav">
-            {/* Center Nav Links */}
+          
             <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <NavLink to="/" className="nav-link px-3 text-dark">
@@ -95,9 +95,9 @@ export default function Navbar(): React.ReactElement {
               </li>
             </ul>
 
-            {/* Right Side */}
+      
             <ul className="navbar-nav ms-lg-auto align-items-lg-center">
-              {/* User Section */}
+          
               <li className="nav-item dropdown">
                 {user && user.name ? (
                   <>

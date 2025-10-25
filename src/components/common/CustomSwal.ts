@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 import type { NavigateFunction } from "react-router-dom";
 
-/* ✅ Success Alert */
+
 export const showSuccessAlert = (message: string) => {
   Swal.fire({
     icon: "success",
@@ -14,7 +14,7 @@ export const showSuccessAlert = (message: string) => {
   });
 };
 
-/* ❌ Error Alert */
+
 export const showErrorAlert = (message: string) => {
   Swal.fire({
     icon: "error",
@@ -24,7 +24,7 @@ export const showErrorAlert = (message: string) => {
   });
 };
 
-/* ⚠️ Confirm Alert */
+
 export const showConfirmAlert = async (message: string) => {
   const result = await Swal.fire({
     title: "Are you sure?",
@@ -38,7 +38,7 @@ export const showConfirmAlert = async (message: string) => {
   return result.isConfirmed;
 };
 
-/* 🟢 Login Success */
+
 export const showLoginSuccess = (message = "You have successfully logged in!",name:string) => {
   Swal.fire({
     title: `Welcome Back ${name}`,
@@ -53,7 +53,7 @@ export const showLoginSuccess = (message = "You have successfully logged in!",na
   });
 };
 
-/* 🔴 Login Error */
+
 export const showLoginError = (message = "Invalid email or password.") => {
   Swal.fire({
     title: "Login Failed",
@@ -67,10 +67,10 @@ export const showLoginError = (message = "Invalid email or password.") => {
   });
 };
 
-/* ⚠️ Login Required */
+
 export const showLoginRequired = (message = "Please login first", navigate?: NavigateFunction) => {
   Swal.fire({
-    title: "Login Required ⚠️",
+    title: "Login Required ",
     text: message,
     icon: "warning",
     confirmButtonText: "Login Now",
@@ -105,18 +105,18 @@ export const showLogout = (navigate?: NavigateFunction, dispatch?: AppDispatch) 
     cancelButtonText: "Cancel",
   }).then((result) => {
     if (result.isConfirmed) {
-      // 🔥 نظّف التخزين المحلي
+
       localStorage.removeItem("user");
 
-      // 🔥 حدّث الـ Redux store لو متاح
+
       if (dispatch) {
         dispatch(logoutUser());
       }
 
-      // ✅ رسالة نجاح
+
       showSuccessAlert("You have logged out successfully!");
 
-      // ✅ رجّع المستخدم لصفحة الدخول
+      
       if (navigate) {
         setTimeout(() => {
           navigate("/login");

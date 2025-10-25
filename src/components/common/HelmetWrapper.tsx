@@ -12,6 +12,7 @@ export default function HelmetWrapper({ title, description }: HelmetWrapperProps
     <Helmet>
       {title && <title>{title}</title>}
       {description && <meta name="description" content={description} />}
+       <link rel="icon" type="image/png" href="/Images/wlogo.png" />
     </Helmet>
   );
 }

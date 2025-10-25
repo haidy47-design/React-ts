@@ -93,7 +93,6 @@ const ChatWidget: React.FC = () => {
     <>
       
 
-      {/* زر فتح الشات */}
       <button
         className="btn btn-success rounded-0 shadow position-fixed"
         style={{
@@ -108,7 +107,7 @@ const ChatWidget: React.FC = () => {
         {open ? <X size={22} /> : <ChatIcon />}
       </button>
 
-      {/* نافذة الشات */}
+      
       {open && (
         <div
           className="card shadow-lg position-fixed rounded-0"
@@ -119,7 +118,7 @@ const ChatWidget: React.FC = () => {
             zIndex: 1049,
           }}
         >
-          {/* الهيدر */}
+    
           <div
             className="card-header rounded-0 text-white d-flex justify-content-between align-items-center"
             style={{ backgroundColor: "#6b1e2f" }}
@@ -129,11 +128,9 @@ const ChatWidget: React.FC = () => {
           </div>
 
           <div className="card-body" style={{ fontSize: "14px" }}>
-            {/* شاشة تسجيل الاسم والإيميل */}
+    
             
             
-            
-                {/* منطقة الرسائل */}
                 <div
                   className="mb-3 p-2 border rounded"
                   style={{
@@ -170,7 +167,7 @@ const ChatWidget: React.FC = () => {
                   )}
                 </div>
 
-                {/* إدخال الرسالة */}
+          
                 <div className="input-group">
                   <input
                     type="text"

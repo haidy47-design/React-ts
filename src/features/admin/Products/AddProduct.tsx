@@ -7,6 +7,7 @@ import { createProduct } from "../api";
 import { showSuccessAlert, showErrorAlert } from "../../../components/common/CustomSwal";
 import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
+import HelmetWrapper from "../../../components/common/HelmetWrapper";
 
 
 const productFormSchema = z.object({
@@ -93,118 +94,121 @@ const AddProduct: React.FC = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h3 style={{ color: "#79253D" }}>Add Product</h3>
-
-      <Form onSubmit={handleSubmit(onSubmit)} className="bg-white p-4 rounded-4 shadow-sm mt-4">
-        <Form.Group className="mb-3">
-          <Form.Label>Title</Form.Label>
-          <Form.Control 
-            {...register("title")} 
-            isInvalid={!!errors.title}
-            placeholder="Enter product title"
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.title?.message}
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
-          <Form.Control 
-            as="textarea" 
-            rows={3}
-            {...register("description")} 
-            isInvalid={!!errors.description}
-            placeholder="Enter product description"
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.description?.message}
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Category</Form.Label>
-          <Form.Control 
-            {...register("category")} 
-            isInvalid={!!errors.category}
-            placeholder="e.g., Roses, Lilies"
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.category?.message}
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Image URL</Form.Label>
-          <Form.Control 
-            {...register("image")} 
-            isInvalid={!!errors.image}
-            placeholder="https://example.com/image.jpg"
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.image?.message}
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Price ($)</Form.Label>
-          <Form.Control 
-            type="number" 
-            step="0.01" 
-            min="0"
-            {...register("price", { valueAsNumber: true })} 
-            isInvalid={!!errors.price}
-            placeholder="0.00"
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.price?.message}
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Stock Quantity</Form.Label>
-          <Form.Control 
-            type="number" 
-            min="0"
-            {...register("stock", { valueAsNumber: true })} 
-            isInvalid={!!errors.stock}
-            placeholder="0"
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.stock?.message}
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Discount Percentage (%)</Form.Label>
-          <Form.Control
-            type="number"
-            step="0.01"
-            min="0"
-            max="100"
-            {...register("discountPercentage", { valueAsNumber: true })}
-            isInvalid={!!errors.discountPercentage}
-            placeholder="0"
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.discountPercentage?.message}
-          </Form.Control.Feedback>
-          <Form.Text className="text-muted">
-            Enter discount as a percentage (0-100)
-          </Form.Text>
-        </Form.Group>
-
-        <div className="d-flex justify-content-between mt-4">
-          <Button type="submit" variant="success" disabled={mutation.isPending}>
-            {mutation.isPending ? "Saving..." : "Add Product"}
-          </Button>
-          <Button variant="secondary" onClick={() => navigate("/admin/products")}>
-            Cancel
-          </Button>
-        </div>
-      </Form>
-    </div>
+    <>
+    <HelmetWrapper title="Add Product" />
+      <div className="container mt-4">
+        <h3 style={{ color: "#79253D" }}>Add Product</h3>
+      
+        <Form onSubmit={handleSubmit(onSubmit)} className="bg-white p-4 rounded-4 shadow-sm mt-4">
+          <Form.Group className="mb-3">
+            <Form.Label>Title</Form.Label>
+            <Form.Control 
+              {...register("title")} 
+              isInvalid={!!errors.title}
+              placeholder="Enter product title"
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.title?.message}
+            </Form.Control.Feedback>
+          </Form.Group>
+      
+          <Form.Group className="mb-3">
+            <Form.Label>Description</Form.Label>
+            <Form.Control 
+              as="textarea" 
+              rows={3}
+              {...register("description")} 
+              isInvalid={!!errors.description}
+              placeholder="Enter product description"
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.description?.message}
+            </Form.Control.Feedback>
+          </Form.Group>
+      
+          <Form.Group className="mb-3">
+            <Form.Label>Category</Form.Label>
+            <Form.Control 
+              {...register("category")} 
+              isInvalid={!!errors.category}
+              placeholder="e.g., Roses, Lilies"
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.category?.message}
+            </Form.Control.Feedback>
+          </Form.Group>
+      
+          <Form.Group className="mb-3">
+            <Form.Label>Image URL</Form.Label>
+            <Form.Control 
+              {...register("image")} 
+              isInvalid={!!errors.image}
+              placeholder="https://example.com/image.jpg"
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.image?.message}
+            </Form.Control.Feedback>
+          </Form.Group>
+      
+          <Form.Group className="mb-3">
+            <Form.Label>Price ($)</Form.Label>
+            <Form.Control 
+              type="number" 
+              step="0.01" 
+              min="0"
+              {...register("price", { valueAsNumber: true })} 
+              isInvalid={!!errors.price}
+              placeholder="0.00"
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.price?.message}
+            </Form.Control.Feedback>
+          </Form.Group>
+      
+          <Form.Group className="mb-3">
+            <Form.Label>Stock Quantity</Form.Label>
+            <Form.Control 
+              type="number" 
+              min="0"
+              {...register("stock", { valueAsNumber: true })} 
+              isInvalid={!!errors.stock}
+              placeholder="0"
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.stock?.message}
+            </Form.Control.Feedback>
+          </Form.Group>
+      
+          <Form.Group className="mb-3">
+            <Form.Label>Discount Percentage (%)</Form.Label>
+            <Form.Control
+              type="number"
+              step="0.01"
+              min="0"
+              max="100"
+              {...register("discountPercentage", { valueAsNumber: true })}
+              isInvalid={!!errors.discountPercentage}
+              placeholder="0"
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.discountPercentage?.message}
+            </Form.Control.Feedback>
+            <Form.Text className="text-muted">
+              Enter discount as a percentage (0-100)
+            </Form.Text>
+          </Form.Group>
+      
+          <div className="d-flex justify-content-between mt-4">
+            <Button type="submit" variant="success" disabled={mutation.isPending}>
+              {mutation.isPending ? "Saving..." : "Add Product"}
+            </Button>
+            <Button variant="secondary" onClick={() => navigate("/admin/products")}>
+              Cancel
+            </Button>
+          </div>
+        </Form>
+      </div>
+    </>
   );
 };
 
