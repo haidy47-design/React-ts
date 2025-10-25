@@ -70,7 +70,7 @@ const EditProduct: React.FC = () => {
   const watchPrice = watch("price", 0);
   const watchDiscount = watch("discountPercentage", 0);
 
-  // ✅ السعر بعد الخصم كـ number
+
   const priceAfterDiscount = Number(
     (watchPrice - (watchPrice * watchDiscount) / 100).toFixed(2)
   );

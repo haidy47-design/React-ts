@@ -56,15 +56,10 @@ const EditUserFormSchema = z.object({
    .transform(e => (e === "" ? undefined : e))
    .pipe(z.string().email("Invalid email format").optional()),
    
-  password: z.string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/\d/, "Password must contain at least one number")
-    .optional()
-    .or(z.literal("")),
+  password: z.string().regex(/^[A-Z][a-z0-9]{3,8}$/, "Must start with uppercase and 4-9 chars"),
+  
     
-  rePassword: z.string().optional().or(z.literal("")),
+  rePassword: z.string().or(z.literal("")),
   
   role: z.enum(["user", "admin"]),
   
@@ -76,7 +71,7 @@ const EditUserFormSchema = z.object({
      z.union([
        z.literal(undefined),
        z.string()
-        .refine(val => !isNaN(Number(val)), { message: "Age must be a valid number" }) // إضافة فحص NaN
+        .refine(val => !isNaN(Number(val)), { message: "Age must be a valid number" }) 
         .transform((val) => Number(val))
         .pipe(z.number().min(10, "Age must be at least 10"))
      ])
@@ -98,11 +93,10 @@ const EditUserFormSchema = z.object({
 const NewUserFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email format"),
-  password: z.string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/\d/, "Password must contain at least one number"),
+  password:  z
+      .string()
+      .regex(/^[A-Z][a-z0-9]{3,8}$/, "Must start with uppercase and 3-8 chars"),
+    
   rePassword: z.string(),
   role: z.enum(["user", "admin"]),
   age: z.string()
@@ -744,11 +738,11 @@ const handleSaveChanges = async () => {
         )}
       
       
-        <Modal show={showEditModal} onHide={() => setShowEditModal(false)} backdrop="static" keyboard={false} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Edit User</Modal.Title>
+        <Modal show={showEditModal} onHide={() => setShowEditModal(false)} backdrop="static" keyboard={false} centered className="my-5">
+          <Modal.Header closeButton style={{ backgroundColor: "#fad7a5ff" }}>
+            <Modal.Title className="main-color">Edit User</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body style={{ backgroundColor: "#F4EFE8" }}>
             <Form>
               <Form.Group className="mb-3">
                 <Form.Label>Name</Form.Label>
@@ -826,22 +820,22 @@ const handleSaveChanges = async () => {
               </Form.Group>
             </Form>
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer style={{ backgroundColor: "#F4EFE8" }}>
             <Button variant="secondary" onClick={() => setShowEditModal(false)}>
               Close
             </Button>
-            <Button variant="primary" onClick={()=>handleSaveChanges()}>
+            <Button variant="success" onClick={()=>handleSaveChanges()}>
               Save Changes
             </Button>
           </Modal.Footer>
         </Modal>
       
         
-        <Modal show={showAddModal} onHide={() => setShowAddModal(false)} backdrop="static" keyboard={false} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Add User</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+        <Modal show={showAddModal} onHide={() => setShowAddModal(false)} backdrop="static" keyboard={false} centered className="my-5">
+          <Modal.Header closeButton style={{ backgroundColor: "#fad7a5ff" }}>
+            <Modal.Title className="main-color">Add User</Modal.Title>
+          </Modal.Header >
+          <Modal.Body style={{ backgroundColor: "#F4EFE8" }}>
             <Form>
               <Form.Group className="mb-3">
                 <Form.Label>Name</Form.Label>
@@ -926,22 +920,22 @@ const handleSaveChanges = async () => {
               </Form.Group>
             </Form>
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer style={{ backgroundColor: "#F4EFE8" }}>
             <Button variant="secondary" onClick={() => setShowAddModal(false)}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleAddUser}>
+            <Button variant="success" onClick={handleAddUser}>
               Add User
             </Button>
           </Modal.Footer>
         </Modal>
       
        
-        <Modal show={showOrdersModal} onHide={() => setShowOrdersModal(false)} backdrop="static" keyboard={false} centered size="lg">
-          <Modal.Header closeButton>
-            <Modal.Title>Orders</Modal.Title>
+        <Modal show={showOrdersModal} onHide={() => setShowOrdersModal(false)} backdrop="static" keyboard={false} centered size="lg" className="my-5">
+          <Modal.Header closeButton style={{ backgroundColor: "#fad7a5ff" }}>
+            <Modal.Title className="main-color">Orders</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body style={{ backgroundColor: "#F4EFE8" }}>
             <div className="mb-4 p-3 rounded" style={{ backgroundColor: "#f8f9fa", border: "1px solid #ddd" }}>
               <h5 className="fw-bold mb-3">Customer Information</h5>
               {selectedOrders.length > 0 && (
@@ -1010,7 +1004,7 @@ const handleSaveChanges = async () => {
               </Table>
             )}
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer style={{ backgroundColor: "#F4EFE8" }}>
             <Button variant="secondary" onClick={() => setShowOrdersModal(false)}>
               Close
             </Button>

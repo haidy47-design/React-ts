@@ -13,7 +13,7 @@ import HelmetWrapper from "../../components/common/HelmetWrapper";
 
 
 
-// animated count-up hook 
+
 function useCountUp(target: number, duration = 800) {
   const [value, setValue] = useState(0);
 
@@ -39,19 +39,19 @@ function useCountUp(target: number, duration = 800) {
   return value;
 }
 
-// constants 
+ 
 const COLORS = ["var(--rose-primary)", "var(--maroon-secondary)", "var(--rose-light)", "var(--maroon-light)"];
 
-// Dashboard Component 
+
 const Dashboard: React.FC = () => {
-  // Filters
+
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
 
-  // react-query fetches 
+
   const usersQuery = useQuery<AdminUser[]>({ queryKey: ["users"], queryFn: fetchUsers, staleTime: 1000 * 60 * 2 });
   const productsQuery = useQuery<AdminProduct[]>({ queryKey: ["products"], queryFn: fetchProducts, staleTime: 1000 * 60 * 2 });
   const ordersQuery = useQuery<IOrder[]>({ queryKey: ["orders"], queryFn: fetchOrders, staleTime: 1000 * 60 * 1 });
@@ -59,12 +59,12 @@ const Dashboard: React.FC = () => {
   const isLoading = usersQuery.isLoading || productsQuery.isLoading || ordersQuery.isLoading;
   const hasError = usersQuery.isError || productsQuery.isError || ordersQuery.isError;
 
-  // data defaults
+  
   const users = usersQuery.data ?? [];
   const products = productsQuery.data ?? [];
   const orders = ordersQuery.data ?? [];
 
-  // Check if any filters are active
+
   const hasActiveFilters = useMemo(() => {
     return categoryFilter !== "all" || 
            statusFilter !== "all" || 
@@ -72,29 +72,29 @@ const Dashboard: React.FC = () => {
            dateTo !== "";
   }, [categoryFilter, statusFilter, dateFrom, dateTo]);
 
-  // Enhanced filtering logic
+
   const filteredOrders = useMemo(() => {
     return orders.filter((o: IOrder) => {
-      // date handling
+
       const created = o.createdAt ? new Date(o.createdAt) : new Date();
       
-      // status filter
+  
       if (statusFilter !== "all" && o.status.toLowerCase() !== statusFilter.toLowerCase()) return false;
 
       
-      // dateFrom
+
       if (dateFrom) {
         const from = new Date(dateFrom + "T00:00:00");
         if (created < from) return false;
       }
       
-      // dateTo
+    
       if (dateTo) {
         const to = new Date(dateTo + "T23:59:59");
         if (created > to) return false;
       }
       
-      // category filter - check if any item in order matches category
+  
       if (categoryFilter && categoryFilter.toLowerCase() !== "all") {
   const hasCategory = (o.items ?? []).some((it) => {
     const cat = (it.category ?? "").toLowerCase().trim();
@@ -117,7 +117,7 @@ const Dashboard: React.FC = () => {
     });
   }, [orders, products, statusFilter, dateFrom, dateTo, categoryFilter]);
 
-  // Handle loading state for filtering
+
   useEffect(() => {
     if (hasActiveFilters) {
       setIsFiltering(true);
@@ -130,13 +130,12 @@ const Dashboard: React.FC = () => {
     }
   }, [filteredOrders, hasActiveFilters]);
 
-  // Derived metrics 
+ 
   const totalUsers = users.length;
   const totalProducts = products.length;
   const totalOrders = filteredOrders.length;
 
-  // total revenue from filtered orders
-// total revenue from filtered orders (category-aware, no discount subtraction)
+
 const totalRevenue = useMemo(() => {
   let total = 0;
 
@@ -148,7 +147,7 @@ const totalRevenue = useMemo(() => {
           (it.title ?? "").toLowerCase().trim()
       );
 
-      // ✅ فلترة حسب الكاتيجوري فقط
+  
       if (
         categoryFilter !== "all" &&
         product &&
@@ -158,7 +157,7 @@ const totalRevenue = useMemo(() => {
         return;
       }
 
-      // ❌ منستخدمش الخصم خالص
+
       const totalPrice = Number(it.discount ?? 0) * Number(it.quantity ?? 1);
       total += totalPrice;
     });
@@ -170,13 +169,13 @@ const totalRevenue = useMemo(() => {
 
 
 
-  // animated counts
+
   const usersCount = useCountUp(totalUsers, 900);
   const productsCount = useCountUp(totalProducts, 900);
   const ordersCount = useCountUp(totalOrders, 900);
   const revenueCount = useCountUp(Math.round(totalRevenue), 900);
 
-  // Orders per day (LineChart)
+
   const ordersByDay = useMemo(() => {
     const map = new Map<string, number>();
     filteredOrders.forEach((o: IOrder) => {
@@ -188,7 +187,7 @@ const totalRevenue = useMemo(() => {
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [filteredOrders]);
 
-  // Revenue by Product (BarChart)
+
 
 const revenueByProduct = useMemo(() => {
   const map = new Map<string, number>();
@@ -203,14 +202,14 @@ const revenueByProduct = useMemo(() => {
           (it.title ?? "").toLowerCase().trim()
       );
 
-      // ✅ لو الفلتر مش "all" اتأكد ان المنتج من نفس الكاتيجوري
+  
       if (
         categoryFilter !== "all" &&
         product &&
         product.category?.toLowerCase().trim() !==
           categoryFilter.toLowerCase().trim()
       ) {
-        return; // skip this product
+        return;
       }
 
       const basePrice = product ? Number(product.price) : 0;
@@ -229,7 +228,7 @@ const revenueByProduct = useMemo(() => {
 }, [filteredOrders, products, categoryFilter]);
 
 
-  // Status distribution (Pie)
+
   const statusDistribution = useMemo(() => {
     const map = new Map<string, number>();
     filteredOrders.forEach((o: IOrder) => {
@@ -241,20 +240,20 @@ const revenueByProduct = useMemo(() => {
 
 
 const COLORS = [
-  "#5c1a1f", // dark maroon
-  "#722f37", // rose-primary
-  "#8b3a3a", // maroon-secondary
-  "#a03a3a", // deep maroon
-  "#9f4f4f", // brick red
-  // "#f4efe8", // rose-light
-  "#b66a6a", // muted rose 
-  "#d9b5b5", // soft pink
-  "#c48b8b", // warm pink 
-  "#e6caca", // very soft rose
+  "#5c1a1f", 
+  "#722f37", 
+  "#8b3a3a", 
+  "#a03a3a", 
+  "#9f4f4f", 
+
+  "#b66a6a", 
+  "#d9b5b5", 
+  "#c48b8b", 
+  "#e6caca", 
     
 ];
 
-  // available categories for filter
+
   const categories = useMemo(() => {
     const set = new Set<string>();
     products.forEach((p) => {
@@ -263,7 +262,7 @@ const COLORS = [
     return Array.from(set);
   }, [products]);
 
-  // available product types for filter
+  
   const productTypes = useMemo(() => {
     const set = new Set<string>();
     products.forEach((p) => {
@@ -272,7 +271,7 @@ const COLORS = [
     return Array.from(set);
   }, [products]);
 
-  // Clear all filters function
+
   const clearAllFilters = useCallback(() => {
     setCategoryFilter("all");
     setStatusFilter("all");
@@ -280,7 +279,7 @@ const COLORS = [
     setDateTo("");
   }, []);
 
-  // Get active filters count
+  
   const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (categoryFilter !== "all") count++;
@@ -290,7 +289,7 @@ const COLORS = [
     return count;
   }, [categoryFilter, statusFilter, dateFrom, dateTo]);
 
-  // UI 
+
   if (hasError) {
     return (
       <div className="container py-4">

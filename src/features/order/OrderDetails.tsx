@@ -199,7 +199,7 @@ const getStatusBadgeColor = (status: string) => {
         </div>
       </div>
 
-      {/* Items Section */}
+      
       
       <div className="row g-4 mt-2 ">
         <h4 className="mb-1 text-center text-md-start text-lg-start" style={{ color: "#79253D" }}>Order Items</h4>

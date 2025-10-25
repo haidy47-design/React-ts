@@ -261,7 +261,7 @@ export default function AdminSidebar() {
         </Toolbar>
       </AppBar>
 
-      {/* Mobile Drawer - Temporary, slides from left */}
+    
       {isMobile ? (
         <MuiDrawer
           anchor="left"
@@ -281,7 +281,7 @@ export default function AdminSidebar() {
           {drawerContent}
         </MuiDrawer>
       ) : (
-        /* Desktop Drawer - Permanent, can be collapsed */
+    
         <Drawer variant="permanent" open={open}>
           {drawerContent}
         </Drawer>

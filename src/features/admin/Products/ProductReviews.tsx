@@ -16,11 +16,11 @@ const AdminProductReviews: React.FC = () => {
     },
   });
 
-  // ✅ Pagination State
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
-  // ✅ Pagination Logic
+  
   const paginatedReviews = useMemo(() => {
     if (!reviews) return [];
     const start = (currentPage - 1) * itemsPerPage;
@@ -69,13 +69,13 @@ const AdminProductReviews: React.FC = () => {
           </Link>
         </div>
     
-        {/* --- Review Cards Grid --- */}
+      
         <div className="row g-3 g-sm-4 my-md-4">
           {paginatedReviews.map((rev) => (
             <div key={rev.id} className="col-12 col-sm-6 col-md-4 col-lg-3">
               <div className="card shadow-sm border-0 h-100 review-card mt-2">
                 <div className="card-body p-2 p-sm-3">
-                  {/* --- User Info --- */}
+              
                   <div className="d-flex align-items-center mb-2">
                     <i className="fa-solid fa-user-circle fs-4 fs-sm-3 me-2 main-color"></i>
                     <div className="flex-grow-1 text-truncate">
@@ -101,7 +101,7 @@ const AdminProductReviews: React.FC = () => {
                     ))}
                   </div>
     
-                  {/* --- Review Text --- */}
+        
                   <h6 className="fw-semibold small mb-1">{rev.reviewTitle}</h6>
                   <p className="main-color mb-0" style={{ fontSize: '0.813rem' }}>
                     {rev.overall}
@@ -112,7 +112,7 @@ const AdminProductReviews: React.FC = () => {
           ))}
         </div>
     
-        {/* --- Pagination Section --- */}
+      
         {reviews.length > itemsPerPage && (
           <div className="pagination-bar d-flex justify-content-center align-items-center mt-4 gap-2 flex-wrap">
             <button
