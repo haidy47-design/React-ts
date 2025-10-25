@@ -3,9 +3,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Spinner, Form, Button, Card, Row, Col, Container } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import "./AdProduct.css";
-import { deleteProduct, fetchProducts } from "../api";
+import { applyDiscountForAllProducts, deleteProduct, fetchProducts } from "../api";
 import { Product } from "src/components/product/ProductCard";
-import { showConfirmAlert, showSuccessAlert } from "../../../components/common/CustomSwal";
+import { showConfirmAlert, showDiscountPrompt, showErrorAlert, showSuccessAlert } from "../../../components/common/CustomSwal";
 
 const ProductList: React.FC = () => {
   const navigate = useNavigate();
@@ -19,6 +19,20 @@ const ProductList: React.FC = () => {
     },
   });
 
+const applyDiscountMutation = useMutation({
+  mutationFn: (discount: number) => applyDiscountForAllProducts(discount),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["products"] });
+    showSuccessAlert("Discount applied to all products successfully");
+  },
+  onError: (error) => {
+    console.error("Discount API Error:", error);
+    showErrorAlert("Failed to apply discount!");
+  },
+});
+;
+
+
   const { data, isLoading, isError } = useQuery<Product[]>({
     queryKey: ["products"],
     queryFn: fetchProducts,
@@ -28,7 +42,7 @@ const ProductList: React.FC = () => {
   const [category, setCategory] = useState("");
   const [maxPrice, setMaxPrice] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-    const [statusFilter, setStatusFilter] = useState("All"); // ✅ فلتر الحالة الجديد
+    const [statusFilter, setStatusFilter] = useState("All"); // ? ???? ?????? ??????
 
   const itemsPerPage = 6;
 
@@ -63,7 +77,7 @@ const ProductList: React.FC = () => {
 
       const matchesPrice = !maxPrice || Number(p.price) <= Number(maxPrice);
 
-      // ✅ تحديد الحالة بناءً على المخزون
+      // ? ????? ?????? ????? ??? ???????
       let stockStatus = "Active";
       if (p.stock === 0) stockStatus = "Out of Stock";
       else if (p.stock <= 3) stockStatus = "Low Stock";
@@ -100,6 +114,23 @@ const ProductList: React.FC = () => {
     }
   };
 
+
+
+  
+  const handleGlobalDiscount = async () => {
+  const discount = await showDiscountPrompt(); 
+  if (discount === null) return;
+
+  const confirmed = await showConfirmAlert(
+    `Apply ${discount}% discount to all products?`
+  );
+  if (!confirmed) return;
+
+  await applyDiscountMutation.mutateAsync(discount);
+};
+
+
+
   if (isLoading)
     return (
       <div className="d-flex justify-content-center align-items-center p-5">
@@ -110,22 +141,31 @@ const ProductList: React.FC = () => {
   if (isError)
     return (
       <div className="text-center text-danger mt-4">
-        Failed to load products 😔
+        Failed to load products ??
       </div>
     );
 
   return (
     <div>
-      {/* 🔹 Filters Section */}
+      {/* ?? Filters Section */}
       <div className="p-4 bg-white rounded-4 shadow-sm mb-4">
         <div className="d-md-flex justify-content-between d-flex-column ">
           <h4 className="fw-bold mb-4" style={{ color: "#79253D" }}>
             Product Management
           </h4>
 
-          <button className="btn btn-success col-12 col-md-2 col-lg-1 mb-4 mb-md-2 p-md-0" onClick={() => navigate("/admin/products/add")}>
-            Add Product
-          </button>
+          <div className="btn-group col-12 col-md-auto mb-4 mb-md-0 d-flex flex-wrap">
+            <button className="btn btn-success fs-5 mb-4 mb-md-2 " onClick={() => navigate("/admin/products/add")}>
+              Add Product
+            </button>
+            
+             <button
+               className="btn btn-warning text-white fs-5  mb-4 mb-md-2 "
+               onClick={handleGlobalDiscount}
+             >
+               Add Discount for All
+             </button>
+          </div>
         </div>
 
         <div className="d-flex flex-wrap align-items-center gap-3 ">
@@ -275,7 +315,7 @@ const ProductList: React.FC = () => {
         )}
       </div>
 
-      {/* 🔹 Card View - Mobile & Tablet (hidden on desktop) */}
+      {/* ?? Card View - Mobile & Tablet (hidden on desktop) */}
       <div className="d-lg-none mt-4">
         <Row className="g-3">
           {currentProducts.map((product) => (
@@ -362,7 +402,7 @@ const ProductList: React.FC = () => {
         )}
       </div>
 
-      {/* 🔹 Pagination Section */}
+      {/* ?? Pagination Section */}
       {filteredProducts.length > itemsPerPage && (
         <div className="pagination-bar d-flex justify-content-center align-items-center mt-4 gap-2 flex-wrap">
           <button
@@ -401,7 +441,11 @@ const ProductList: React.FC = () => {
   );
 };
 
+
+
 export default ProductList;
+
+
 
 
 

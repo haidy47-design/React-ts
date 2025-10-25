@@ -46,7 +46,7 @@ export default function CartPage(): React.ReactElement {
 
   if (items.length === 0)
     return (
-      <div className="cart-empty"><span className="display-1">🛒</span> Your cart is empty.</div>
+      <div className="cart-empty"><img src="/Images/trolley.png" width={100} height={100} alt="" className="mx-4 mx-md-4" /> <span className="display-6">Your cart is empty.</span> </div>
     );
 
   return (
