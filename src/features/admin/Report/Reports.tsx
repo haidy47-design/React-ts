@@ -456,7 +456,7 @@ const AdminReports: React.FC = () => {
  
 
   return (
-    <div className='bg-white'>
+    <div >
       <div >
         
         <div className="mb-4">
@@ -612,7 +612,7 @@ const AdminReports: React.FC = () => {
                 
                   <tr style={{ backgroundColor: "#79253D", color: "white" }}>
                     <th className="p-3">Month/Year</th>
-                    <th className="p-3">Total Income (E£)</th>
+                    <th className="p-3">Total Income</th>
                   </tr>
                 
                 <tbody>
@@ -649,7 +649,7 @@ const AdminReports: React.FC = () => {
                   <tr style={{ backgroundColor: "#79253D", color: "white" }}>
                     <th className="p-3">Product Name</th>
                     <th className="p-3 text-center" >Total Quantity Sold</th>
-                    <th className="p-3">Total Revenue (E£)</th>
+                    <th className="p-3">Total Revenue</th>
                   </tr>
               
                 <tbody>
@@ -692,7 +692,7 @@ const AdminReports: React.FC = () => {
                   <tr style={{ backgroundColor: "#79253D", color: "white" }}>
                     <th className="p-3">Product Category</th>
                     <th className="text-center p-3">Total Quantity Sold</th>
-                    <th className="p-3">Total Revenue (E£)</th>
+                    <th className="p-3">Total Revenue </th>
                   </tr>
                 
                 <tbody>
