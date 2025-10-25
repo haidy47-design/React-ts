@@ -154,13 +154,13 @@ const applyDiscountMutation = useMutation({
             Product Management
           </h4>
 
-          <div className="btn-group col-12 col-md-auto mb-4 mb-md-0 d-flex flex-wrap">
-            <button className="btn btn-success fs-5 mb-4 mb-md-2 " onClick={() => navigate("/admin/products/add")}>
+          <div className="col-12 col-md-2 mb-4 mb-md-0 mt-5 mt-md-0 d-flex flex-wrap justify-content-end">
+            <button className="btn btn-success mb-2 mb-md-2  w-100 " onClick={() => navigate("/admin/products/add")}>
               Add Product
             </button>
             
              <button
-               className="btn btn-warning text-white fs-5  mb-4 mb-md-2 "
+               className="btn btn-warning text-white w-100  mb-4 mb-md-2 "
                onClick={handleGlobalDiscount}
              >
                Add Discount for All
@@ -230,7 +230,7 @@ const applyDiscountMutation = useMutation({
             />
           </div>
 
-          <Button variant="outline-secondary" className="ms-auto col-12 col-md-2 col-lg-1 px-0" onClick={handleReset}>
+          <Button variant="outline-secondary" className="ms-auto col-12 col-md-2 col-lg-2 px-0" onClick={handleReset}>
             Reset Filters
           </Button>
         </div>

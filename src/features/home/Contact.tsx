@@ -9,41 +9,32 @@ import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 
-/**
- * Expected localStorage shape:
- * localStorage.setItem("user", JSON.stringify({
- *   user: {
- *     id: "3",
- *     name: "Abdallah",
- *     email: "abdodonia45@gmail.com",
- *     ...
- *   }
- * }));
- */
+
 
 export default function Contact() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  // Read user from localStorage safely
+
   let userEmail: string | null = null;
+  let userID: string | null = null;
   try {
     const raw = localStorage.getItem("user");
     if (raw) {
       const parsed = JSON.parse(raw);
-      // If the object is like { user: { email: "..." } }
-      if (parsed?.user?.email) userEmail = String(parsed.user.email);
-      // or if it's directly { email: "..." }
-      else if (parsed?.email) userEmail = String(parsed.email);
+      if (parsed?.user) {
+        userEmail = parsed.user.email ?? null;
+        userID = parsed.user.id ?? null;
+      } else {
+        userEmail = parsed?.email ?? null;
+        userID = parsed?.id ?? null;
+      }
     }
   } catch (err) {
     console.warn("Failed to parse user from localStorage", err);
   }
 
-  // Fallback: if no user email found, you can set to null or empty string.
-  // Using null will make the refine check fail and show validation message.
-  // If you prefer to allow anonymous, change logic accordingly.
-  // Create schema factory so it can capture current userEmail
+  // ✅ Schema validation with zod
   const createSchema = (expectedEmail: string | null) =>
     z
       .object({
@@ -81,12 +72,19 @@ export default function Contact() {
     },
   });
 
+  // ✅ handle submit
   const handleFormSubmit = async (values: ContactForm) => {
     if (loading) return;
     setLoading(true);
 
     try {
-      await axios.post("https://68f17bc0b36f9750dee96cbb.mockapi.io/contact",{ ...values,replay: "unRead"});
+      // 👇 Send message + userID + replay flag
+      await axios.post("https://68f17bc0b36f9750dee96cbb.mockapi.io/contact", {
+        ...values,
+        replay: "unRead",
+        userId: userID ?? "unknown", // fallback if id missing
+      });
+
       showSuccessAlert("Thank you, your message has been sent.");
       reset();
     } catch (error) {
@@ -99,7 +97,7 @@ export default function Contact() {
   return (
     <section className="contact-section py-5">
       <div className="container">
-        
+
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -158,7 +156,7 @@ export default function Contact() {
 
               <div className="row">
                 <div className="col-12 col-md-6 mb-3">
-                  {/* make email readOnly so user cannot change it */}
+
                   <input
                     type="email"
                     readOnly
@@ -171,7 +169,7 @@ export default function Contact() {
                   {errors.email && (
                     <div className="invalid-feedback">{errors.email.message}</div>
                   )}
-                  {/* optional: show note if userEmail not found */}
+
                   {!userEmail && (
                     <small className="text-warning">
                       No logged-in email found. Please log in first.
@@ -224,7 +222,7 @@ export default function Contact() {
               </div>
             </div>
           </motion.div>
-
+          
 
           <motion.div
             className="col-12 col-md-6 p-0"
@@ -233,7 +231,12 @@ export default function Contact() {
             transition={{ duration: 0.7 }}
             viewport={{ once: true }}
           >
-            <img src="/Images/contactUs.jpg" alt="Contact illustration" className="rounded-4" style={{width:"100%" , height:"600px" , filter:"brightness(0.9)"}} />
+            <img
+              src="/Images/contactUs.jpg"
+              alt="Contact illustration"
+              className="rounded-4"
+              style={{ width: "100%", height: "600px", filter: "brightness(0.9)" }}
+            />
           </motion.div>
         </div>
       </div>
