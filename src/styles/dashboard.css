@@ -23,7 +23,7 @@ h3{
 
 
 
-/* Summary Cards */
+
 .dashboard-card {
   background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,234,234,0.98));
   border-radius: 12px;
@@ -39,7 +39,7 @@ h3{
 .dashboard-card .small { color: #6c757d; }
 .count-up { color: var(--maroon-primary); }
 
-/* Filters card */
+
 .filter-card {
   border-radius: 10px;
   background: rgba(255,255,255,0.98);
@@ -47,7 +47,7 @@ h3{
 }
 
 
-/* Filter section */
+
 .filters-header {
   display: flex;
   align-items: center;
@@ -89,7 +89,7 @@ h3{
   border-color: var(--rose-primary);
 }
 
-/* Responsive tweaks */
+
 @media (max-width: 576px) {
   .filters-header {
     flex-direction: column;
@@ -103,7 +103,7 @@ h3{
   }
 }
 
-/* Chart cards */
+
 .chart-card {
   padding: 1rem;
   border-radius: 12px;
@@ -116,11 +116,11 @@ h3{
   margin-bottom: 0.5rem;
 }
 
-/* Top products */
+
 .top-products li { border-bottom: 1px dashed #f1f1f1; }
 .top-products li:last-child { border-bottom: none; }
 
-/* Recharts tooltip */
+
 .recharts-tooltip-wrapper { z-index: 50; }
 .custom-tooltip {
   background: rgba(255,255,255,0.95);
@@ -139,7 +139,7 @@ h3{
 }
 
 
-/* Responsive tweaks */
+
 @media (max-width: 768px) {
   .chart-card { padding: .65rem; }
   .dashboard-card { padding: .6rem; }
@@ -154,7 +154,7 @@ h3{
 
 .card .card-body { padding: 0.9rem; }
 
-/* Enhanced filter styles */
+
 .filter-card .form-control:focus, .filter-card .form-select:focus {
   outline: 3px solid rgba(114,47,55,0.08);
   box-shadow: 0 0 0 0.2rem rgba(114,47,55,0.15);
@@ -165,13 +165,13 @@ h3{
   border-color: var(--rose-primary) !important;
 }
 
-/* Chart loading states */
+
 .chart-card .spinner-border {
   width: 1rem;
   height: 1rem;
 }
 
-/* Enhanced empty states */
+
 .chart-card .fa-3x {
   color: var(--rose-light);
 }
@@ -180,7 +180,7 @@ h3{
   color: var(--rose-light);
 }
 
-/* Top products enhancements */
+
 .top-products li:last-child {
   border-bottom: none !important;
 }
@@ -189,12 +189,12 @@ h3{
   font-weight: 600;
 }
 
-/* Smooth transitions for charts */
+
 .recharts-wrapper {
   transition: opacity 0.3s ease;
 }
 
-/* Mobile responsiveness improvements */
+
 @media (max-width: 576px) {
   .filter-card .d-flex.gap-2 {
     flex-direction: column;
@@ -219,17 +219,17 @@ h3{
   }
 }
 
-/* Animation for count-up */
+
 .count-up {
   transition: all 0.3s ease;
 }
 
-/* Enhanced tooltip styles */
+
 .recharts-tooltip-wrapper {
   z-index: 1000;
 }
 
-/* Chart card hover effects */
+
 .chart-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }

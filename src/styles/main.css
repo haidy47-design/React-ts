@@ -53,14 +53,14 @@ body {
 }
 
 
-/* One-line clamp */
+
 .text-clamp-1 {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-/* Two-line clamp */
+
 .text-clamp-2 {
   overflow: hidden;
   display: -webkit-box;
@@ -68,7 +68,7 @@ body {
   -webkit-line-clamp: 2;
 }
 
-/* Three-line clamp */
+
 .text-clamp-3 {
   overflow: hidden;
   display: -webkit-box;

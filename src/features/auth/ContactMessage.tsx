@@ -23,11 +23,11 @@ export default function ContactMessage() {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
 
-  // 🔹 Modal state
+  
   const [showModal, setShowModal] = useState(false);
   const [selectedMsg, setSelectedMsg] = useState<Message | null>(null);
 
-  // 🔹 Pagination
+ 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
@@ -62,7 +62,7 @@ export default function ContactMessage() {
     fetchMessages();
   }, [userId]);
 
-  // 🔹 Handle modal open/close
+ 
   const handleShowModal = (msg: Message) => {
     setSelectedMsg(msg);
     setShowModal(true);
@@ -72,7 +72,7 @@ export default function ContactMessage() {
     setShowModal(false);
   };
 
-  // 🔹 Pagination calculations
+  
   const totalPages = Math.ceil(messages.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentMessages = messages.slice(startIndex, startIndex + itemsPerPage);
@@ -194,7 +194,7 @@ export default function ContactMessage() {
         )}
       </div>
 
-      {/* 🔹 Reply Modal */}
+      
       <Modal show={showModal} onHide={handleCloseModal}  className="my-5">
         <Modal.Header closeButton style={{backgroundColor:"#fad7a5ff"}}>
           <Modal.Title className="main-color fw-semibold">Admin Replay</Modal.Title>

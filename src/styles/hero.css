@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@400;500&display=swap');
 
 
-/* Hero Section Styles*/
+
 .hero-section {
   min-height: 100vh;
   background-size: cover;
@@ -28,15 +28,15 @@
 }
 
 
-/* === Overlay for contrast === */
+
 .hero-section {
-  min-height: 100vh; /* full viewport */
+  min-height: 100vh;
   overflow: hidden;
   position: relative;
 }
 
 .hero-overlay {
-  background-color: rgba(0, 0, 0, 0.45); /* dark overlay */
+  background-color: rgba(0, 0, 0, 0.45); 
   z-index: 1;
 }
 
@@ -85,5 +85,5 @@
 
 .carousel-control-prev,
 .carousel-control-next {
-  z-index: 3 !important; /* خليها فوق كل الطبقات */
+  z-index: 3 !important; 
 }

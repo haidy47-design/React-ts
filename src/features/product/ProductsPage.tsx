@@ -41,14 +41,14 @@ export default function ProductsPage(): React.ReactElement {
 
   const products = useMemo(() => data ?? [], [data]);
 
-  // أقل وأعلى خصم
+  
   const [minDiscount, maxDiscount] = useMemo(() => {
     if (!products.length) return [0, 0];
     const discounts = products.map((p) => p.discount || 0);
     return [Math.min(...discounts), Math.max(...discounts)];
   }, [products]);
 
-  // ضبط السلايدر
+  
   useEffect(() => {
     if (products.length) {
       const discounts = products.map((p) => p.discount || 0);
@@ -65,22 +65,22 @@ export default function ProductsPage(): React.ReactElement {
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
-    // البحث
+    
     if (searchTerm.trim() !== "") {
       result = result.filter((p) =>
         p.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // الفئة
+    
     if (selectedCategory !== "All") {
       result = result.filter((p) => p.category === selectedCategory);
     }
 
-    // الفلترة بالخصم
+    
     result = result.filter((p) => (p.discount || 0) <= discountLimit);
 
-    // الفرز
+    
     if (sortOption === "price-asc") {
       result.sort((a, b) => a.price - b.price);
     } else if (sortOption === "price-desc") {
@@ -110,11 +110,11 @@ export default function ProductsPage(): React.ReactElement {
         </p>
       </div>
 
-      {/* Filters */}
+     
       <div className="row mb-4">
         <div className="col-12">
           <div className="filters-bar d-flex flex-wrap gap-4 align-items-center justify-content-center justify-content-md-start mb-4">
-            {/* Search */}
+            
             <div className="filter-item">
               <label htmlFor="searchInput" className="form-label mb-1">
                 Search by name:
@@ -128,7 +128,7 @@ export default function ProductsPage(): React.ReactElement {
               />
             </div>
 
-            {/* Category */}
+          
             <div className="filter-item">
               <label htmlFor="categorySelect" className="form-label mb-1">
                 Category:
@@ -147,7 +147,7 @@ export default function ProductsPage(): React.ReactElement {
               </select>
             </div>
 
-            {/* Discount Range */}
+           
             <div className="filter-item" style={{ minWidth: "250px" }}>
               <label className="form-label d-block">Max Discount:</label>
               <input
@@ -166,21 +166,21 @@ export default function ProductsPage(): React.ReactElement {
         </div>
       </div>
 
-      {/* Loading */}
+      
       {isLoading && (
         <div className="d-flex justify-content-center my-5">
           <Spinner />
         </div>
       )}
 
-      {/* Error */}
+      
       {isError && (
         <div className="alert alert-danger text-center">
           Failed to load products. Please try again.
         </div>
       )}
 
-      {/* Products */}
+      
       {!isLoading && !isError && (
         <>
           <div className="row g-4">
@@ -197,7 +197,7 @@ export default function ProductsPage(): React.ReactElement {
             )}
           </div>
 
-          {/* 🔹 Pagination (نفس شكل Orders) */}
+          
           {filteredProducts.length > itemsPerPage && (
             <div className="pagination-bar d-flex justify-content-center align-items-center mt-5 gap-2 flex-wrap">
               <button

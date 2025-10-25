@@ -27,7 +27,7 @@ const initialState: CartState = {
   error: null,
 };
 
-// 🟢 Fetch cart items (local filter)
+
 export const fetchCartItems = createAsyncThunk<CartItem[], void, { rejectValue: string }>(
   "cart/fetchCartItems",
   async (_, { rejectWithValue }) => {
@@ -39,13 +39,15 @@ export const fetchCartItems = createAsyncThunk<CartItem[], void, { rejectValue: 
     const userID = JSON.parse(storedUser).id;
     const res = await axios.get(API_URL);
 
-    // ✅ تحديد النوع بشكل صريح
+    
     const filtered = (res.data as CartItem[]).filter((item: CartItem) => item.userID === userID);
     return filtered;
   }
 );
 
-// 🟡 Add or update cart item
+
+
+
 export const addToCart = createAsyncThunk<
   CartItem,
   Product & { quantity: number },
@@ -53,37 +55,37 @@ export const addToCart = createAsyncThunk<
 >("cart/addToCart", async (product, { rejectWithValue }) => {
   const storedUser = localStorage.getItem("user");
 
-  // 🔴 لو المستخدم مش عامل لوجين
+  
   if (!storedUser) {
-    showLoginRequired(); // يظهر alert تسجيل الدخول
+    showLoginRequired(); 
     return rejectWithValue("Please login first");
   }
 
   const userID = JSON.parse(storedUser).id;
 
-  // 🟢 Check stock availability
+  
   if (product.quantity > product.stock) {
     Swal.fire({
       icon: "warning",
-      title: "Not Enough Stock ⚠️",
+      title: "Not Enough Stock ",
       text: `Only ${product.stock} items available in stock.`,
       confirmButtonColor: "#79253D",
     });
     return rejectWithValue("Not enough stock available");
   }
 
-  // 🟣 Check if product already exists in user's cart
+ 
   const res = await axios.get(API_URL);
   const userCart = (res.data as CartItem[]).filter((item: CartItem) => item.userID === userID);
   const existing = userCart.find((item: CartItem) => item.title === product.title);
 
-  // ✅ لو المنتج موجود بالفعل
+ 
   if (existing) {
     const newQuantity = existing.quantity + product.quantity;
     if (newQuantity > product.stock) {
       Swal.fire({
         icon: "warning",
-        title: "Stock Limit Reached ⚠️",
+        title: "Stock Limit Reached ",
         text: `You already have ${existing.quantity} in cart, and only ${product.stock} are available.`,
         confirmButtonColor: "#79253D",
       });
@@ -111,29 +113,29 @@ export const addToCart = createAsyncThunk<
 
 
 
-// 🔵 Update quantity manually (with stock check)
+
 export const updateCartQuantity = createAsyncThunk<
   CartItem,
   { id: string; quantity: number },
   { rejectValue: string }
 >("cart/updateCartQuantity", async ({ id, quantity }, { rejectWithValue }) => {
   try {
-    // 🟢 أول حاجة نجيب بيانات المنتج من API عشان نعرف المخزون
+   
     const itemRes = await axios.get(`${API_URL}/${id}`);
     const itemData = itemRes.data as CartItem;
 
-    // 🔴 لو الكمية المطلوبة أكبر من المتاح في المخزون
+   
     if (quantity > itemData.stock) {
       Swal.fire({
         icon: "warning",
-        title: "Not Enough Stock ⚠️",
+        title: "Not Enough Stock ",
         text: `Only ${itemData.stock} items available in stock.`,
         confirmButtonColor: "#79253D",
       });
       return rejectWithValue("Quantity exceeds available stock");
     }
 
-    // ✅ لو الكمية مناسبة نحدث العنصر
+    
     const res = await axios.put(`${API_URL}/${id}`, { quantity });
     showSuccessAlert("Cart quantity updated successfully.")
     return res.data;
@@ -143,27 +145,27 @@ export const updateCartQuantity = createAsyncThunk<
   }
 });
 
-// 🔴 Remove single item
+
 export const removeFromCart = createAsyncThunk<string, string, { rejectValue: string }>(
   "cart/removeFromCart",
   async (id, { rejectWithValue }) => {
-    // 🟡 إظهار تنبيه تأكيد
+    
     const confirmed = await showConfirmAlert("Are you sure you want to delete this item?");
     if (!confirmed) {
       return rejectWithValue("Delete cancelled");
     }
 
-    // ✅ لو وافق المستخدم
+    
     await axios.delete(`${API_URL}/${id}`);
 
-    // 🔔 تنبيه نجاح
+   
     showSuccessAlert("Item removed from your cart.")
 
     return id;
   }
 );
 
-// ⚫ Clear all user's items (local filter)
+
 export const clearCart = createAsyncThunk<CartItem[], void, { rejectValue: string }>(
   "cart/clearCart",
   async (_, { rejectWithValue }) => {

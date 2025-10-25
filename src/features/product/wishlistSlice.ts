@@ -17,7 +17,7 @@ const initialState: WishlistState = {
   error: null,
 };
 
-// get logged-in user id (returns null if not logged)
+
 const getLoggedUserId = (): string | null => {
   try {
     const stored = localStorage.getItem("user");
@@ -30,7 +30,7 @@ const getLoggedUserId = (): string | null => {
   }
 };
 
-// Fetch wishlist for current logged-in user (filtered)
+
 export const fetchWishlist = createAsyncThunk(
   "wishlist/fetch",
   async (_, { rejectWithValue }) => {
@@ -50,7 +50,7 @@ export const fetchWishlist = createAsyncThunk(
   }
 );
 
-//  Toggle Wishlist 
+
 export const toggleWishlist = createAsyncThunk(
   "wishlist/toggle",
   async (product: Product, { rejectWithValue }) => {
@@ -94,7 +94,7 @@ export const toggleWishlist = createAsyncThunk(
 );
 
 
-// Clear wishlist items of the current user only (deletes records on API)
+
 export const clearWishlist = createAsyncThunk(
   "wishlist/clear",
   async (_, { rejectWithValue }) => {
