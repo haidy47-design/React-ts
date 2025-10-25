@@ -1,6 +1,7 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
 import { Modal, Button, Form, Table, Badge, Spinner } from "react-bootstrap";
-import "../../styles/main.css";
+import { IOrder } from "src/features/order/OrdersPage";
+
 
 interface User {
   id: string;
@@ -12,23 +13,6 @@ interface User {
   createdAt?: string;
   ordersCount?: number;
   totalSpent?: string;
-}
-
-interface Order {
-  id: string;
-  userID: string;
-  totalPrice: string;
-  address: string;
-  phone: string;
-  userName: string;
-  items: {
-    id: string;
-    title: string;
-    quantity: number;
-    discount: string;
-    image: string;
-  }[];
-  email?: string;
 }
 
 interface EditForm {
@@ -43,7 +27,7 @@ interface EditForm {
 const UsersManagement: React.FC = () => {
   // Data
   const [users, setUsers] = useState<User[]>([]);
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Selected / modals
@@ -51,7 +35,7 @@ const UsersManagement: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showOrdersModal, setShowOrdersModal] = useState(false);
-  const [selectedOrders, setSelectedOrders] = useState<Order[]>([]);
+  const [selectedOrders, setSelectedOrders] = useState<IOrder[]>([]);
 
   // Forms
   const [editForm, setEditForm] = useState<EditForm>({
@@ -90,7 +74,7 @@ const UsersManagement: React.FC = () => {
         ]);
 
         const usersData: User[] = await usersRes.json();
-        const ordersData: Order[] = await ordersRes.json();
+        const ordersData: IOrder[] = await ordersRes.json();
 
         // enrich users with ordersCount and totalSpent
         const enrichedUsers = usersData.map((user) => {
@@ -183,21 +167,21 @@ const UsersManagement: React.FC = () => {
     const passRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
 
     if (editForm.email && !emailRegex.test(editForm.email)) {
-      alert("❌ Invalid email format!");
+      alert("Invalid email format!");
       return false;
     }
     if ((editForm.password || editForm.rePassword) && !passRegex.test(editForm.password)) {
       alert(
-        "❌ Password must be at least 8 chars, include uppercase, lowercase, and number."
+        "Password must be at least 8 chars, include uppercase, lowercase, and number."
       );
       return false;
     }
     if (editForm.password !== editForm.rePassword) {
-      alert("❌ Passwords do not match!");
+      alert("Passwords do not match!");
       return false;
     }
     if (editForm.age && (isNaN(Number(editForm.age)) || Number(editForm.age) < 10)) {
-      alert("❌ Please enter a valid age (10+).");
+      alert("Please enter a valid age (10+).");
       return false;
     }
     return true;
@@ -245,10 +229,10 @@ const UsersManagement: React.FC = () => {
       const updated = await res.json();
       setUsers((prev) => prev.map((u) => (u.id === updated.id ? updated : u)));
       setShowEditModal(false);
-      alert("✅ User updated successfully!");
+      alert("User updated successfully!");
     } catch (err) {
       console.error(err);
-      alert("❌ Failed to update user.");
+      alert("Failed to update user.");
     }
   };
 
@@ -258,25 +242,25 @@ const UsersManagement: React.FC = () => {
     const passRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
 
     if (!newUser.name || !newUser.email || !newUser.password || !newUser.age) {
-      alert("❌ Please fill in all required fields.");
+      alert("Please fill in all required fields.");
       return false;
     }
     if (!emailRegex.test(newUser.email)) {
-      alert("❌ Invalid email format!");
+      alert("Invalid email format!");
       return false;
     }
     if (!passRegex.test(newUser.password)) {
       alert(
-        "❌ Password must be at least 8 chars, include uppercase, lowercase, and number."
+        "Password must be at least 8 chars, include uppercase, lowercase, and number."
       );
       return false;
     }
     if (newUser.password !== newUser.rePassword) {
-      alert("❌ Passwords do not match!");
+      alert("Passwords do not match!");
       return false;
     }
     if (isNaN(Number(newUser.age)) || Number(newUser.age) < 10) {
-      alert("❌ Please enter a valid age (10+).");
+      alert("Please enter a valid age (10+).");
       return false;
     }
     return true;
@@ -348,7 +332,7 @@ const UsersManagement: React.FC = () => {
         method: "DELETE",
       });
       setUsers((prev) => prev.filter((u) => u.id !== id));
-      alert("🗑️ User deleted successfully!");
+      alert("User deleted successfully!");
     } catch (err) {
       console.error(err);
       alert("❌ Failed to delete user.");
@@ -379,17 +363,16 @@ const UsersManagement: React.FC = () => {
 
   // ---------------- UI ----------------
   return (
-    <div className="container mt-5 users-container">
+    <div className=" users-container">
       {/* Filters / Search box (like product management box) */}
       <div className="p-4 bg-white rounded-4 shadow-sm mb-4">
         <div className="d-md-flex justify-content-between d-flex-column ">
-          <h4 className="fw-bold mb-4" style={{ color: "#79253D" }}>
+          <h4 className="fw-bold mb-4 main-color">
             Users Management
           </h4>
 
-          <Button
-            className="col-12 col-md-2 col-lg-1 mb-4 mb-md-2 p-md-0"
-            style={{ backgroundColor: "#79253D", border: "none" }}
+          <button
+            className="col-12 col-md-2 col-lg-1 mb-4 mb-md-2 p-md-0 btn btn-success"
             onClick={() => {
               setNewUser({
                 name: "",
@@ -403,7 +386,7 @@ const UsersManagement: React.FC = () => {
             }}
           >
             Add User
-          </Button>
+          </button>
         </div>
 
         <div className="d-flex flex-wrap align-items-center gap-3 ">
@@ -466,22 +449,20 @@ const UsersManagement: React.FC = () => {
       </div>
 
       {/* Users table */}
-      <div className="card shadow-sm">
-        <div className="card-body p-0">
+    
+       <div className="table-responsive mt-4 bg-white rounded-4 shadow-sm">
           <Table hover responsive className="align-middle rounded-4 table-hover mb-0">
-            <thead>
-              <tr className="rounded-4" style={{ backgroundColor: "#79253D", color: "white" }}>
+    
+              <tr className="rounded-4 bg-success text-white">
                 <th className="p-3">User Info</th>
                 <th className="p-3">Email</th>
                 <th className="p-3">Age</th>
-                <th className="p-3">Role</th>
                 <th className="p-3">Orders</th>
                 <th className="p-3">Total Spent</th>
+                <th className="p-3 ps-5">Role</th>
                 <th className="p-3 text-center">Actions</th>
               </tr>
-            </thead>
-
-            <tbody>
+          
               {currentUsers.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="text-center p-4 text-muted">
@@ -513,27 +494,26 @@ const UsersManagement: React.FC = () => {
 
                     <td className="ps-3">{u.email}</td>
                     <td className="ps-4">{u.age || "--"}</td>
-                    <td className="ps-2 text-center ml-3 ">
+                    <td className="ps-5">{u.ordersCount ?? 0}</td>
+                    <td className="ps-4">${u.totalSpent ?? "0.00"}</td>
+                    <td className="ps-2 ml-3 ">
                       <Badge
-                        bg={u.role === "admin" ? "danger" : "primary"}
-                        className="d-flex align-items-center gap-4"
+                        bg={u.role === "admin" ? "success" : "secondary"}
+                        className="d-flex align-items-center gap-2 justify-content-center "
                       >
                         {u.role === "admin" ? (
                           <>
-                            <i className="fa-solid fa-crown" />
-                            Admin
+                            <i className="fa-solid fa-crown text-white" />
+                            <span className="text-white ">Admin</span>
                           </>
                         ) : (
                           <>
-                            <i className="fa-solid fa-user" />
-                            User
+                            <i className="fa-solid fa-user text-white" />
+                            <span className="text-white ">User</span>
                           </>
                         )}
                       </Badge>
                     </td>
-
-                    <td className="ps-5">{u.ordersCount ?? 0}</td>
-                    <td className="ps-4">${u.totalSpent ?? "0.00"}</td>
 
                     <td className="text-center">
                       <div className="d-flex justify-content-center">
@@ -560,9 +540,7 @@ const UsersManagement: React.FC = () => {
                   </tr>
                 ))
               )}
-            </tbody>
           </Table>
-        </div>
       </div>
 
       {/* Pagination bar (uses filteredUsers length) */}
@@ -778,8 +756,6 @@ const UsersManagement: React.FC = () => {
                     <td>{o.userName}</td>
                     <td>{o.address}</td>
                     <td>{o.phone}</td>
-
-
                     <td>
                       <div className="d-flex align-items-center gap-2 flex-wrap">
                         <span className="fw-bold me-2">{o.items.length}x</span>
@@ -800,12 +776,7 @@ const UsersManagement: React.FC = () => {
                         ))}
                       </div>
                     </td>
-
-
                     <td>${o.totalPrice}</td>
-
-
-
                   </tr>
                 ))}
               </tbody>

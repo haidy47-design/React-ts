@@ -22,7 +22,7 @@ import AdminLayout from "../features/admin/AdminLayout";
 import Dashboard from "../features/admin/Dashboard";
 import Products from "../features/admin/Products/Products";
 
-import Users from "../features/admin/Users";
+import Users from "../features/admin/users/Users";
 import Reports from "../features/admin/Report/Reports";
 import Wishlist from "../features/product/Wishlist"
 import EditProduct from "../features/admin/Products/EditProduct";
