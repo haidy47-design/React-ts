@@ -37,7 +37,7 @@ export default function ProfilePage(): React.ReactElement {
     e.preventDefault();
 
     if (!user?.id) {
-      showErrorAlert("⚠️ User not found!");
+      showErrorAlert("User not found!");
       return;
     }
 
@@ -77,7 +77,7 @@ export default function ProfilePage(): React.ReactElement {
       const passwordRegex = /^[A-Z][a-z0-9]{3,8}$/;
       if (!passwordRegex.test(password)) {
         showErrorAlert(
-          " Password must start with a capital letter and be 4–9 characters (letters/numbers only)."
+          " Password must start with a capital letter and be 3–8 characters (letters/numbers only)."
         );
         return;
       }

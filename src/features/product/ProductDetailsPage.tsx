@@ -17,9 +17,12 @@ import ReviewForm from "./ReviewForm";
 import { showErrorAlert, showLoginRequired, showSuccessAlert } from "../../components/common/CustomSwal";
 
 
-// ✅ تعريف Zod Schema
 
-// جلب منتج واحد
+
+
+
+
+
 async function fetchProduct(id: string): Promise<Product> {
   const res = await axios.get(
     `https://68e43ee28e116898997b5bf8.mockapi.io/product/${id}`
@@ -27,7 +30,7 @@ async function fetchProduct(id: string): Promise<Product> {
   return res.data;
 }
 
-// جلب كل المنتجات
+
 async function fetchAllProducts(): Promise<Product[]> {
   const resAll = await axios.get(
     `https://68e43ee28e116898997b5bf8.mockapi.io/product`
@@ -58,7 +61,7 @@ const navigate = useNavigate()
 
 
 
-  // --- Fetch Reviews ---
+
 const { data: reviews, isLoading: loadingReviews } = useQuery({
   queryKey: ["reviews", id],
   queryFn: async () => {
@@ -70,7 +73,7 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
 });
 
 
-  // ✅ إضافة المنتج للسلة
+  
   const handleAddToCart = async () => {
     const userID = localStorage.getItem("user");
     if (!userID) {
@@ -102,7 +105,7 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
 
   };
 
-  // ✅ إرسال الريفيو
+  
   
   if (isLoading) return <Spinner />;
   if (isError || !product)
@@ -130,7 +133,7 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
         <div className="container py-5 product-details-page">
     
 
-      {/* --- Product Info --- */}
+     
       <div className="row g-5 align-items-start justify-content-between pb-5">
         
         <div className="col-12 col-md-7 col-lg-7">
@@ -190,7 +193,7 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
         </div>
       </div>
 
-      {/* --- Write Review Button --- */}
+      
       <div className="row">
         <div className="col-12 d-flex justify-content-end">
           <button
@@ -204,11 +207,11 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
       </div>
 
 
-      {/* --- Review Form --- */}
+     
     {showReviewForm && <ReviewForm productID={id} />}
 
-    {/* --- Reviews Section --- */}
-    {/* --- Reviews Section --- */}
+  
+   
 <div className="reviews-section mt-5">
   <h4 className="text-center mb-4 main-color">Customer Reviews</h4>
 
@@ -244,7 +247,7 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
                 </div>
               </div>
 
-              {/* Rating */}
+              
               <div className="mb-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <i
@@ -271,7 +274,7 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
 </div>
 
 
-      {/* --- Related Products --- */}
+      
       {related && related.length > 1 && (
         <div className="related-products mt-5">
           <h4 className="text-center mb-4 main-color">Related Products</h4>

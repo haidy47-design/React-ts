@@ -60,7 +60,7 @@ export default function CartPage(): React.ReactElement {
             <h2 className="">My Cart</h2>
             <div className="cart-divider mb-4"></div>
           <div className="cart-grid">
-            {/* 🛍 My Cart Section */}
+            
             <div className="cart-section px-5">
               
               {items.map((item) => (
@@ -114,7 +114,7 @@ export default function CartPage(): React.ReactElement {
           
             </div>
       
-            {/* 🧾 Order Summary */}
+            
             <div className="order-summary mt-3">
               <h5 className="">Order Summary</h5>
               <div className="cart-divider"></div>

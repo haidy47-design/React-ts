@@ -8,7 +8,7 @@
   --rose-maroon-gradient: linear-gradient(135deg, #722f37 0%, #4a1f24 100%);
 }
 
-/* ========== Section Title ========== */
+
 .section-title {
   font-weight: 700;
   font-size: 1.75rem;
@@ -36,7 +36,7 @@
   width: 80px;
 }
 
-/* ========== Category Card ========== */
+
 .category-card {
     transition: transform 0.4s ease, box-shadow 0.4s ease;
     border: none;
@@ -46,7 +46,7 @@
 
  .category-card img {
   width: 100%;
-  /* height: 310px; */
+  
   height: clamp(450px, 30vw, 300px);
   aspect-ratio: 4 / 3;
   object-fit: cover;
@@ -96,7 +96,7 @@
     font-size: 1.1rem;
   }
 
-/* ========== Swiper Customization ========== */
+
 .swiper {
   min-height: 250px;
   padding-bottom: 50px;
@@ -142,7 +142,7 @@
     color: #fff !important;
   }
   
-  /* Pagination Dots */
+  
   .swiper-pagination-bullet {
     background: var(--rose-primary) !important;
     position: relative !important;
@@ -155,11 +155,11 @@
     opacity: 1;
   }
   
-  /* Slide Transition */
+
   .swiper-slide {
     transition: transform 0.4s ease-in-out;
   }
-/* ========== Spinner Overlay ========== */
+
 .loading-overlay {
   position: absolute;
   inset: 0;

@@ -5,7 +5,7 @@
 }
  
 .footer-logo {
-  background-color:  #722f37; /* Burgundy */
+  background-color:  #722f37; 
   color: #fff;
   font-size: 2rem;
   font-weight: 600;
@@ -16,7 +16,7 @@
 
 .footer-title {
   font-weight: bold;
-  color: #822433; /* Burgundy */
+  color: #822433; 
   font-size: 1.1rem;
 }
 
@@ -50,7 +50,7 @@
   border: solid 1px #fff !important;
 }
 
-/* Responsiveness */
+
 @media (max-width: 768px) {
   .custom-footer .border-end {
     border-right: none !important;

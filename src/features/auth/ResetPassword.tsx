@@ -14,7 +14,7 @@ const schema = z
   .object({
     newPassword: z
       .string()
-      .regex(/^[A-Z][a-z0-9]{3,8}$/, "Must start with uppercase and 4–9 chars"),
+      .regex(/^[A-Z][a-z0-9]{3,8}$/, "Must start with uppercase and 3–8 chars"),
     "re-password": z.string(),
   })
   .refine((data) => data.newPassword === data["re-password"], {
@@ -69,7 +69,7 @@ export default function ResetPassword() {
       showSuccessAlert("Password updated successfully!");
       setTimeout(() => navigate("/login"), 1500);
     } catch (error) {
-      toast.error("⚠️ Something went wrong. Try again later.");
+      toast.error("Something went wrong. Try again later.");
       console.error(error);
     }
   };

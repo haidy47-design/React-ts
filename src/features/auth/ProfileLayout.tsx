@@ -6,7 +6,7 @@ import "../../styles/auth.css";
 export default function ProfileLayout(): React.ReactElement {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
-  const [isOpen, setIsOpen] = useState(false); // ✅ toggle state
+  const [isOpen, setIsOpen] = useState(false); 
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -24,12 +24,12 @@ export default function ProfileLayout(): React.ReactElement {
 
   return (
     <div className="profile-container main-color">
-      {/* ✅ Toggle Button for small screens */}
+      
       <div className="menu-toggle" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? <FaTimes size={22} /> : <FaBars size={22} />}
       </div>
 
-      {/* Drawer */}
+    
       <div className={`drawer ${isOpen ? "open" : ""}`}>
         <div className="drawer-header">
           <img
@@ -71,7 +71,7 @@ export default function ProfileLayout(): React.ReactElement {
         </ul>
       </div>
 
-      {/* Content */}
+      
       <div className="profile-content">
         <Outlet />
       </div>

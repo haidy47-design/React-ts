@@ -4,7 +4,7 @@ const PolicyAccordion: React.FC = () => {
   return (
     <div className="accordion  my-5 border border-0 "  id="policyAccordion">
       
-      {/* ===== Return & Refund Policy ===== */}
+     
       <div className="accordion-item border-0 border-top border-bottom " style={{backgroundColor:"transparent"}}>
         <h2 className="accordion-header" id="headingOne">
           <button
@@ -33,7 +33,7 @@ const PolicyAccordion: React.FC = () => {
         </div>
       </div>
 
-      {/* ===== Shipping Policy ===== */}
+      
       <div className="accordion-item border-0 border-bottom" style={{backgroundColor:"transparent"}}>
         <h2 className="accordion-header" id="headingTwo">
           <button

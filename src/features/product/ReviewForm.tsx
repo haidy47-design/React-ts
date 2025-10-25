@@ -82,7 +82,7 @@ const ReviewForm: React.FC<{ productID: string }> = ({ productID }) => {
         >
         <h5 className="mb-3 text-center">Write Your Review</h5>
 
-        {/* Name */}
+       
         <div className="mb-3">
           <label className="form-label">Name</label>
           <input
@@ -95,7 +95,7 @@ const ReviewForm: React.FC<{ productID: string }> = ({ productID }) => {
           )}
         </div>
 
-        {/* Email */}
+        
         <div className="mb-3">
           <label className="form-label">Email</label>
           <input
@@ -108,7 +108,7 @@ const ReviewForm: React.FC<{ productID: string }> = ({ productID }) => {
           )}
         </div>
 
-        {/* Rating */}
+       
         <div className="mb-3">
           <label className="form-label d-block">Rate</label>
           <Controller
@@ -140,7 +140,7 @@ const ReviewForm: React.FC<{ productID: string }> = ({ productID }) => {
           )}
         </div>
 
-        {/* Review Title */}
+        
         <div className="mb-3">
           <label className="form-label">Review Title</label>
           <input
@@ -157,7 +157,7 @@ const ReviewForm: React.FC<{ productID: string }> = ({ productID }) => {
           )}
         </div>
 
-        {/* Overall */}
+      
         <div className="mb-3">
           <label className="form-label">Overall Review</label>
           <textarea
@@ -171,7 +171,7 @@ const ReviewForm: React.FC<{ productID: string }> = ({ productID }) => {
           )}
         </div>
 
-        {/* Hidden Product ID */}
+        
         <input type="hidden" {...register("productID")} value={productID} />
 
         <button type="submit" className="btn btn-success w-100" disabled={loading}>

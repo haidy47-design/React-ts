@@ -37,7 +37,7 @@ export default function ForgotPassword() {
       showErrorAlert("Email not found. Please check again.");
     }
   } catch (error) {
-    toast.error("⚠️ Something went wrong. Try again later.");
+    toast.error(" Something went wrong. Try again later.");
     console.error(error);
   }
 };

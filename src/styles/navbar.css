@@ -1,8 +1,8 @@
-/* Navbar Custom Look */
+
 .custom-navbar {
   background-color: #f4efe8 !important;
   transition: all 0.3s ease;
-  /* padding: 0.6rem 0; */
+  
 }
 
 .navbar-brand {
@@ -13,7 +13,7 @@
 
 .nav-link {
   color: black !important;
-  /* font-weight: 500; */
+  
   transition: color 0.3s ease;
 }
 
@@ -35,7 +35,7 @@
   background-color: #722f37 !important;
   color: #f8eaea  !important;
 }
-/* Mobile View Tweaks */
+
 @media (max-width: 992px) {
   .navbar-nav {
     text-align: center;

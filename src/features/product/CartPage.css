@@ -284,7 +284,7 @@
 
 
 
-/* ===== Filters ===== */
+
 .filters-bar {
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
@@ -321,7 +321,7 @@
   background: #fff;
 }
 
-/* ===== Pagination ===== */
+
 .pagination-bar button {
   border-radius: 20px;
   padding: 0.4rem 1rem;
@@ -332,7 +332,7 @@
   transform: scale(1.05);
 }
 
-/* ===== Responsive ===== */
+
 @media (max-width: 576px) {
   .filters-bar {
     flex-direction: column;
@@ -349,7 +349,7 @@
 
 .related-slider .slick-prev:before,
 .related-slider .slick-next:before {
-  color: #79253D; /* لون السهم */
+  color: #79253D; 
   font-size: 25px;
 }
 
@@ -366,19 +366,19 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* ===== Scroll only in the left (cart-section) ===== */
+
 .cart-grid {
-  display: flex; /* استبدل grid بـ flex */
+  display: flex;
   gap: 60px;
   align-items: flex-start;
-  height: calc(100vh - 200px); /* حسب ارتفاع الهيدر والفوتر عندك */
-  overflow: hidden; /* يمنع scroll للصفحة كلها */
+  height: calc(100vh - 200px); 
+  overflow: hidden; 
 }
 
-/* الجزء الشمال (قائمة المنتجات) */
+
 .cart-section {
   flex: 2;
-  overflow-y: auto; /* هنا ال scroll */
+  overflow-y: auto;
   padding-right: 10px;
   max-height: 100%;
   scrollbar-width: thin;
@@ -393,7 +393,7 @@
   border-radius: 10px;
 }
 
-/* الجزء اليمين (Order Summary) */
+
 .order-summary {
   flex: 1;
   position: sticky;
@@ -408,22 +408,22 @@
 
 
 
-/* ===== Responsive Adjustments ===== */
+
 @media (max-width: 992px) {
   .cart-grid {
-    flex-direction: column; /* يخليهم فوق بعض بدل جنب بعض */
-    height: auto; /* يلغي الارتفاع الثابت */
-    overflow: visible; /* يسمح بالتمرير العادي */
+    flex-direction: column; 
+    height: auto; 
+    overflow: visible; 
   }
 
   .cart-section {
     max-height: none;
     overflow-y: visible;
-    width: 90vw; /* مفيش scroll داخلي في الموبايل */
+    width: 90vw; 
   }
 
   .order-summary {
-    position: static; /* ميبقاش ثابت */
+    position: static; 
     width: 100%;
     margin-top: 40px;
     background-color: transparent;
