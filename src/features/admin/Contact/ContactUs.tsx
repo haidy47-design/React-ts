@@ -148,53 +148,95 @@ const AdminContacts: React.FC = () => {
       </div>
 
   
-      <div className="table-responsive mt-4 bg-white rounded-4 shadow-sm ">
-        <table className="table align-middle table-hover">
-         
-            <tr style={{ backgroundColor: "#79253D", color: "white" }}>
-              <th className="p-3">ID</th>
-              <th className="p-3">Full Name</th>
-              <th className="p-3">Email</th>
-              <th className="p-3">Subject</th>
-              <th className="p-3">Message</th>
-              <th className="p-3">Created At</th>
-              <th className="p-3">Reply</th>
-            </tr>
+     
+<div className="mt-4 bg-white rounded-4 shadow-sm p-3">
+ 
+  <div className="table-responsive d-none d-md-block rounded-4">
+    <table className="table align-middle rounded-0 table-hover">
+      
+        <tr style={{ backgroundColor: "#79253D", color: "white" }}>
+          <th className="p-3">ID</th>
+          <th className="p-3">Full Name</th>
+          <th className="p-3">Email</th>
+          <th className="p-3">Subject</th>
+          <th className="p-3">Message</th>
+          <th className="p-3">Created At</th>
+          <th className="p-3 text-center">Reply</th>
+        </tr>
+      
+      <tbody>
+        {currentContacts.map((contact) => (
+          <tr key={contact.id} style={{ borderBottom: "1px solid #ddd" }}>
+            <td className="ps-3">{contact.id}</td>
+            <td>{`${contact.firstName} ${contact.lastName}`}</td>
+            <td>{contact.email}</td>
+            <td>{contact.subject}</td>
+            <td>{contact.message}</td>
+            <td>{new Date(contact.createdAt).toLocaleString()}</td>
+            <td className="text-center">
+              {contact.replay === "unRead" ? (
+                <FaReply
+                  size={30}
+                  color="#79253D"
+                  className="btn btn-emojiShow btn-sm"
+                  title="Reply"
+                  onClick={() => setSelectedContact(contact)}
+                />
+              ) : (
+                <i
+                  className="fa-solid fa-check"
+                  style={{ color: "#198754", fontSize: "1.3rem" }}
+                ></i>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+
+  <div className="d-block d-md-none user-card">
+    {currentContacts.map((contact) => (
+      <div
+        key={contact.id}
+        className="border rounded-4 p-3 mb-3 shadow-sm bg-light"
+      >
+         <div className="mb-2">
+          <span className="fw-bold">{contact.firstName} {contact.lastName}</span> <br />
+          <small className="text-muted">{contact.email}</small>
+        </div>
+        <div className="d-flex justify-content-between align-items-center mb-2">
+          <strong className="text-dark">Subject:{contact.subject}</strong>
+          <small className="text-muted">
+            {new Date(contact.createdAt).toLocaleDateString()}
+          </small>
+        </div>
        
-          
-            {currentContacts.map((contact) => (
-              <tr key={contact.id} style={{ borderBottom: "1px solid #ddd" }}>
-                <td className="ps-3">{contact.id}</td>
-                <td>{`${contact.firstName} ${contact.lastName}`}</td>
-                <td>{contact.email}</td>
-                <td className="ps-3">{contact.subject}</td>
-                <td>{contact.message}</td>
-                <td>{new Date(contact.createdAt).toLocaleString()}</td>
-                <td className="reply-cell">
-                  {contact.replay === "unRead" ? (
-                    <FaReply
-                      size={35}
-                      color="#79253D"
-                      className="btn btn-emojiShow btn-sm"
-                      title="Reply"
-                      onClick={() => setSelectedContact(contact)}
-                    />
-                  ) : (
-                    <div>
-                      <span className="sent-label">
-                        <i
-                          className="fa-solid fa-check"
-                          style={{ backgroundColor: "white", color: "#79253D" }}
-                        ></i>
-                      </span>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))}
-         
-        </table>
+        <p className="mb-2" style={{ whiteSpace: "pre-wrap" }}>
+         Message: {contact.message}
+        </p>
+        <div className="d-flex justify-content-end">
+          {contact.replay === "unRead" ? (
+            <Button
+              size="sm"
+              variant="outline-success"
+              onClick={() => setSelectedContact(contact)}
+            >
+              <FaReply className="me-1" /> Reply
+            </Button>
+          ) : (
+            <span className="badge bg-success">
+              <i className="fa-solid fa-check me-1" />
+              Replied
+            </span>
+          )}
+        </div>
       </div>
+    ))}
+  </div>
+</div>
+
 
   
       {filteredContacts.length > itemsPerPage && (

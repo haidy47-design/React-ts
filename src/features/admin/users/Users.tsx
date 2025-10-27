@@ -8,13 +8,14 @@ import { showConfirmAlert, showErrorAlert, showSuccessAlert } from "../../../com
 import HelmetWrapper from "../../../components/common/HelmetWrapper";
 
 
+
 const OrderItemSchema = z.object({
   id: z.string(),
   title: z.string(),
   image: z.string().optional(),
   quantity: z.number().or(z.string().transform((s) => Number(s))).optional(),
 });
-
+ 
 const OrderSchema = z.object({
   id: z.string(),
   userID: z.string().optional(),
@@ -610,98 +611,131 @@ const handleSaveChanges = async () => {
         </div>
       
        
-        <div className="table-responsive mt-4 bg-white rounded-4 shadow-sm">
-          <Table hover responsive className="align-middle rounded-4 table-hover mb-0">
-          
-              <tr className="rounded-4 bg-success text-white">
-                <th className="p-3">User Info</th>
-                <th className="p-3">Email</th>
-                <th className="p-3">Age</th>
-                <th className="p-3">Orders</th>
-                <th className="p-3">Total Spent</th>
-                <th className="p-3 ps-5">Role</th>
-                <th className="p-3 text-center">Actions</th>
-              </tr>
-           
-            <tbody>
-              {currentUsers.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="text-center p-4 text-muted">
-                    No users found.
-                  </td>
-                </tr>
-              ) : (
-                currentUsers.map((u) => (
-                  <tr key={u.id} style={{ borderBottom: "1px solid #ddd" }}>
-                    <td className="p-3">
-                      <div className="d-flex align-items-center gap-3">
-                        <div
-                          className="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
-                          style={{
-                            width: "60px",
-                            height: "60px",
-                            backgroundColor: "#79253D",
-                            fontSize: "1.3rem",
-                          }}
-                        >
-                          {u.name ? u.name.charAt(0).toUpperCase() : "U"}
-                        </div>
-                        <div>
-                          <p className="mb-0">{u.name}</p>
-                          <span className="text-muted">ID:{u.id}</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="ps-3">{u.email}</td>
-                    <td className="ps-4">{u.age || "--"}</td>
-                    <td className="ps-5">{u.ordersCount ?? 0}</td>
-                    <td className="ps-4">${u.totalSpent ?? "0.00"}</td>
-                    <td className="ps-2 ml-3">
-                      <Badge
-                        bg={u.role === "admin" ? "success" : "secondary"}
-                        className="d-flex align-items-center gap-2 justify-content-center"
-                      >
-                        {u.role === "admin" ? (
-                          <>
-                            <i className="fa-solid fa-crown text-white" />
-                            <span className="text-white">Admin</span>
-                          </>
-                        ) : (
-                          <>
-                            <i className="fa-solid fa-user text-white" />
-                            <span className="text-white">User</span>
-                          </>
-                        )}
-                      </Badge>
-                    </td>
-                    <td className="text-center">
-                      <div className="d-flex justify-content-center">
-                        <button
-                          className="btn btn-emojiShow btn-sm me-2"
-                          onClick={() => handleViewOrders(u.id)}
-                        >
-                          <i className="fa-solid fa-eye" />
-                        </button>
-                        <button
-                          className="btn btn-emojiShow btn-sm me-2"
-                          onClick={() => handleEditClick(u)}
-                        >
-                          <i className="fa-solid fa-pen-to-square" />
-                        </button>
-                        <button
-                          className="btn btn-emojiDelete btn-sm"
-                          onClick={() => handleDelete(u.id)}
-                        >
-                          <i className="fa-solid fa-trash" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </Table>
+       
+<div className="table-responsive users-table d-none d-md-block mt-4 bg-white rounded-4 shadow-sm">
+  <Table hover responsive className="align-middle rounded-4 table-hover mb-0">
+    
+      <tr className="rounded-4 bg-success text-white">
+        <th className="p-3">User Info</th>
+        <th className="p-3">Email</th>
+        <th className="p-3">Age</th>
+        <th className="p-3">Orders</th>
+        <th className="p-3">Total Spent</th>
+        <th className="p-3 ps-5">Role</th>
+        <th className="p-3 text-center">Actions</th>
+      </tr>
+    
+    <tbody>
+      {currentUsers.length === 0 ? (
+        <tr>
+          <td colSpan={7} className="text-center p-4 text-muted">
+            No users found.
+          </td>
+        </tr>
+      ) : (
+        currentUsers.map((u) => (
+          <tr key={u.id} style={{ borderBottom: "1px solid #ddd" }}>
+            <td className="p-3">
+              <div className="d-flex align-items-center gap-3">
+                <div
+                  className="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    backgroundColor: "#79253D",
+                    fontSize: "1.1rem",
+                  }}
+                >
+                  {u.name ? u.name.charAt(0).toUpperCase() : "U"}
+                </div>
+                <div>
+                  <p className="mb-0 fw-semibold">{u.name}</p>
+                  <small className="text-muted">ID: {u.id}</small>
+                </div>
+              </div>
+            </td>
+            <td>{u.email}</td>
+            <td>{u.age || "--"}</td>
+            <td>{u.ordersCount ?? 0}</td>
+            <td>${u.totalSpent ?? "0.00"}</td>
+            <td>
+              <Badge bg={u.role === "admin" ? "success" : "secondary"}>
+                {u.role}
+              </Badge>
+            </td>
+            <td className="text-center">
+              <div className="d-flex justify-content-center">
+                <button className="btn btn-emojiShow btn-sm me-2" onClick={() => handleViewOrders(u.id)}>
+                  <i className="fa-solid fa-eye" />
+                </button>
+                <button className="btn btn-emojiShow btn-sm me-2" onClick={() => handleEditClick(u)}>
+                  <i className="fa-solid fa-pen-to-square" />
+                </button>
+                <button className="btn btn-emojiDelete btn-sm" onClick={() => handleDelete(u.id)}>
+                  <i className="fa-solid fa-trash" />
+                </button>
+              </div>
+            </td>
+          </tr>
+        ))
+      )}
+    </tbody>
+  </Table>
+</div>
+
+
+<div className="users-cards d-block d-md-none mt-4">
+  {currentUsers.length === 0 ? (
+    <p className="text-center text-muted py-3">No users found.</p>
+  ) : (
+    currentUsers.map((u) => (
+      <div key={u.id} className="user-card bg-white rounded-4 shadow-sm p-3 mb-3">
+        <div className="d-flex align-items-center gap-3 mb-2">
+          <div
+            className="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
+            style={{
+              width: "45px",
+              height: "45px",
+              backgroundColor: "#79253D",
+              fontSize: "1rem",
+            }}
+          >
+            {u.name ? u.name.charAt(0).toUpperCase() : "U"}
+          </div>
+          <div>
+            <p className="mb-0 fw-semibold">{u.name}</p>
+            <small className="text-muted">{u.email}</small>
+          </div>
         </div>
+
+        <div className="px-2">
+          <p className="mb-1"><b>Age:</b> {u.age || "--"}</p>
+          <p className="mb-1"><b>Orders:</b> {u.ordersCount ?? 0}</p>
+          <p className="mb-1"><b>Total Spent:</b> ${u.totalSpent ?? "0.00"}</p>
+          <p className="mb-1">
+            <b>Role:</b>{" "}
+            <Badge bg={u.role === "admin" ? "success" : "secondary"}>
+              {u.role}
+            </Badge>
+          </p>
+        </div>
+
+        <div className="mt-3 d-flex justify-content-around">
+          <button className="btn btn-emojiShow btn-sm" onClick={() => handleViewOrders(u.id)}>
+            <i className="fa-solid fa-eye" />
+          </button>
+          <button className="btn btn-emojiShow btn-sm" onClick={() => handleEditClick(u)}>
+            <i className="fa-solid fa-pen-to-square" />
+          </button>
+          <button className="btn btn-emojiDelete btn-sm" onClick={() => handleDelete(u.id)}>
+            <i className="fa-solid fa-trash" />
+          </button>
+        </div>
+      </div>
+    ))
+  )}
+</div>
+
       
         
         {filteredUsers.length > itemsPerPage && (

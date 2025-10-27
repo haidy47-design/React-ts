@@ -530,3 +530,64 @@ input:-webkit-autofill:active {
 
 
 
+
+.users-table {
+  max-height: 70vh !important;
+  overflow-y: auto !important;
+  overflow-x: auto !important;
+  border-radius: 1rem !important;
+}
+
+
+.users-table::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.users-table::-webkit-scrollbar-thumb {
+  background: #79253D80;
+  border-radius: 4px;
+}
+
+
+.users-cards .user-card {
+  transition: all 0.2s ease-in-out;
+  background-color: #9d9d9654 !important;
+}
+.users-cards .user-card:hover {
+  transform: scale(1.02);
+}
+
+
+.user-card .badge {
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+
+@media (max-width: 768px) {
+  .user-card p {
+    font-size: 0.9rem;
+  }
+  .user-card b {
+    color: #79253D;
+  }
+}
+@media (max-width: 768px) {
+  .table {
+    display: none;
+  }
+
+  .contact-card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+
+  .contact-card p {
+    margin-bottom: 0.5rem;
+  }
+}
+
+
