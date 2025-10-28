@@ -3,11 +3,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast, { Toaster } from "react-hot-toast";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../styles/auth.css";
 import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
+import { User } from "./SignupPage";
+
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -28,7 +30,7 @@ export default function ForgotPassword() {
   const handleForgot = async (values: ForgotForm) => {
   try {
     const { data } = await axios.get("https://68e83849f2707e6128ca32fb.mockapi.io/users");
-    const user = data.find((u: any) => u.email.toLowerCase() === values.email.toLowerCase());
+    const user = data.find((u: User) => u.email.toLowerCase() === values.email.toLowerCase());
 
     if (user) {
       showSuccessAlert(" Email found! Redirecting...");

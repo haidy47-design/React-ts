@@ -19,6 +19,7 @@ export default function AdminLayout(): React.ReactElement {
           bgcolor: "#f4efe8",
           p: 3,
           minHeight: "100vh",
+          overflowY: "auto",
         }}
       >
     

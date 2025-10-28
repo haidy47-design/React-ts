@@ -6,6 +6,7 @@ import { z } from "zod";
 import { ChangeEvent } from 'react';
 import { showConfirmAlert, showErrorAlert, showSuccessAlert } from "../../../components/common/CustomSwal";
 import HelmetWrapper from "../../../components/common/HelmetWrapper";
+import { User } from "src/features/auth/SignupPage";
 
 
 const OrderItemSchema = z.object({
@@ -228,9 +229,9 @@ const UsersManagement: React.FC = () => {
           ? (ordersParse.data as unknown as IOrder[])
           : []; 
         const enrichedUsers = usersData.map((user) => {
-          const userOrders = ordersData.filter((o) => (o as any).userID === user.id);
+          const userOrders = ordersData.filter((o) => (o as IOrder).userID === user.id);
           const totalSpent = userOrders.reduce(
-            (sum, o) => sum + parseFloat((o as any).totalPrice ?? "0"),
+            (sum, o) => sum + parseFloat((o as IOrder).totalPrice ?? "0"),
             0
           );
           return {
@@ -241,9 +242,9 @@ const UsersManagement: React.FC = () => {
         }); 
         setUsers(enrichedUsers);
         setOrders(ordersData);
-      } catch (err: any) {
+      } catch (err) {
         console.error(" Error fetching data:", err);
-        setError(err.response?.data?.message || err.message || "Failed to load data");
+        setError("Failed to load data");
       } finally {
         setLoading(false);
       }
@@ -353,7 +354,7 @@ const handleSaveChanges = async () => {
     const validatedData = result.data; 
     
    
-    const updatedData: any = {};  
+    const updatedData: Partial<User> = {};  
     
     
     
@@ -406,9 +407,9 @@ const handleSaveChanges = async () => {
       setShowEditModal(false);
       setEditFormErrors({}); 
       showSuccessAlert("User updated successfully!");
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      showErrorAlert( `Failed to update user: ${err.message}`);
+      showErrorAlert( `Failed to update user: ${err instanceof Error ? err.message : 'An unknown error occurred.'}` );
     }
   };
  const handleAddUser = async () => {
@@ -446,7 +447,7 @@ const handleSaveChanges = async () => {
         age: Number(newUser.age),
         're-password': newUser.rePassword, 
       }; 
-      const created = await createUser(payload as any); 
+      const created = await createUser(payload as Partial<AdminUser>); 
      setUsers((prev) => [
       ...prev,
       { ...created, ordersCount: 0, totalSpent: "0.00" },
@@ -467,10 +468,10 @@ const handleSaveChanges = async () => {
     setCurrentPage(newTotalPages);
     
     showSuccessAlert("User added successfully!");
-     } catch (err: any) {
+     } catch (err) {
      console.error("Error adding user:", err);
      
-     showErrorAlert(`Failed to add user: ${err.message}`);
+     showErrorAlert(`Failed to add user`);
      }
  };
 
@@ -490,17 +491,17 @@ const handleSaveChanges = async () => {
     setUsers((prev) => prev.filter((u) => u.id !== id));
     showSuccessAlert("User deleted successfully!");
 
-  } catch (err: any) {
+  } catch (err) {
     console.error(err);
   
-    const errorMessage = err.message || 'An unknown error occurred.';
+    const errorMessage = 'An unknown error occurred.';
     showErrorAlert(`Failed to delete user: ${errorMessage}`);
   }
 };
- 
+ 
 
    const handleViewOrders = (userId: string) => {
-      const userOrders = orders.filter((o) => (o as any).userID === userId);
+      const userOrders = orders.filter((o) => (o as IOrder).userID === userId);
       setSelectedOrders(userOrders);
       setShowOrdersModal(true);
    };  
@@ -982,10 +983,10 @@ const handleSaveChanges = async () => {
                           <span className="fw-bold me-2">{o.items.length}x</span>
                           {o.items.map((item) => (
                             <img
-                              key={(item as any).id}
-                              src={(item as any).image}
-                              alt={(item as any).title}
-                              title={`${(item as any).title} (${(item as any).quantity})`}
+                              key={(item).id}
+                              src={(item).image}
+                              alt={(item).title}
+                              title={`${(item).title} (${(item).quantity})`}
                               style={{
                                 width: "45px",
                                 height: "45px",

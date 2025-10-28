@@ -15,7 +15,14 @@ import HelmetWrapper from "../../../components/common/HelmetWrapper";
 
 const editProductSchema = z.object({
   title: z.string().min(2, "Title must be at least 2 characters"),
-  description: z.string().min(5, "Description must be at least 5 characters"),
+  description: z
+    .string()
+    .min(10, "Description must be at least 10 characters")
+    .max(500, "Description must be less than 500 characters")
+    .regex(
+      /^(?=.*[A-Za-z])[A-Za-z0-9.,!'"()\-\s]+$/,
+      "Description must include at least one letter"
+    ),
   price: z
     .number({ message: "Price must be a number" })
     .positive("Price must be greater than 0"),
@@ -143,8 +150,7 @@ const EditProduct: React.FC = () => {
             <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
               <Form.Control
-                as="textarea"
-                rows={3}
+                as="input"
                 {...register("description")}
                 isInvalid={!!errors.description}
               />

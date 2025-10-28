@@ -104,6 +104,7 @@ const applyDiscountMutation = useMutation({
   const handleReset = () => {
     setSearchTerm("");
     setCategory("");
+    setStatusFilter("All");
     setMaxPrice(0);
     setCurrentPage(1);
   };
@@ -156,9 +157,9 @@ const applyDiscountMutation = useMutation({
   
         <div className="p-4 bg-white rounded-4 shadow-sm mb-4">
           <div className="d-md-flex justify-content-between d-flex-column ">
-            <h4 className="fw-bold mb-4" style={{ color: "#79253D" }}>
+            <h3 className="fw-bold mb-4" style={{ color: "#79253D" }}>
               Product Management
-            </h4>
+            </h3>
 
       
             <div className="col-12 col-md-2 mb-4 mb-md-0 mt-5 mt-md-0 d-flex flex-wrap justify-content-end">
