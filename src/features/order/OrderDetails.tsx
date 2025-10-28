@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "src/app/store";
 import { addToCart } from "../product/cartSlice";
 import Swal from "sweetalert2";
+import { Product } from "src/components/product/ProductCard";
 
 export default function OrderDetails(): React.ReactElement {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,7 +33,7 @@ export default function OrderDetails(): React.ReactElement {
     );
     const allProducts = res.data;
     return allProducts.find(
-      (p: any) => p.title.toLowerCase() === title.toLowerCase()
+      (p: Product) => p.title.toLowerCase() === title.toLowerCase()
     );
   }
 

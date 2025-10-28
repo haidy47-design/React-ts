@@ -9,6 +9,7 @@ import {
   showErrorAlert,
 } from "../../components/common/CustomSwal";
 import HelmetWrapper from "../../components/common/HelmetWrapper";
+import { Product } from "src/components/product/ProductCard";
 
 export interface IOrder {
   id: string;
@@ -65,7 +66,7 @@ export default function OrdersPage(): React.ReactElement {
           );
 
           const matchedProduct = products.find(
-            (p: any) =>
+            (p: Product) =>
               p.title.trim().toLowerCase() === item.title.trim().toLowerCase()
           );
 

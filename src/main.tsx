@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HelmetProvider } from "react-helmet-async";
+
 import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -31,7 +31,7 @@ const queryClient = new QueryClient({
 
 root.render(
   <React.StrictMode>
-    <HelmetProvider>
+  
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
@@ -40,7 +40,7 @@ root.render(
           </BrowserRouter>
         </QueryClientProvider>
       </Provider>
-    </HelmetProvider>
+
   </React.StrictMode>
 );
 

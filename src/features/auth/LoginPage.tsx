@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../auth/authSlice";
 import { showLoginError, showLoginSuccess } from "../../components/common/CustomSwal";
 import HelmetWrapper from "../../components/common/HelmetWrapper";
+import { RegisterForm } from "./SignupPage";
 
 const schema = z.object({
   email: z.string().email("Invalid email"),
@@ -41,7 +42,7 @@ export default function Login() {
       const { data } = await axios.get("https://68e83849f2707e6128ca32fb.mockapi.io/users");
 
       const user = data.find(
-        (u: any) =>
+        (u: RegisterForm) =>
           u.email.toLowerCase() === values.email.toLowerCase() &&
           u.password === values.password
       );

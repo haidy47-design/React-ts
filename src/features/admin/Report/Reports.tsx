@@ -460,8 +460,8 @@ const AdminReports: React.FC = () => {
       <div >
         
         <div className="mb-4">
-          <h1 className="display-4 fw-bold text-dark mb-2">Overview</h1>
-          <p className="text-secondary fs-5">Comprehensive business analytics and reports</p>
+          <h2 className=" fw-bold main-color mb-2">Overview</h2>
+          <p className="text-secondary ">Comprehensive business analytics and reports</p>
           
           <div className="row g-3 mt-3">
             <div className="col-md-4">
@@ -470,7 +470,7 @@ const AdminReports: React.FC = () => {
                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
                 <div className="card-body">
                   <p className="text-secondary small mb-2">Total Orders</p>
-                  <h3 className="text-gray fw-bold">{filteredOrders.length}</h3>
+                  <h4 className="main-color fw-bold">{filteredOrders.length}</h4>
                 </div>
               </div>
             </div>
@@ -480,7 +480,7 @@ const AdminReports: React.FC = () => {
                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
                 <div className="card-body">
                   <p className="text-secondary small mb-2">Total Revenue</p>
-                  <h3 className="text-dark fw-bold">$ {totalRevenue.toFixed(2)}</h3>
+                  <h4 className="main-color fw-bold">$ {totalRevenue.toFixed(2)}</h4>
                 </div>
               </div>
             </div>
@@ -490,7 +490,7 @@ const AdminReports: React.FC = () => {
                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
                 <div className="card-body">
                   <p className="text-secondary small mb-2">Products Sold</p>
-                  <h3 className="main-color fw-bold">{productSales.reduce((sum, p) => sum + p.quantity, 0)}</h3>
+                  <h4 className="main-color fw-bold">{productSales.reduce((sum, p) => sum + p.quantity, 0)}</h4>
                 </div>
               </div>
             </div>

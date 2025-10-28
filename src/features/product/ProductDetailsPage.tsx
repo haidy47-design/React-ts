@@ -13,7 +13,7 @@ import ProductCard from "../../components/product/ProductCard";
 import "./CartPage.css";
 import { Rating } from "@mui/material";
 import PolicyAccordion from "./PolicyAccordion";
-import ReviewForm from "./ReviewForm";
+import ReviewForm, { ReviewFormData, ReviewResponse } from "./ReviewForm";
 import { showErrorAlert, showLoginRequired, showSuccessAlert } from "../../components/common/CustomSwal";
 
 
@@ -68,7 +68,7 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
     const res = await axios.get(
       "https://68f17bc0b36f9750dee96cbb.mockapi.io/reviews"
     );
-    return res.data.filter((r: any) => r.productID === id);
+    return res.data.filter((r: ReviewFormData) => r.productID === id);
   },
 });
 
@@ -88,7 +88,7 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
       await dispatch(addToCart({ ...product!, quantity })).unwrap();
       queryClient.invalidateQueries({ queryKey: ["orders"] });
     showSuccessAlert("Order Added successfully");
-    } catch (err: any) {
+    } catch (err) {
     
     if (err === "Not enough stock available" || err === "Quantity exceeds stock") {
     
@@ -233,7 +233,7 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
       ]}
       className="review-slider related-slider"
     >
-      {reviews.map((rev: any) => (
+      {reviews.map((rev: ReviewResponse) => (
         <div key={rev.id} className="p-3">
           <div className="card shadow-sm border-0 h-100 review-card">
             <div className="card-body">
