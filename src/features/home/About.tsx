@@ -77,11 +77,11 @@ const  navigate = useNavigate();
               transition={{ duration: 0.7 }}
               viewport={{ once: true }}
             >
-              {/* <img
+              <img
                 src="/Images/aboutus.jpeg"
                 alt="Flowers"
                 className="rounded-4" style={{width:"100%" , height:"600px" , filter: "brightness(0.5)"}}
-              /> */}
+              />
             </motion.div>
           </div>
         </div>
