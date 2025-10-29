@@ -181,11 +181,7 @@ export default function OrdersPage(): React.ReactElement {
         </div>
       ) : (
         <div
-          className="mt-5"
-          style={{
-            overflow: "visible",
-            maxWidth: "100%",
-          }}
+          className="table-responsive mt-5"
         >
           <table className="table align-middle table-hover text-center">
             <tr className="text-center text-white" style={{ backgroundColor: "#79253D" }}>

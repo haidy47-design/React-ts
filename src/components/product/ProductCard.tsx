@@ -113,7 +113,7 @@ const handleToggleWishlist = async() => {
           <img
             src={product.image}
             alt={product.title}
-            style={{ height: "500px", objectFit: "contain" }}
+            style={{ height: "350px", objectFit: "contain" }}
             className="card-img-top rounded-0 object-fit-cover"
             loading="lazy"
           />

@@ -65,6 +65,7 @@ export default function CategorySlider(): React.ReactElement {
 
   return (
     <section className="container py-5 position-relative">
+      
       <h3 className="section-title text-center mb-2 mt-5">
         Discover Our Categories
        </h3>
