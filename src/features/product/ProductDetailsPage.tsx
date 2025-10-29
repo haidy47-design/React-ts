@@ -115,7 +115,7 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
     dots: false,
     infinite: true,
     speed: 700,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
     arrows: true,
     autoplay: true,

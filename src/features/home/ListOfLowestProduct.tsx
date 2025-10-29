@@ -21,7 +21,7 @@ export default function ListOfLowestProduct(): React.ReactElement {
         "https://68e43ee28e116898997b5bf8.mockapi.io/product"
       );
     
-      return response.data.sort((a, b) => a.price - b.price).slice(0, 6);
+      return response.data.sort((a, b) => a.price - b.price).slice(0, 8);
     },
     staleTime: 5 * 60 * 1000, 
     retry: 2,
@@ -82,7 +82,7 @@ export default function ListOfLowestProduct(): React.ReactElement {
 
       <div className="row g-4">
         {products.map((product) => (
-          <div key={product.id} className="col-lg-4 col-md-6 col-12">
+          <div key={product.id} className="col-lg-3 col-md-6 col-12">
             <ProductCard product={product} />
           </div>
         ))}

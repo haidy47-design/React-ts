@@ -1,11 +1,18 @@
-import React from "react";
+import React, { use } from "react";
 import { motion } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/about.css";
 import HelmetWrapper from "../../components/common/HelmetWrapper";
+import { useNavigate } from "react-router";
 
 
 const About: React.FC = () => {
+const  navigate = useNavigate();
+  const handleGoToContact = () => {
+    navigate("/contact");
+  }
+
+
   return (
 
     <>
@@ -56,6 +63,7 @@ const About: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="btn btn-success rounded-0 px-4 py-2"
+                onClick={handleGoToContact}
               >
                 Contact Us
               </motion.button>
@@ -69,11 +77,11 @@ const About: React.FC = () => {
               transition={{ duration: 0.7 }}
               viewport={{ once: true }}
             >
-              <img
+              {/* <img
                 src="/Images/aboutus.jpeg"
                 alt="Flowers"
                 className="rounded-4" style={{width:"100%" , height:"600px" , filter: "brightness(0.5)"}}
-              />
+              /> */}
             </motion.div>
           </div>
         </div>

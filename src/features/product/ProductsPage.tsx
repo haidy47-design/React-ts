@@ -93,7 +93,7 @@ export default function ProductsPage(): React.ReactElement {
     return result;
   }, [products, searchTerm, selectedCategory, sortOption, discountLimit]);
 
-  const itemsPerPage = 9;
+  const itemsPerPage = 8;
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
@@ -186,7 +186,7 @@ export default function ProductsPage(): React.ReactElement {
           <div className="row g-4">
             {currentProducts.length > 0 ? (
               currentProducts.map((p) => (
-                <div key={p.id} className="col-12 col-md-6 col-lg-4">
+                <div key={p.id} className="col-12 col-md-6 col-lg-3">
                   <ProductCard product={p} />
                 </div>
               ))
