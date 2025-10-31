@@ -42,3 +42,18 @@
     gap: 0.6rem;
   }
 }
+
+/* فتح القائمة عند تمرير الماوس */
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0; /* يمنع فجوة صغيرة تسبب اختفاء القائمة */
+}
+
+/* يخلي الرابط الأساسي يفضل نشط أثناء الفتح */
+.nav-item.dropdown:hover .nav-link {
+  color: #79253D;
+}
+
+
+
+

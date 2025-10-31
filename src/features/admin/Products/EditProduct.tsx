@@ -130,7 +130,7 @@ const EditProduct: React.FC = () => {
           Edit Product
         </h3>
       <div className="row bg-white p-0 p-md-4 rounded-4 shadow-sm">
-         <img src={product.image} style={{height:"350px"}} className="col-12 col-md-4 rounded-4 mt-4"></img>
+         <img src={product.image} style={{height:"550px"}} className="col-12 col-md-4 rounded-5 mt-4"></img>
           <Form
             onSubmit={handleSubmit(onSubmit)}
             className="bg-white p-4  col-12 col-md-8"
@@ -170,7 +170,54 @@ const EditProduct: React.FC = () => {
               </Form.Control.Feedback>
             </Form.Group>
         
-            <Form.Group className="mb-3">
+          
+        
+          <div className="row">
+              <Form.Group className="mb-3 col-12 col-md-4">
+                <Form.Label>Price ($)</Form.Label>
+                <Form.Control
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  {...register("price", { valueAsNumber: true })}
+                  isInvalid={!!errors.price}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.price?.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+            
+              <Form.Group className="mb-3 col-12 col-md-4">
+                <Form.Label>Stock</Form.Label>
+                <Form.Control
+                  type="number"
+                  min="0"
+                  {...register("stock", { valueAsNumber: true })}
+                  isInvalid={!!errors.stock}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.stock?.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+            
+              <Form.Group className="mb-3 col-12 col-md-4">
+                <Form.Label>Discount Percentage (%)</Form.Label>
+                <Form.Control
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max="100"
+                  {...register("discountPercentage", { valueAsNumber: true })}
+                  isInvalid={!!errors.discountPercentage}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.discountPercentage?.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+          </div>
+        
+
+          <Form.Group className="mb-3">
               <Form.Label>Image URL</Form.Label>
               <Form.Control
                 {...register("image")}
@@ -180,52 +227,6 @@ const EditProduct: React.FC = () => {
                 {errors.image?.message}
               </Form.Control.Feedback>
             </Form.Group>
-        
-            <Form.Group className="mb-3">
-              <Form.Label>Price ($)</Form.Label>
-              <Form.Control
-                type="number"
-                step="0.01"
-                min="0"
-                {...register("price", { valueAsNumber: true })}
-                isInvalid={!!errors.price}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.price?.message}
-              </Form.Control.Feedback>
-            </Form.Group>
-        
-            <Form.Group className="mb-3">
-              <Form.Label>Stock</Form.Label>
-              <Form.Control
-                type="number"
-                min="0"
-                {...register("stock", { valueAsNumber: true })}
-                isInvalid={!!errors.stock}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.stock?.message}
-              </Form.Control.Feedback>
-            </Form.Group>
-        
-            <Form.Group className="mb-3">
-              <Form.Label>Discount Percentage (%)</Form.Label>
-              <Form.Control
-                type="number"
-                step="0.01"
-                min="0"
-                max="100"
-                {...register("discountPercentage", { valueAsNumber: true })}
-                isInvalid={!!errors.discountPercentage}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.discountPercentage?.message}
-              </Form.Control.Feedback>
-              <Form.Text className="text-muted">
-                The discounted price will be saved automatically in the "discount" field.
-              </Form.Text>
-            </Form.Group>
-        
           
             <div className="alert alert-info mt-3">
               <strong>Price after discount:</strong> ${priceAfterDiscount}
