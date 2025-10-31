@@ -100,103 +100,105 @@ const AddProduct: React.FC = () => {
         <h3 style={{ color: "#79253D" }}>Add Product</h3>
       
         <Form onSubmit={handleSubmit(onSubmit)} className="bg-white p-4 rounded-4 shadow-sm mt-4">
-          <Form.Group className="mb-3">
-            <Form.Label>Title</Form.Label>
-            <Form.Control 
-              {...register("title")} 
-              isInvalid={!!errors.title}
-              placeholder="Enter product title"
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.title?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
+          <div className="row">
+            <Form.Group className="mb-3 col-md-6">
+              <Form.Label>Title</Form.Label>
+              <Form.Control 
+                {...register("title")} 
+                isInvalid={!!errors.title}
+                placeholder="Enter product title"
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.title?.message}
+              </Form.Control.Feedback>
+            </Form.Group>
+            
+            <Form.Group className="mb-3 col-md-6">
+              <Form.Label>Description</Form.Label>
+              <Form.Control 
+                {...register("description")} 
+                isInvalid={!!errors.description}
+                placeholder="Enter product description"
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.description?.message}
+              </Form.Control.Feedback>
+            </Form.Group>
+            
+          </div>
+          <div className="row">
+            <Form.Group className="mb-3 col-md-6">
+              <Form.Label>Category</Form.Label>
+              <Form.Control 
+                {...register("category")} 
+                isInvalid={!!errors.category}
+                placeholder="e.g., Roses, Lilies"
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.category?.message}
+              </Form.Control.Feedback>
+            </Form.Group>
+            
+            <Form.Group className="mb-3 col-md-6">
+              <Form.Label>Image URL</Form.Label>
+              <Form.Control 
+                {...register("image")} 
+                isInvalid={!!errors.image}
+                placeholder="https://example.com/image.jpg"
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.image?.message}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </div>
       
-          <Form.Group className="mb-3">
-            <Form.Label>Description</Form.Label>
-            <Form.Control 
-              as="textarea" 
-              rows={3}
-              {...register("description")} 
-              isInvalid={!!errors.description}
-              placeholder="Enter product description"
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.description?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-      
-          <Form.Group className="mb-3">
-            <Form.Label>Category</Form.Label>
-            <Form.Control 
-              {...register("category")} 
-              isInvalid={!!errors.category}
-              placeholder="e.g., Roses, Lilies"
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.category?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-      
-          <Form.Group className="mb-3">
-            <Form.Label>Image URL</Form.Label>
-            <Form.Control 
-              {...register("image")} 
-              isInvalid={!!errors.image}
-              placeholder="https://example.com/image.jpg"
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.image?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-      
-          <Form.Group className="mb-3">
-            <Form.Label>Price ($)</Form.Label>
-            <Form.Control 
-              type="number" 
-              step="0.01" 
-              min="0"
-              {...register("price", { valueAsNumber: true })} 
-              isInvalid={!!errors.price}
-              placeholder="0.00"
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.price?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-      
-          <Form.Group className="mb-3">
-            <Form.Label>Stock Quantity</Form.Label>
-            <Form.Control 
-              type="number" 
-              min="0"
-              {...register("stock", { valueAsNumber: true })} 
-              isInvalid={!!errors.stock}
-              placeholder="0"
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.stock?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-      
-          <Form.Group className="mb-3">
-            <Form.Label>Discount Percentage (%)</Form.Label>
-            <Form.Control
-              type="number"
-              step="0.01"
-              min="0"
-              max="100"
-              {...register("discountPercentage", { valueAsNumber: true })}
-              isInvalid={!!errors.discountPercentage}
-              placeholder="0"
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.discountPercentage?.message}
-            </Form.Control.Feedback>
-            <Form.Text className="text-muted">
-              Enter discount as a percentage (0-100)
-            </Form.Text>
-          </Form.Group>
+        <div className="row">
+            <Form.Group className="mb-3 col-12 col-md-4">
+              <Form.Label>Price ($)</Form.Label>
+              <Form.Control 
+                type="number" 
+                step="0.01" 
+                min="0"
+                {...register("price", { valueAsNumber: true })} 
+                isInvalid={!!errors.price}
+                placeholder="0.00"
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.price?.message}
+              </Form.Control.Feedback>
+            </Form.Group>
+          
+            <Form.Group className="mb-3 col-12 col-md-4">
+              <Form.Label>Stock Quantity</Form.Label>
+              <Form.Control 
+                type="number" 
+                min="0"
+                {...register("stock", { valueAsNumber: true })} 
+                isInvalid={!!errors.stock}
+                placeholder="0"
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.stock?.message}
+              </Form.Control.Feedback>
+            </Form.Group>
+          
+            <Form.Group className="mb-3 col-12 col-md-4">
+              <Form.Label>Discount Percentage (%)</Form.Label>
+              <Form.Control
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                {...register("discountPercentage", { valueAsNumber: true })}
+                isInvalid={!!errors.discountPercentage}
+                placeholder="0"
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.discountPercentage?.message}
+              </Form.Control.Feedback>
+              
+            </Form.Group>
+        </div>
       
           <div className="d-flex justify-content-between mt-4">
             <Button type="submit" variant="success" disabled={mutation.isPending}>
