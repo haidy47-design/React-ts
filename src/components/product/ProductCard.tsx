@@ -1,6 +1,6 @@
 
 import React, { memo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../features/hooks";
 import { addToCart } from "../../features/product/cartSlice";
 import { toast } from "react-hot-toast";
@@ -31,17 +31,17 @@ function ProductCardComponent({ product }: Props): React.ReactElement {
   
 
   const dispatch = useAppDispatch();
-  
+  const navigate = useNavigate()
 
 
 const handleAddToCart = () => {
   dispatch(addToCart({ ...product, quantity: 1 }))
     .unwrap()
     .then(() => {
-      showSuccessAlert("Added to cart!");
+      showSuccessAlert("Added to cart");
     })
     .catch((err) => {
-      showErrorAlert(err || "Failed to add to cart");
+      showLoginRequired("Failed to add to cart",navigate);
     });
 };
 
@@ -53,7 +53,7 @@ const isInWishlist = wishlist.some(
 const handleToggleWishlist = async() => {
   const storedUser = localStorage.getItem("user");
   if (!storedUser) {
-    showLoginRequired("Login first");
+    showLoginRequired("Login first",navigate);
     return; 
   }
   try {

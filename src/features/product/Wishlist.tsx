@@ -46,7 +46,7 @@ const Wishlist: React.FC = () => {
           <>
             <div className="text-center mb-5">
               <button
-                className="btn btn-outline-primary btn-lg mb-2"
+                className="btn btn-outline-success rounded-0 btn-lg mb-2"
                 onClick={handleClearWishlist}
               >
                 Reset Wishlist
@@ -56,7 +56,7 @@ const Wishlist: React.FC = () => {
       
             <div className="row g-4">
               {wishlist.map((product) => (
-                <div key={product.id} className="col-lg-4 col-md-6 col-12">
+                <div key={product.id} className="col-lg-3 col-md-6 col-12">
                   <ProductCard product={product} />
                 </div>
               ))}
