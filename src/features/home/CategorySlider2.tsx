@@ -1,15 +1,14 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { Autoplay, Navigation, Pagination, EffectCoverflow } from "swiper/modules"; 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import "swiper/css/effect-coverflow"; 
 import "swiper/css/pagination";
-import "../../styles/category.css";
-
-import { fa } from "zod/v4/locales";
+import "../../styles/category2.css"; 
 
 interface Product {
   id: string;
@@ -28,7 +27,7 @@ interface Category {
   count: number;
 }
 
-export default function CategorySlider(): React.ReactElement {
+export default function CategorySlider2(): React.ReactElement {
   const { data, isLoading, error } = useQuery<Category[]>({
     queryKey: ["categories"],
     queryFn: async () => {
@@ -37,7 +36,7 @@ export default function CategorySlider(): React.ReactElement {
       );
 
       const categoryMap = new Map<string, { image: string; count: number }>();
-
+      
       response.data.forEach((product) => {
         if (categoryMap.has(product.category)) {
           const existing = categoryMap.get(product.category)!;
@@ -59,81 +58,78 @@ export default function CategorySlider(): React.ReactElement {
     },
   });
 
-  if (error) return <p className="text-center">Error loading categories</p>;
+  if (error) return <p className="text-center text-danger">Error loading categories. Please try again.</p>;
 
   const categories = Array.isArray(data) ? data : [];
 
   return (
     <section className="container py-5 position-relative">
       <h3 className="section-title text-center mb-2 mt-5">
-        Discover Our Categories
-       </h3>
+         Discover Our Categories 
+      </h3>
       <div className="mb-5 pb-1">
-       <h6 className="text-center mt-3 ">Fresh, Seasonal, Beautiful</h6>
-      <h6 className="text-center ">Order Now and Get Same-Day-Delivery</h6>
-       </div>
+        <p className="text-center text-muted mt-3 mb-1">
+          Fresh, Seasonal, Beautiful
+        </p>
+      </div>
 
-      {/* Spinner overlay */}
       {isLoading && (
-        <div
-          className="d-flex justify-content-center align-items-center"
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "rgba(255,255,255,0.7)",
-            zIndex: 10,
-          }}
-        >
+        <div className="loading-overlay">
           <div className="spinner-border text-primary" role="status"></div>
         </div>
       )}
 
-    
       {!isLoading && categories.length > 0 && (
         <Swiper
-          modules={[Navigation, Autoplay, Pagination]}
-          slidesPerView={4}
-          spaceBetween={20}
+          modules={[Navigation, Autoplay, Pagination, EffectCoverflow]}
+          effect={"coverflow"} 
+          
+          coverflowEffect={{
+            rotate: 50, 
+            stretch: 0, 
+            depth: 100, 
+            modifier: 1,
+            slideShadows: true, 
+          }}
+          
+          grabCursor={true} 
+          centeredSlides={true} 
+          slidesPerView={3} 
+          spaceBetween={10} 
           loop
-          navigation={false}
+          navigation={true} 
           pagination={{ clickable: true }}
           autoplay={{ delay: 2500, disableOnInteraction: false }}
+
           breakpoints={{
-            320: { slidesPerView: 1 },
-            576: { slidesPerView: 2 },
-            992: { slidesPerView: 3 },
-            1200: { slidesPerView: 4 },
+            320: { slidesPerView: 1, spaceBetween: 10 },
+            768: { slidesPerView: 2.5, spaceBetween: 15 }, 
+            1200: { slidesPerView: 3, spaceBetween: 20 },
           }}
         >
           {categories.map((cat) => (
-            <SwiperSlide key={cat.id} >
-              <Link to={`/products?category=${encodeURIComponent(cat.name)}`} 
-                className="card shadow-sm h-150 position-relative overflow-hidden category-card"
-                style={{ cursor: "pointer", width: "100%" }}
+            <SwiperSlide key={cat.id}>
+              <Link
+                to={`/products?category=${encodeURIComponent(cat.name)}`}
+                className="category-card shadow-lg position-relative overflow-hidden" 
               >
-                <img
-                  src={cat.image}
-                  alt={cat.name}
-                  className="category-img"
-                />
-              
+                <div className="category-img-container"> 
+                  <img
+                    src={cat.image}
+                    alt={cat.name}
+                    className="category-img"
+                  />
+                </div>
                 <div className="overlay"></div>
-
-            
-                <div className="card-body text-center position-absolute bottom-0 start-0 end-0 text-white">
-                  <h5 className="card-title mb-1">{cat.name}</h5>
-                
+                <div className="card-info text-center position-absolute bottom-0 start-0 end-0 text-white p-3">
+                  <h5 className="card-title mb-1 text-uppercase">{cat.name}</h5>
+                  
                 </div>
               </Link>
             </SwiperSlide>
           ))}
         </Swiper>
       )}
-
-
     </section>
   );
 }
-
-
-

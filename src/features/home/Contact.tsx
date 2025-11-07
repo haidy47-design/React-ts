@@ -235,9 +235,9 @@ export default function Contact() {
               viewport={{ once: true }}
             >
               <img
-                src="/Images/contactUs.jpg"
+                src="/Images/aa.jpg"
                 alt="Contact illustration"
-                className="rounded-4"
+                className="rounded-0"
                 style={{ width: "100%", height: "600px", filter: "brightness(0.9)" }}
               />
             </motion.div>

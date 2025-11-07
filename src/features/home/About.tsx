@@ -72,7 +72,7 @@ const About: React.FC = () => {
               <img
                 src="/Images/aboutus.jpeg"
                 alt="Flowers"
-                className="rounded-4" style={{width:"100%" , height:"600px" , filter: "brightness(0.5)"}}
+                className="rounded-0" style={{width:"100%" , height:"600px" , filter: "brightness(0.5)"}}
               />
             </motion.div>
           </div>

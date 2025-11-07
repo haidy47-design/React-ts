@@ -8,6 +8,8 @@ import About from "./About";
 import Contact from "./Contact";
 import SpecialOffer from "./SpecialOffer";
 import InstagramPhotos from "./InstagramPhotos";
+import CategorySlider2 from "./CategorySlider2";
+
 
 
 export default function HomePage(): React.ReactElement {
@@ -23,6 +25,10 @@ export default function HomePage(): React.ReactElement {
       <section className="container mt-4">
       <CategorySlider />
       </section>
+
+      {/* <section className="container mt-4">
+      <CategorySlider2 />
+      </section> */}
       <section className="container mt-4">
       <SpecialOffer />
       </section>
