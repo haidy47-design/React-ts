@@ -41,42 +41,42 @@ export default function Welcome(): React.ReactElement {
         <Carousel.Item className="h-100">
           <img
             className="d-block w-100 h-100 object-fit-cover"
-            src="/Images/13.jpg"
+            src="/Images/v.jpg"
             alt="Hero 1"
           />
         </Carousel.Item>
         <Carousel.Item className="h-100">
           <img
             className="d-block w-100 h-100 object-fit-cover"
-            src="/Images/4.jpg"
+            src="/Images/l.jpg"
             alt="Hero 2"
           />
         </Carousel.Item>
         <Carousel.Item className="h-100">
           <img
             className="d-block w-100 h-100 object-fit-cover"
-            src="/Images/6.jpg"
+            src="/Images/lll.jpg"
             alt="Hero 3"
           />
         </Carousel.Item>
         <Carousel.Item className="h-100">
           <img
             className="d-block w-100 h-100 object-fit-cover"
-            src="/Images/5.jpg"
+            src="/Images/kk.jpg"
             alt="Hero 4"
           />
         </Carousel.Item>
         <Carousel.Item className="h-100">
           <img
             className="d-block w-100 h-100 object-fit-cover"
-            src="/Images/17.jpg"
+            src="/Images/ttt.jpg"
             alt="Hero 5"
           />
         </Carousel.Item>
         <Carousel.Item className="h-100">
           <img
             className="d-block w-100 h-100 object-fit-cover"
-            src="/Images/18.jpg"
+            src="/Images/d.jpg"
             alt="Hero 6"
           />
         </Carousel.Item>
