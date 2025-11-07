@@ -310,7 +310,7 @@ const COLORS = [
         {/* Header */}
         <Row className="align-items-center mb-3">
           <Col xs={12} md={6}>
-            <h3 className="mb-0">Admin Dashboard</h3>
+            <h3 className="mb-0 fw-bold">Admin Dashboard</h3>
             <small className="text-muted">Performance & Sales at a Glance</small>
           </Col>
           <Col xs={12} md={6} className="text-md-end mt-3 mt-md-0">

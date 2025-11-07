@@ -101,14 +101,11 @@ export default function Navbar(): React.ReactElement {
               <li className="nav-item dropdown">
                 {user && user.name ? (
                   <>
-                    <a
-                      href="#!"
-                      className="nav-link dropdown-toggle text-dark"
-                      id="userDropdown"
-                      role="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
+                  <a
+  href="#!"
+  className="nav-link dropdown-toggle text-dark"
+  onClick={(e) => e.preventDefault()} // يمنع الفتح بالضغط
+>
                       Hi, {user?.name ?? "User"}
                     </a>
                     <ul

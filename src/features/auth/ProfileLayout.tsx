@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Outlet, Link, useNavigate, NavLink } from "react-router-dom";
 import { FaUser, FaClipboardList, FaHome, FaSignOutAlt, FaBars, FaTimes, FaFacebookMessenger } from "react-icons/fa";
 import "../../styles/auth.css";
+import { RegisterForm, User } from "./SignupPage";
+
+
 
 export default function ProfileLayout(): React.ReactElement {
+ 
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User>();
   const [isOpen, setIsOpen] = useState(false); 
 
   useEffect(() => {

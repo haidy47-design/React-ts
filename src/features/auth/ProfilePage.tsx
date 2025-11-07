@@ -5,10 +5,12 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import "../../styles/auth.css";
 import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
+import { RegisterForm, User } from "./SignupPage";
+
 
 export default function ProfilePage(): React.ReactElement {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User>();
   const [formData, setFormData] = useState({
     name: "",
     oldPassword: "",
@@ -83,10 +85,16 @@ export default function ProfilePage(): React.ReactElement {
       }
     }
 
+    type Fields ={
+      name?: string;
+      password?: string;
+      "re-password"?: string;
+    }
+
     try {
 
 
-      const updatedFields: any = {};
+      const updatedFields: Fields = {};
       if (name && name !== user.name) updatedFields.name = name;
       if (password) {
         updatedFields.password = password;

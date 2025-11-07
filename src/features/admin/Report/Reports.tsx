@@ -149,6 +149,30 @@ const AdminReports: React.FC = () => {
     return Object.values(productData).sort((a, b) => b.revenue - a.revenue);
   };
 
+
+   const getMostActiveCustomers = () => {
+    const customerData: { [key: string]: { userName: string; email: string; totalOrders: number } } = {};
+    
+    filteredOrders.forEach(order => {
+      if (order.status !== 'Cancelled') {
+        const email = order.email || 'unknown';
+        if (!customerData[email]) {
+          customerData[email] = {
+            userName: order.userName || 'Unknown',
+            email: email,
+            totalOrders: 0
+          };
+        }
+        customerData[email].totalOrders += 1;
+      }
+    });
+    
+    return Object.values(customerData)
+      .sort((a, b) => b.totalOrders - a.totalOrders)
+      .slice(0, 3);
+};
+
+
   const calculateCategorySales = () => {
     const categoryData: { [key: string]: { category: string; quantity: number; revenue: number } } = {};
     
@@ -178,6 +202,7 @@ const AdminReports: React.FC = () => {
   const monthlyIncome = calculateMonthlyIncome();
   const productSales = calculateProductSales();
   const categorySales = calculateCategorySales();
+  const customerData = getMostActiveCustomers();
 
   const totalRevenue = filteredOrders
     .filter(order => order.status !== 'Cancelled')
@@ -460,8 +485,8 @@ const AdminReports: React.FC = () => {
       <div >
         
         <div className="mb-4">
-          <h1 className="display-4 fw-bold text-dark mb-2">Overview</h1>
-          <p className="text-secondary fs-5">Comprehensive business analytics and reports</p>
+          <h2 className=" fw-bold main-color mb-2">Overview</h2>
+          <p className="text-secondary ">Comprehensive business analytics and reports</p>
           
           <div className="row g-3 mt-3">
             <div className="col-md-4">
@@ -470,7 +495,7 @@ const AdminReports: React.FC = () => {
                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
                 <div className="card-body">
                   <p className="text-secondary small mb-2">Total Orders</p>
-                  <h3 className="text-gray fw-bold">{filteredOrders.length}</h3>
+                  <h4 className="main-color fw-bold">{filteredOrders.length}</h4>
                 </div>
               </div>
             </div>
@@ -480,7 +505,7 @@ const AdminReports: React.FC = () => {
                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
                 <div className="card-body">
                   <p className="text-secondary small mb-2">Total Revenue</p>
-                  <h3 className="text-dark fw-bold">$ {totalRevenue.toFixed(2)}</h3>
+                  <h4 className="main-color fw-bold">$ {totalRevenue.toFixed(2)}</h4>
                 </div>
               </div>
             </div>
@@ -490,7 +515,7 @@ const AdminReports: React.FC = () => {
                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
                 <div className="card-body">
                   <p className="text-secondary small mb-2">Products Sold</p>
-                  <h3 className="main-color fw-bold">{productSales.reduce((sum, p) => sum + p.quantity, 0)}</h3>
+                  <h4 className="main-color fw-bold">{productSales.reduce((sum, p) => sum + p.quantity, 0)}</h4>
                 </div>
               </div>
             </div>
@@ -716,6 +741,48 @@ const AdminReports: React.FC = () => {
             </div>
           </div>
         </div>
+
+            
+            <div className="card shadow-sm mb-4">
+          <div className="card-body">
+            <h4 className="card-title mb-3 main-color ">
+              <i className="fas fa-users me-2 "></i>
+              Most Active Users
+            </h4>
+            <div className="table-responsive mt-4 bg-white rounded-4 shadow-sm ">
+              <table className="table align-middle table-hover">
+              
+                  <tr style={{ backgroundColor: "#79253D", color: "white" }}>
+                    <th className="p-3 text-center">#</th>
+                    <th className="p-3">User Name</th>
+                    <th className="p-3">Email</th>
+                    <th className="p-3 text-center">Total Orders</th>
+                  </tr>
+          
+                <tbody>
+                  {customerData.length > 0 ? (
+                    customerData.map((customer, index) => (
+                      <tr key={index}>
+                        <td className="text-center fw-bold">{index + 1}</td>
+                        <td className="fw-semibold">{customer.userName}</td>
+                        <td>{customer.email}</td>
+                        <td className="text-center fw-bold main-color">{customer.totalOrders}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={4} className="text-center text-secondary py-4">
+                        No active customers data available
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
       </div>
     </div>
   );

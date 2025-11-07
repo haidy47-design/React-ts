@@ -10,6 +10,10 @@ import "../../styles/auth.css";
 import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
 import HelmetWrapper from "../../components/common/HelmetWrapper";
 
+
+export  type User = RegisterForm & { avatar?: string , id?: string ,createdAt?: string , role?: string} ;
+
+
 const schema = z
   .object({
     name: z.string().min(3, "Name must be at least 3 characters"),
@@ -25,7 +29,7 @@ const schema = z
     path: ["re-password"],
   });
 
-type RegisterForm = z.infer<typeof schema>;
+export type RegisterForm = z.infer<typeof schema>;
 
 export default function Register() {
   const navigate = useNavigate();

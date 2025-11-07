@@ -9,6 +9,7 @@ import {
   showErrorAlert,
 } from "../../components/common/CustomSwal";
 import HelmetWrapper from "../../components/common/HelmetWrapper";
+import { Product } from "src/components/product/ProductCard";
 
 export interface IOrder {
   id: string;
@@ -65,7 +66,7 @@ export default function OrdersPage(): React.ReactElement {
           );
 
           const matchedProduct = products.find(
-            (p: any) =>
+            (p: Product) =>
               p.title.trim().toLowerCase() === item.title.trim().toLowerCase()
           );
 
@@ -180,11 +181,7 @@ export default function OrdersPage(): React.ReactElement {
         </div>
       ) : (
         <div
-          className="mt-5"
-          style={{
-            overflow: "visible",
-            maxWidth: "100%",
-          }}
+          className="table-responsive mt-5"
         >
           <table className="table align-middle table-hover text-center">
             <tr className="text-center text-white" style={{ backgroundColor: "#79253D" }}>

@@ -11,6 +11,7 @@ import {
 import { IOrder } from "src/features/order/OrdersPage";
 import { fetchOrders } from "../api";
 import HelmetWrapper from "../../../components/common/HelmetWrapper";
+import { Product } from "src/components/product/ProductCard";
 
 const Orders: React.FC = () => {
   const navigate = useNavigate();
@@ -29,12 +30,12 @@ const Orders: React.FC = () => {
 
       const restoreStockPromises = order.items.map(async (item) => {
         try {
-          const { data: products } = await axios.get(
+          const { data: products } = await axios.get<Product[]>(
             "https://68e43ee28e116898997b5bf8.mockapi.io/product"
           );
 
           const matchedProduct = products.find(
-            (p: any) =>
+            (p: Product) =>
               p.title.trim().toLowerCase() === item.title.trim().toLowerCase()
           );
 
@@ -74,14 +75,14 @@ const Orders: React.FC = () => {
       );
 
       if (status === "Cancelled") {
-        const restoreStockPromises = updatedOrder.items.map(async (item: any) => {
+        const restoreStockPromises = updatedOrder.items.map( async (item: { title: string; image: string; quantity: number; discount: number }) => {
           try {
             const { data: products } = await axios.get(
               "https://68e43ee28e116898997b5bf8.mockapi.io/product"
             );
 
             const matchedProduct = products.find(
-              (p: any) =>
+              (p: Product) =>
                 p.title.trim().toLowerCase() === item.title.trim().toLowerCase()
             );
 
@@ -216,9 +217,9 @@ const Orders: React.FC = () => {
   
       <div className="p-3 p-md-4 bg-white rounded-4 shadow-sm mb-4">
         <div className="mb-3">
-          <h4 className="fw-bold mb-2" style={{ color: "#79253D" }}>
+          <h3 className="fw-bold mb-2" style={{ color: "#79253D" }}>
             Orders Management
-          </h4>
+          </h3>
           <p className="text-muted mb-0">Total Orders: {orders.length}</p>
         </div>
 
@@ -552,7 +553,7 @@ const Orders: React.FC = () => {
       </div>
 
 
-      <Modal show={showModal} onHide={handleCloseModal} centered size="lg" className="my-5">
+      <Modal show={showModal} onHide={handleCloseModal} centered size="lg" className="py-5 mt-2">
         <Modal.Header closeButton style={{ backgroundColor: "#fad7a5ff" }}>
           <Modal.Title className="main-color">Order Details</Modal.Title>
         </Modal.Header>
@@ -599,7 +600,7 @@ const Orders: React.FC = () => {
                     className="p-3"
                     style={{ backgroundColor: "#F4EFE8" }}
                   >
-                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+                    <div className="d-flex flex-md-row justify-content-between align-items-center align-items-md-center gap-3">
                       <div className="d-flex align-items-center gap-3">
                         <img
                           src={item.image}
@@ -612,9 +613,11 @@ const Orders: React.FC = () => {
                           <small className="text-muted">Qty: {item.quantity}</small>
                         </div>
                       </div>
-                      <p className="mb-0 fw-bold">
-                        ${(item.discount * item.quantity).toFixed(2)}
-                      </p>
+                      <div>
+                        <p className="mb-0 fw-bold">
+                          ${(item.discount * item.quantity).toFixed(2)}
+                        </p>
+                      </div>
                     </div>
                   </ListGroup.Item>
                 ))}

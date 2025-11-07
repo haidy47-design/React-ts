@@ -104,9 +104,9 @@ const AdminContacts: React.FC = () => {
       
       <div className="p-4 bg-white rounded-4 shadow-sm mb-4">
         <div className="d-md-flex justify-content-between align-items-center flex-wrap mb-3">
-          <h4 className="fw-bold" style={{ color: "#79253D" }}>
+          <h3 className="fw-bold" style={{ color: "#79253D" }}>
             Contact Management
-          </h4>
+          </h3>
           <div className="text-muted">
             Total Messages: <b>{filteredContacts.length}</b>
           </div>
