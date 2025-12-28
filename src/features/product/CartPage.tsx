@@ -10,7 +10,7 @@ import { Link, useNavigate } from "react-router";
 import "./CartPage.css"; 
 import Spinner from "../../components/common/Spinner";
 import { FaLongArrowAltRight } from 'react-icons/fa';
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
 
 export default function CartPage(): React.ReactElement {
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ export default function CartPage(): React.ReactElement {
 
   return (
     <>
-     <HelmetWrapper title="Cart" />
+     {/* <HelmetWrapper title="Cart" /> */}
 
 
       <div className="cart-page py-4">

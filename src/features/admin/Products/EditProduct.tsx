@@ -11,7 +11,7 @@ import {
   showSuccessAlert,
   showErrorAlert,
 } from "../../../components/common/CustomSwal";
-import HelmetWrapper from "../../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../../components/common/HelmetWrapper";
 
 const editProductSchema = z.object({
   title: z.string().min(2, "Title must be at least 2 characters"),
@@ -124,7 +124,7 @@ const EditProduct: React.FC = () => {
 
   return (
     <>
-     <HelmetWrapper title="Edit Product" />
+     {/* <HelmetWrapper title="Edit Product" /> */}
       <div className="container mt-3">
         <h3 className="mb-4" style={{ color: "#79253D" }}>
           Edit Product

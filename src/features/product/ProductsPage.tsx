@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Spinner from "../../components/common/Spinner";
 import ProductCard, { Product } from "../../components/product/ProductCard";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
 import "./CartPage.css";
 import { useLocation } from "react-router";
 
@@ -101,7 +101,7 @@ export default function ProductsPage(): React.ReactElement {
 
   return (
     <div className="container py-5 products-page">
-      <HelmetWrapper title="Roséa Shop" />
+      {/* <HelmetWrapper title="Roséa Shop" /> */}
 
       <div className="text-center mb-5">
         <h2 className="fw-bold">Beautiful Flowers</h2>

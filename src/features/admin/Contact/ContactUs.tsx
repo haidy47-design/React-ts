@@ -8,7 +8,7 @@ import {
   showSuccessAlert,
 } from "../../../components/common/CustomSwal";
 import { fetchContacts, sendReply } from "../api";
-import HelmetWrapper from "../../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../../components/common/HelmetWrapper";
 
 export interface Contact {
   id: string;
@@ -100,7 +100,7 @@ const AdminContacts: React.FC = () => {
 
   return (
     <>
-    <HelmetWrapper title="Messages" />
+    {/* <HelmetWrapper title="Messages" /> */}
       
       <div className="p-4 bg-white rounded-4 shadow-sm mb-4">
         <div className="d-md-flex justify-content-between align-items-center flex-wrap mb-3">

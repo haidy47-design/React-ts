@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast, { Toaster } from "react-hot-toast";
-import { Helmet } from "react-helmet-async";
+// import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../styles/auth.css";
@@ -47,9 +47,9 @@ export default function ForgotPassword() {
 
   return (
     <>
-      <Helmet>
+      {/* <Helmet>
         <title>Forgot Password</title>
-      </Helmet>
+      </Helmet> */}
       <Toaster position="top-center" />
 
       <div className="auth-container">

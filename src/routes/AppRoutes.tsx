@@ -134,7 +134,7 @@ const user = JSON.parse(localStorage.getItem("user") || "null");
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-     {!hideLayout && (
+     {!hideLayout && (  
         <>
           <Footer />
           <ChatWidget />

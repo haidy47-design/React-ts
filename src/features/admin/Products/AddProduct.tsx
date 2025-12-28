@@ -7,7 +7,7 @@ import { createProduct } from "../api";
 import { showSuccessAlert, showErrorAlert } from "../../../components/common/CustomSwal";
 import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
-import HelmetWrapper from "../../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../../components/common/HelmetWrapper";
 
 
 const productFormSchema = z.object({
@@ -95,7 +95,7 @@ const AddProduct: React.FC = () => {
 
   return (
     <>
-    <HelmetWrapper title="Add Product" />
+    {/* <HelmetWrapper title="Add Product" /> */}
       <div className="container mt-4">
         <h3 style={{ color: "#79253D" }}>Add Product</h3>
       

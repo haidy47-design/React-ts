@@ -10,7 +10,7 @@ import {
 } from "../../../components/common/CustomSwal";
 import { IOrder } from "src/features/order/OrdersPage";
 import { fetchOrders } from "../api";
-import HelmetWrapper from "../../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../../components/common/HelmetWrapper";
 import { Product } from "src/components/product/ProductCard";
 
 const Orders: React.FC = () => {
@@ -212,7 +212,7 @@ const Orders: React.FC = () => {
 
   return (
     <>
-      <HelmetWrapper title="Orders" />
+      {/* <HelmetWrapper title="Orders" /> */}
       
   
       <div className="p-3 p-md-4 bg-white rounded-4 shadow-sm mb-4">

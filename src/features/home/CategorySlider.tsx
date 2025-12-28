@@ -63,18 +63,26 @@ export default function CategorySlider(): React.ReactElement {
 
   const categories = Array.isArray(data) ? data : [];
 
+  // ✅ خريطة الصور اللي معاك من النت
+  const categoryImages: Record<string, string> = {
+    Roses: "https://i.ibb.co/C5n3q1cg/Red-rose-png-removebg-preview.png",
+    Lilies: "https://i.ibb.co/jkNDHv5z/Photo-by-Natalie-Kinnear-on-Unsplash-removebg-preview.png",
+    Tulips: "https://i.ibb.co/8gWDZ0B2/Tulip-removebg-preview.png",
+    Sunflowers: "https://i.ibb.co/23fR7Vx6/Sunflower-removebg-preview.png",
+    Daisies: "https://i.ibb.co/r98T4yd/Single-daisy-on-dark-blue-background-Otomodachi-removebg-preview.png",
+    Orchids: "https://i.ibb.co/r290J8HD/pink-orchid-removebg-preview.png",
+  };
+
   return (
     <section className="container py-5 position-relative">
-      
       <h3 className="section-title text-center mb-2 mt-5">
         Discover Our Categories
-       </h3>
+      </h3>
       <div className="mb-5 pb-1">
-       <h6 className="text-center mt-3 ">Fresh, Seasonal, Beautiful</h6>
-      <h6 className="text-center ">Order Now and Get Same-Day-Delivery</h6>
-       </div>
+        <h6 className="text-center mt-3">Fresh, Seasonal, Beautiful</h6>
+        <h6 className="text-center">Order Now and Get Same-Day-Delivery</h6>
+      </div>
 
-      {/* Spinner overlay */}
       {isLoading && (
         <div
           className="d-flex justify-content-center align-items-center"
@@ -89,14 +97,12 @@ export default function CategorySlider(): React.ReactElement {
         </div>
       )}
 
-    
       {!isLoading && categories.length > 0 && (
         <Swiper
           modules={[Navigation, Autoplay, Pagination]}
           slidesPerView={4}
           spaceBetween={20}
           loop
-          navigation={false}
           pagination={{ clickable: true }}
           autoplay={{ delay: 2500, disableOnInteraction: false }}
           breakpoints={{
@@ -107,34 +113,27 @@ export default function CategorySlider(): React.ReactElement {
           }}
         >
           {categories.map((cat) => (
-            <SwiperSlide key={cat.id} >
-              <Link to={`/products?category=${encodeURIComponent(cat.name)}`} 
-                className="card shadow-sm h-150 position-relative overflow-hidden category-card"
-                style={{ cursor: "pointer", width: "100%" }}
+            <SwiperSlide key={cat.id}>
+              <Link
+                to={`/products?category=${encodeURIComponent(cat.name)}`}
+                className=" shadow-sm h-150 position-relative overflow-hidden category-card"
               >
-                <img
-                  src={cat.image}
+                <div className="bg-secondary bg-opacity-25 ">
+                  <img
+                  src={categoryImages[cat.name] }
                   alt={cat.name}
-                  className="category-img"
-                />
-              
+                  className="category-img object-fit-contain"
+                /></div>
+                
                 <div className="overlay"></div>
-
-            
                 <div className="card-body text-center position-absolute bottom-0 start-0 end-0 text-white">
                   <h5 className="card-title mb-1">{cat.name}</h5>
-                
                 </div>
               </Link>
             </SwiperSlide>
           ))}
         </Swiper>
       )}
-
-
     </section>
   );
 }
-
-
-

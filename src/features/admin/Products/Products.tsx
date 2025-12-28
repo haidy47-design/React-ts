@@ -6,7 +6,7 @@ import "./AdProduct.css";
 import { applyDiscountForAllProducts, deleteProduct, fetchProducts } from "../api";
 import { Product } from "src/components/product/ProductCard";
 import { showConfirmAlert, showDiscountPrompt, showErrorAlert, showSuccessAlert } from "../../../components/common/CustomSwal";
-import HelmetWrapper from "../../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../../components/common/HelmetWrapper";
 
 const ProductList: React.FC = () => {
   const navigate = useNavigate();
@@ -152,7 +152,7 @@ const applyDiscountMutation = useMutation({
     
       <>
 
-        <HelmetWrapper title="Product" />
+        {/* <HelmetWrapper title="Product" /> */}
 
   
         <div className="p-4 bg-white rounded-4 shadow-sm mb-4">

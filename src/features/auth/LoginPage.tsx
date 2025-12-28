@@ -5,13 +5,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import toast, { Toaster } from "react-hot-toast";
-import { Helmet } from "react-helmet-async";
+// import { Helmet } from "react-helmet-async";
 import "../../styles/auth.css";
 import { FaSignInAlt } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setUser } from "../auth/authSlice";
 import { showLoginError, showLoginSuccess } from "../../components/common/CustomSwal";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
 import { RegisterForm } from "./SignupPage";
 
 const schema = z.object({
@@ -65,7 +65,7 @@ export default function Login() {
 
   return (
     <>
-        <HelmetWrapper title="login" />
+        {/* <HelmetWrapper title="login" /> */}
       <Toaster position="top-center" />
 
       <div className="auth-container">
