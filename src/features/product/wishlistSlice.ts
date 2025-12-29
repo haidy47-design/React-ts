@@ -57,6 +57,8 @@ export const fetchWishlist = createAsyncThunk<WishlistItem[], void, { rejectValu
 );
 
 // ✅ Toggle Wishlist
+// استبدل toggleWishlist بهذا الكود:
+
 export const toggleWishlist = createAsyncThunk<
   { added?: WishlistItem; removedId?: string },
   Product,
@@ -70,11 +72,15 @@ export const toggleWishlist = createAsyncThunk<
 
       const userId = JSON.parse(storedUser).id as string;
 
-      const res = await axios.get<WishlistItem[]>(API_URL, {
-        params: { userId },
-      });
+    
+      const res = await axios.get<WishlistItem[]>(API_URL);
+      
+    
+      const userItems = res.data.filter(
+        (item) => String(item.userId) === String(userId)
+      );
 
-      const userItems = res.data;
+
       const existing = userItems.find(
         (item) =>
           String(item.productId) === String(product.id) ||
@@ -82,9 +88,11 @@ export const toggleWishlist = createAsyncThunk<
       );
 
       if (existing && existing.id) {
+      
         await axios.delete(`${API_URL}/${existing.id}`);
         return { removedId: existing.id };
       } else {
+      
         const newItem: WishlistItem = {
           ...product,
           userId,
@@ -102,7 +110,7 @@ export const toggleWishlist = createAsyncThunk<
   }
 );
 
-// ✅ Clear Wishlist
+//  Clear Wishlist
 export const clearWishlist = createAsyncThunk<WishlistItem[], void, { rejectValue: string }>(
   "wishlist/clear",
   async (_, { rejectWithValue }) => {

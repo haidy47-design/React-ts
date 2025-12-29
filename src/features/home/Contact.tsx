@@ -8,7 +8,7 @@ import z from "zod";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
 
 
 
@@ -97,7 +97,7 @@ export default function Contact() {
 
   return (
     <>
-        <HelmetWrapper title="Countact Us" />
+      {/* <HelmetWrapper title="Countact Us" /> */}
       <section className="contact-section py-5">
         <div className="container">
       

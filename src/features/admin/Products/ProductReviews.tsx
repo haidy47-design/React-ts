@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchReviews } from "../api";
 import Spinner from "../../../components/common/Spinner";
-import HelmetWrapper from "../../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../../components/common/HelmetWrapper";
 
 const AdminProductReviews: React.FC = () => {
   const { productID } = useParams<{ productID: string }>();
@@ -60,7 +60,7 @@ const AdminProductReviews: React.FC = () => {
 
   return (
   <>
-  <HelmetWrapper title="Product Review" />
+  {/* <HelmetWrapper title="Product Review" /> */}
       <div className="container-fluid px-2 px-sm-3 mt-3">
         <div className="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-start align-items-sm-center mb-3 mb-sm-4 gap-2 px-2 px-sm-0">
           <h3 className="main-color mb-0 ">Product Reviews</h3>

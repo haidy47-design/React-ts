@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+// import { Helmet, HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -17,6 +17,7 @@ import { Toaster } from "react-hot-toast";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import ScrollToTop from "./components/common/ScrollToTop";
+import AppWrapper from "./components/common/HandleHeart";
 
 
 const container = document.getElementById("root")!;
@@ -32,17 +33,20 @@ const queryClient = new QueryClient({
 
 root.render(
   <React.StrictMode>
-      <HelmetProvider>
+    {/* {/* <HelmetProvider> */}
       <Provider store={store}>
+        
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <ScrollToTop />
+            <AppWrapper>
             <AppRoutes />
-            
+            </AppWrapper>
           </BrowserRouter>
         </QueryClientProvider>
+        
       </Provider>
-    </HelmetProvider>
+    {/* </HelmetProvider> */}
   </React.StrictMode>
 );
 

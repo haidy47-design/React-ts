@@ -2,7 +2,7 @@ import React, { use } from "react";
 import { motion } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/about.css";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
 import { useNavigate } from "react-router";
 
 
@@ -16,7 +16,7 @@ const  navigate = useNavigate();
   return (
 
     <>
-      <HelmetWrapper title="About Us" />
+      {/* <HelmetWrapper title="About Us" /> */}
       <section className="about-section py-5">
         <div className="container">
           {/* Title */}

@@ -5,7 +5,8 @@ import ProductCard from "../../components/product/ProductCard";
 import "../../styles/card.css";
 import { FaHeart } from "react-icons/fa";
 import { FaHeartBroken } from "react-icons/fa";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
+import { showConfirmAlert, showSuccessAlert } from "../../components/common/CustomSwal";
 
 
 const Wishlist: React.FC = () => {
@@ -17,13 +18,18 @@ const Wishlist: React.FC = () => {
   }, [dispatch]); 
 
 
- const handleClearWishlist = () => {
-  dispatch(clearWishlist());
+ const handleClearWishlist = async () => {
+  const confirmed = await showConfirmAlert("Do you really want to clear your wishlist?");
+  if (!confirmed) return;
+
+  await dispatch(clearWishlist());
+  showSuccessAlert("Your wishlist has been cleared successfully!");
 };
+
 
   return (
     <>
-        <HelmetWrapper title="Wishlist" />
+        {/* <HelmetWrapper title="Wishlist" /> */}
 
           
       <section className="container py-4">

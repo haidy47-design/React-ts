@@ -1,4 +1,3 @@
-
 import React, { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../features/hooks";
@@ -19,7 +18,7 @@ export type Product = {
   category: string;
   discount: number;
   stock: number;
-  
+  productId?: string; // ✅ أضف productId كـ optional
 };
 
 type Props = {
@@ -29,46 +28,55 @@ type Props = {
 function ProductCardComponent({ product }: Props): React.ReactElement {
   const hasDiscount = true;
   
-
   const dispatch = useAppDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
+  const handleAddToCart = () => {
+    dispatch(addToCart({ ...product, quantity: 1 }))
+      .unwrap()
+      .then(() => {
+        showSuccessAlert("Added to cart");
+      })
+      .catch((err) => {
+        showLoginRequired("Failed to add to cart", navigate);
+      });
+  };
 
-const handleAddToCart = () => {
-  dispatch(addToCart({ ...product, quantity: 1 }))
-    .unwrap()
-    .then(() => {
-      showSuccessAlert("Added to cart");
-    })
-    .catch((err) => {
-      showLoginRequired("Failed to add to cart",navigate);
-    });
-};
+  // ✅ Helper function: اجلب الـ product ID الصحيح
+  const getProductId = (product: Product): string => {
+    return product.productId || product.id;
+  };
 
   const wishlist = useAppSelector((state) => state.wishlist.items);
-const isInWishlist = wishlist.some(
-  (item) =>  String(item.productId) === String(product.id) || String(item.id) === String(product.id)
-);
+  const isInWishlist = wishlist.some(
+    (item) => String(item.productId) === String(getProductId(product))
+  );
 
-const handleToggleWishlist = async() => {
-  const storedUser = localStorage.getItem("user");
-  if (!storedUser) {
-    showLoginRequired("Login first",navigate);
-    return; 
-  }
-  try {
-    const result = await dispatch(toggleWishlist(product)).unwrap();
-
-    if (result?.removedId) {
-      showSuccessAlert("Removed from wishlist");
-    } else if (result?.added) {
-      showSuccessAlert("Added to wishlist ❤️");
+  const handleToggleWishlist = async() => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      showLoginRequired("Login first", navigate);
+      return; 
     }
-  } catch (err) {
-    showErrorAlert("Failed to update wishlist");
-  }
-};
+    try {
+      // ✅ استخدم الـ product ID الصحيح
+      const productToToggle = {
+        ...product,
+        id: getProductId(product), // تأكد إن الـ ID صحيح
+        productId: undefined // احذف productId عشان متتكررش
+      };
+      
+      const result = await dispatch(toggleWishlist(productToToggle)).unwrap();
 
+      if (result?.removedId) {
+        showSuccessAlert("Removed from wishlist");
+      } else if (result?.added) {
+        showSuccessAlert("Added to wishlist ❤️");
+      }
+    } catch (err) {
+      showErrorAlert("Failed to update wishlist");
+    }
+  };
 
   return (
     <div
@@ -104,7 +112,6 @@ const handleToggleWishlist = async() => {
         </div>
       )}
 
-    
       <div className="position-relative">
         <Link
           to={`/products/${product.id}`}
@@ -119,44 +126,37 @@ const handleToggleWishlist = async() => {
           />
         </Link>
 
-        
-
-      
         <div className="hover-overlay">
+          {/*Wishlist*/}
+          <button
+            className={`wishlist-btn btn rounded-circle p-3 shadow-sm ${
+              isInWishlist ? "active" : ""
+            }`}
+            onClick={handleToggleWishlist}
+          >
+            <FaHeart size={26} />
+          </button>
 
-              {/*Wishlist*/}
+          <div className="bottom-icons">
+            <button
+              className="btn btn-light rounded-circle p-3 shadow-sm"
+              style={{ transition: "all 0.3s ease" }}
+              onClick={handleAddToCart}
+            >
+              <FaShoppingCart size={26} className="fs-5 text-dark" />
+            </button>
 
-              <button
-                  className={`wishlist-btn btn rounded-circle p-3 shadow-sm ${
-                    isInWishlist ? "active" : ""
-                  }`}
-                  onClick={handleToggleWishlist}
-                >
-                  <FaHeart size={26} />
-                </button>
-
-
-              <div className="bottom-icons">
-                <button
-                  className="btn btn-light rounded-circle p-3 shadow-sm"
-                  style={{ transition: "all 0.3s ease" }}
-                  onClick={handleAddToCart}
-                >
-                  <FaShoppingCart size={26} className="fs-5 text-dark" />
-                </button>
-
-                <Link
-                  to={`/products/${product.id}`}
-                  className="btn btn-light rounded-circle p-3 shadow-sm"
-                  style={{ transition: "all 0.3s ease" }}
-                >
-                  <FaEye size={26} className="fs-5 text-dark" />
-                </Link>
-              </div>
-            </div>
+            <Link
+              to={`/products/${product.id}`}
+              className="btn btn-light rounded-circle p-3 shadow-sm"
+              style={{ transition: "all 0.3s ease" }}
+            >
+              <FaEye size={26} className="fs-5 text-dark" />
+            </Link>
           </div>
+        </div>
+      </div>
 
-  
       <div className="text-center">
         <h5 className="mt-3 mb-2">{product.title}</h5>
 

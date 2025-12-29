@@ -3,12 +3,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast, { Toaster } from "react-hot-toast";
-import { Helmet } from "react-helmet";
+// import { Helmet } from "react-helmet";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import "../../styles/auth.css";
 import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
 import { RegisterForm } from "./SignupPage";
 
 const schema = z
@@ -77,7 +77,7 @@ export default function ResetPassword() {
 
   return (
     <>
-        <HelmetWrapper title="Reset Password" />
+      {/* <HelmetWrapper title="Reset Password" /> */}
       <Toaster position="top-center" />
 
       <div className="auth-container">

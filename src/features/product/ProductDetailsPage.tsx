@@ -6,7 +6,7 @@ import Spinner from "../../components/common/Spinner";
 import { Product } from "../../components/product/ProductCard";
 import { useAppDispatch } from "../hooks";
 import { addToCart } from "./cartSlice";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
 import toast from "react-hot-toast";
 import Slider from "react-slick";
 import ProductCard from "../../components/product/ProductCard";
@@ -129,7 +129,7 @@ const { data: reviews, isLoading: loadingReviews } = useQuery({
 
   return (
     <>
-      <HelmetWrapper title={product.title} />
+      {/* <HelmetWrapper title={product.title} /> */}
         <div className="container py-5 product-details-page">
     
 

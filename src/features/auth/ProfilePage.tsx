@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+// import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import "../../styles/auth.css";
@@ -130,9 +130,9 @@ export default function ProfilePage(): React.ReactElement {
 
   return (
     <div className="profile-page">
-      <Helmet>
+      {/* <Helmet>
         <title>Profile</title>
-      </Helmet>
+      </Helmet> */}
       <Toaster position="top-center" />
 
       <div className="profile-card">

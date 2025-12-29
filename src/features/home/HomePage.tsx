@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
 import Welcome from "./Welcome";
 import CategorySlider from "./CategorySlider";
 import ListOfLowestProduct from "./ListOfLowestProduct";
@@ -15,7 +15,7 @@ import CategorySlider2 from "./CategorySlider2";
 export default function HomePage(): React.ReactElement {
   return (
     <>
-      <HelmetWrapper title="Roséa Flower Shop" />
+      {/* <HelmetWrapper title="Roséa Flower Shop" /> */}
 
 
 
@@ -26,9 +26,9 @@ export default function HomePage(): React.ReactElement {
       <CategorySlider />
       </section>
 
-      {/* <section className="container mt-4">
+      <section className="container ">
       <CategorySlider2 />
-      </section> */}
+      </section>
       <section className="container mt-4">
       <SpecialOffer />
       </section>

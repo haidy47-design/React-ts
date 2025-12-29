@@ -5,10 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { Helmet } from "react-helmet-async";
+// import { Helmet } from "react-helmet-async";
 import "../../styles/auth.css";
 import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
 
 
 export  type User = RegisterForm & { avatar?: string , id?: string ,createdAt?: string , role?: string} ;
@@ -66,7 +66,7 @@ export default function Register() {
 
   return (
     <>
-        <HelmetWrapper title="SignUp" />
+        {/* <HelmetWrapper title="SignUp" /> */}
       <Toaster position="top-center" />
 
       <div className="auth-container">

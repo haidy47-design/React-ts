@@ -9,7 +9,7 @@ import { AdminUser, AdminProduct } from "./types";
 import { IOrder } from "../order/OrdersPage";
 import Spinner from "../../components/common/Spinner"; 
 import { Users, Package, DollarSign, ShoppingCart } from 'lucide-react';
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
 
 
 
@@ -305,7 +305,7 @@ const COLORS = [
 
   return (
     <>
-    <HelmetWrapper title="Dashboard" />
+    {/* <HelmetWrapper title="Dashboard" /> */}
       <div className="py-4 dashboard-container">
         {/* Header */}
         <Row className="align-items-center mb-3">

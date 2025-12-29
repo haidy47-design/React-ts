@@ -8,7 +8,7 @@ import {
   showSuccessAlert,
   showErrorAlert,
 } from "../../components/common/CustomSwal";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
 import { Product } from "src/components/product/ProductCard";
 
 export interface IOrder {
@@ -153,7 +153,7 @@ export default function OrdersPage(): React.ReactElement {
 
   return (
     <div className="container py-4">
-        <HelmetWrapper title="Orders" />
+        {/* <HelmetWrapper title="Orders" /> */}
       <h3 className="mb-4 text-center" style={{ color: "#79253D" }}>
         Orders
       </h3>

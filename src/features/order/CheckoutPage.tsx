@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import Spinner from "../../components/common/Spinner";
 import { showErrorAlert, showSuccessAlert } from "../../components/common/CustomSwal";
-import HelmetWrapper from "../../components/common/HelmetWrapper";
+// import HelmetWrapper from "../../components/common/HelmetWrapper";
 
 
 const schema = z.object({
@@ -146,7 +146,7 @@ export default function CheckoutPage(): React.ReactElement {
   return (
   <>
 
-      <HelmetWrapper title="Checkout" />
+      {/* <HelmetWrapper title="Checkout" /> */}
 
       <div className="checkout-container container py-3 py-md-4 py-lg-4">
         <h2 className="col-12 mb-4 pb-3 border-bottom border-secondary border-opacity-50">Checkout</h2>
